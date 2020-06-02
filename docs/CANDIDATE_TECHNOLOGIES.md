@@ -23,13 +23,13 @@ Each of the available technologies has its advantages and disadvantages, and the
 
 So, the factors that should be considered for selecting the candidate technology are:
 
-1. Community's adaptability and familiarity with the technology.
+1. The Fluid Community's adaptability and familiarity with the technology.
 2. Fulfillment of the project's requirements:
-   - Accept and read inputs from the gamepad.
    - Relay functional code/script into the browser.
+   - Accept and read inputs from the gamepad.
    - Compatible across multiple platforms and devices.
 3. Stability and long-term support for the technology.
-4. Assist in implementing navigation features.
+4. Usefulness in implementing navigation features.
 
 ## Candidate Technologies
 
@@ -42,7 +42,7 @@ Before searching for a technology, I framed multiple approaches using which proj
 2. Electron.js Desktop App with the following Node.js packages:
    - [Node Key Sender](https://www.npmjs.com/package/node-key-sender) or [Robot.js](https://www.npmjs.com/package/robotjs)
    - [Gamepad](https://www.npmjs.com/package/gamepad) (Alternative to Gamepad API for Node.js)
-3. [Espruino Pico](https://www.espruino.com/USB)
+3. [Espruino Pico](https://www.espruino.com/Pico)
 4. Secondary Extensions to inject Scripts
    - [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en) (For Safari and Chromium-based browsers)
    - [Greasemonkey](https://addons.mozilla.org/en-US/firefox/addon/greasemonkey/) (for Firefox)
@@ -61,13 +61,13 @@ This option would involve creating our browser extension (or add-on) that will e
 - Provides various Chrome APIs which would be useful in implementing certain navigation effects/features.
 - Lightweight and easy for users to set-up (and install).
 - Requires no separate execution of scripts by the user.
-- Can run on both Desktop and Mobile (supported for a few browsers only).
+- Can run on both Desktop and Mobile (supported for only a few browsers in case of mobiles).
 
 #### Disadvantages
 
 - Cross-browser restrictions, i.e., a Chrome-based extension can't run on Firefox or vice-versa.
 
-Most of the browsers (Chrome, Microsoft Edge, Opera, etc.) are based on Chromium and can thus run Chrome Extension. The Chromium-based browsers for mobile such as [Kiwi](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&hl=en_IN) also support and allow users to install and run Chrome Extensions (unlike the Google Chrome for mobile).
+Most browsers (Chrome, Microsoft Edge, Opera, etc.) are based on Chromium and can thus run Chrome Extension. The Chromium-based browsers for mobile such as [Kiwi](https://play.google.com/store/apps/details?id=com.kiwibrowser.browser&hl=en_IN) also support and allow users to install and run Chrome Extensions (unlike Google Chrome for mobile).
 
 Although a Firefox add-on would offer the same support and features, it will only be limited to Firefox. Talking about Safari add-ons, it would be accessible only to Apple users, as Safari runs only on macOS and iOS.
 
@@ -103,18 +103,19 @@ This is a bit of a different approach. As of now, we want to have browser naviga
 
 - Based on JavaScript.
 - OS-level execution of actions.
-- Simulate keyboard as well as mouse events.
+- Simulate keyboard as well as mouse events (*[Read more](https://www.espruino.com/USB)*).
 - Requires no separate execution of scripts by the user.
 - Low cost (under $50).
 
 #### Disadvantages
 
 - Requires a lot of technical setup and integration by the user.
-- Cannot use Infusion due to memory limitations.
+- Cannot use Infusion as its minified package's size (around **860 kB**) is more than the storage capacity of Espruino Pico (**384 kB**).<br>
+  (*More information regarding the specifications of Espruino Pico can be found [here](https://www.espruino.com/Pico#features)*)
 - Might require additional hardware (buttons, switches, pins, etc.) to work.
 - Can be easily damaged or destroyed (bricked) by the user.
 - Requires knowledge from the user to debug or fix, if damaged (bricked).
-- Less flexible in terms of reconfiguration.    <!-- Swap hardware, buttons, etc. -->
+- Less flexible in terms of reconfiguration.
 
 Although this is a low-cost solution, it seems inconvenient to me, both as a developer and a user. This would require too much of technical setup and integration and a decent knowledge of IoT Boards. Users might feel overwhelmed.
 
