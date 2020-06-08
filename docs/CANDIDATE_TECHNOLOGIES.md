@@ -25,7 +25,6 @@ So, the factors that should be considered for selecting the candidate technology
 
 1. The Fluid Community's adaptability and familiarity with the technology.
 2. Fulfillment of the project's requirements:
-   - Relay functional code/script into the browser.
    - Accept and read inputs from the gamepad.
    - Compatible across multiple platforms and devices.
 3. Stability and long-term support for the technology.
