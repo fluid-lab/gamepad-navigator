@@ -60,7 +60,8 @@ This option would involve creating our browser extension (or add-on) that will e
 - Provides various Chrome APIs which would be useful in implementing certain navigation effects/features.
 - Lightweight and easy for users to set-up (and install).
 - Requires no separate execution of scripts by the user.
-- Can run on both Desktop and Mobile (supported for only a few browsers in case of mobiles).
+- Can run on both Desktop and Mobile.<br>
+  (In the case of mobiles, only a few browsers can run it)
 
 #### Disadvantages
 
