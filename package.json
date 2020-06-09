@@ -1,0 +1,27 @@
+{
+    "name": "gamepad-navigator",
+    "version": "1.0.0",
+    "description": "The Gamepad Navigator is a configurable application that allows you to navigate web pages and browsers using a game controller.",
+    "author": "Divyanshu Mahajan",
+    "license": "BSD-3-Clause",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fluid-lab/gamepad-navigator.git"
+    },
+    "bugs": {
+        "url": "https://github.com/fluid-lab/gamepad-navigator/issues"
+    },
+    "homepage": "https://github.com/fluid-lab/gamepad-navigator#readme",
+    "scripts": {
+        "lint": "grunt lint"
+    },
+    "dependencies": {
+        "infusion": "3.0.0-dev.20200326T173810Z.24ddb2718"
+    },
+    "devDependencies": {
+        "eslint": "7.1.0",
+        "eslint-config-fluid": "1.4.0",
+        "gpii-grunt-lint-all": "1.0.7",
+        "grunt": "1.1.0"
+    }
+}
