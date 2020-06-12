@@ -1,20 +1,60 @@
+/*
+Copyright (c) 2020 The Gamepad Navigator Authors
+See the AUTHORS.md file at the top-level directory of this distribution and at
+https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+
+Licensed under the BSD 3-Clause License. You may not use this file except in
+compliance with this License.
+
+You may obtain a copy of the BSD 3-Clause License at
+https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+*/
+
 /* eslint-env node */
 "use strict";
 
 module.exports = function (grunt) {
     grunt.config.init({
+        licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
+        currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
+        currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m,
         lintAll: {
             sources: {
                 js:    ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js"],
-                md:    [ "./*.md", "tests/**/*.md"],
+                md:    ["./*.md", "tests/**/*.md", "docs/*.md"],
                 json:  ["./*.json", "./.*.json", "tests/**/*.json"],
                 json5: ["./*.json5", "tests/**/*.json5"],
                 other: ["./.*"]
             }
+        },
+        usebanner: {
+            jsAndJson5: {
+                options: {
+                    position: "top",
+                    replace: "<%= currentJsAndJson5Banner %>",
+                    banner: "/*\n<%= licenseBanner %>*/\n"
+                },
+                files: {
+                    src: ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js", "./*.json5", "tests/**/*.json5"]
+                }
+            },
+            markdown: {
+                options: {
+                    position: "top",
+                    replace: "<%= currentMarkdownBanner %>",
+                    banner: "<!--\n<%= licenseBanner %>-->\n"
+                },
+                files: {
+                    src: ["./*.md", "tests/**/*.md", "docs/*.md"]
+                }
+            }
         }
     });
     grunt.loadNpmTasks("gpii-grunt-lint-all");
+    grunt.loadNpmTasks("grunt-banner");
+
     grunt.registerTask("lint", "Perform all standard lint checks.", ["lint-all"]);
+    grunt.registerTask("banner", "Add copyright banner at the top of files.", ["usebanner"]);
 
     grunt.registerTask("default", ["lint"]);
 };
