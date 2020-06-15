@@ -15,9 +15,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 module.exports = function (grunt) {
     grunt.config.init({
-        licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
-        currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
-        currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m,
         lintAll: {
             sources: {
                 js:    ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js"],
@@ -30,7 +27,6 @@ module.exports = function (grunt) {
         usebanner: {
             jsAndJson5: {
                 options: {
-                    position: "top",
                     replace: "<%= currentJsAndJson5Banner %>",
                     banner: "/*\n<%= licenseBanner %>*/\n"
                 },
@@ -40,7 +36,6 @@ module.exports = function (grunt) {
             },
             markdown: {
                 options: {
-                    position: "top",
                     replace: "<%= currentMarkdownBanner %>",
                     banner: "<!--\n<%= licenseBanner %>-->\n"
                 },
@@ -48,7 +43,10 @@ module.exports = function (grunt) {
                     src: ["./*.md", "tests/**/*.md", "docs/*.md"]
                 }
             }
-        }
+        },
+        licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
+        currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
+        currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m
     });
     grunt.loadNpmTasks("gpii-grunt-lint-all");
     grunt.loadNpmTasks("grunt-banner");
