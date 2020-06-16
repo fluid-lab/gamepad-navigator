@@ -44,15 +44,37 @@ module.exports = function (grunt) {
                 }
             }
         },
+        clean: {
+            previousBuild: {
+                src: ["dist/"]
+            }
+        },
+        copy: {
+            infusion: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/infusion/dist/infusion-all.min.js",
+                dest: "dist/js/lib/infusion/"
+            },
+            source: {
+                expand: true,
+                cwd: "src",
+                src: "**",
+                dest: "dist/"
+            }
+        },
         licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
         currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
         currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m
     });
     grunt.loadNpmTasks("gpii-grunt-lint-all");
     grunt.loadNpmTasks("grunt-banner");
+    grunt.loadNpmTasks("grunt-contrib-clean");
+    grunt.loadNpmTasks("grunt-contrib-copy");
 
     grunt.registerTask("lint", "Perform all standard lint checks.", ["lint-all"]);
     grunt.registerTask("banner", "Add copyright banner at the top of files.", ["usebanner"]);
+    grunt.registerTask("build", "Build an unpacked extension.", ["clean", "copy"]);
 
-    grunt.registerTask("default", ["lint"]);
+    grunt.registerTask("default", ["build"]);
 };
