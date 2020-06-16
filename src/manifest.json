@@ -1,0 +1,11 @@
+{
+    "name": "Gamepad Navigator",
+    "description": "The Gamepad Navigator is a configurable application that allows you to navigate web pages and browsers using a game controller.",
+    "version": "1.0.0",
+    "author": "Divyanshu Mahajan",
+    "manifest_version": 2,
+    "content_scripts": [{
+        "matches": ["<all_urls>"],
+        "js": ["js/lib/infusion/infusion-all.min.js", "js/content_scripts/gamepad-navigator.js"]
+    }]
+}
