@@ -33,6 +33,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             gamepadListener: {
                 funcName: "gamepad.gamepadNavigator.gamepadListener",
                 args: ["{that}"]
+            },
+            transformArrayToObject: {
+                funcName: "gamepad.gamepadNavigator.arrayToObject",
+                args: ["{arguments}.0"]
             }
         }
     });
@@ -59,8 +63,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     var modelUpdateTransaction = that.applier.initiate();
 
                     modelUpdateTransaction.fireChangeRequest({ path: "index", value: connectedGamepad.index });
-                    modelUpdateTransaction.fireChangeRequest({ path: "axes", value: connectedGamepad.axes });
-                    modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: connectedGamepad.buttons });
+                    modelUpdateTransaction.fireChangeRequest({ path: "axes", value: that.transformArrayToObject(connectedGamepad.axes) });
+                    modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: that.transformArrayToObject(connectedGamepad.buttons) });
 
                     // Commit the current state of gamepad.
                     modelUpdateTransaction.commit();
@@ -86,6 +90,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 modelUpdateTransaction.commit();
             }
         });
+    };
+
+    /**
+     *
+     * Converts the input array into an object with the keys as the index of the
+     * corresponding element.
+     *
+     * @param {Array} array - The buttons and axes array to be converted into an object.
+     * @return {Object} outputObject - The transformed object.
+     *
+     */
+    gamepad.gamepadNavigator.arrayToObject = function (array) {
+        var outputObject = {};
+        fluid.each(array, function (inputData, index) {
+            /**
+             * Button data is stored as an array of objects whereas axes data is stored
+             * as an array of floating numbers. To obtain the primary values, we need to
+             * access both differently.
+             */
+            outputObject[index] = fluid.isPrimitive(inputData) ? inputData : inputData.value;
+        });
+        return outputObject;
     };
 
     // Create an instance of the gamepad navigator.
