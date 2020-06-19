@@ -17,103 +17,181 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     var gamepad = fluid.registerNamespace("gamepad");
 
-    fluid.defaults("gamepad.gamepadNavigator", {
+    fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
-            index: null,
+            connected: false,
             axes: [],
             buttons: []
         },
+        events: {
+            onGamepadConnected: null,
+            onGamepadDisconnected: null
+        },
         listeners: {
-            "onCreate.gamepadListener": "{that}.gamepadListener"
+            onCreate: "{that}.attachListener",
+            onGamepadConnected: "{that}.onConnected",
+            onGamepadDisconnected: "{that}.onDisconnected"
         },
         frequency: 100,
         connectivityIntervalReference: null,
         invokers: {
-            gamepadListener: {
-                funcName: "gamepad.gamepadNavigator.gamepadListener",
+            attachListener: {
+                funcName: "gamepad.navigator.attachListener",
                 args: ["{that}"]
             },
-            transformArrayToObject: {
-                funcName: "gamepad.gamepadNavigator.arrayToObject",
-                args: ["{arguments}.0"]
+            onConnected: {
+                funcName: "gamepad.navigator.onConnected",
+                args: ["{that}"]
+            },
+            onDisconnected: {
+                funcName: "gamepad.navigator.onDisconnected",
+                args: ["{that}", "{arguments}.0"]
             }
         }
     });
 
     /**
      *
-     * Listens to the connected and disconnected events of the gamepad and updates the
-     * gamepad navigator component's model according to the state of the gamepad.
+     * Attaches a event listener to the gamepad events which fire the gamepad navigator
+     * component's events on being triggered.
      *
      * @param {Object} that - The gamepad navigator component.
      *
      */
-    gamepad.gamepadNavigator.gamepadListener = function (that) {
+    gamepad.navigator.attachListener = function (that) {
         // When a gamepad is connected
         window.addEventListener("gamepadconnected", function () {
-            // Store the gamepad info if no other gamepad is already connected.
-            if (!fluid.isValue(that.model.index)) {
-                // Scan the state of gamepad frequently.
-                that.options.connectivityIntervalReference = setInterval(function () {
-                    // Catch the current state of gamepad.
-                    var connectedGamepad = navigator.getGamepads()[0];
-
-                    // Initiate the gamepad navigator model transaction.
-                    var modelUpdateTransaction = that.applier.initiate();
-
-                    modelUpdateTransaction.fireChangeRequest({ path: "index", value: connectedGamepad.index });
-                    modelUpdateTransaction.fireChangeRequest({ path: "axes", value: that.transformArrayToObject(connectedGamepad.axes) });
-                    modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: that.transformArrayToObject(connectedGamepad.buttons) });
-
-                    // Commit the current state of gamepad.
-                    modelUpdateTransaction.commit();
-                }, that.options.frequency);
-            }
+            that.events.onGamepadConnected.fire();
         });
 
         // When gamepad is disconnected
         window.addEventListener("gamepaddisconnected", function (event) {
-            // Ensure that the gamepad navigator doesn't break if any other gamepad is disconnected.
-            if (that.model.index === event.gamepad.index) {
-                // Stop the interval loop scanning the gamepad state.
-                clearInterval(that.options.connectivityIntervalReference);
+            that.events.onGamepadDisconnected.fire(event);
+        });
+    };
 
-                // Restore the gamepad navigator model to its initial state.
-                var modelUpdateTransaction = that.applier.initiate();
+    /**
+     *
+     * A listener for the gamepad navigator component's event "onGamepadConnected".
+     * Handles the various connected gamepads and reads data from all the gamepads to get
+     * a combined feedback.
+     *
+     * @param {Object} that - The gamepad navigator component.
+     *
+     */
+    gamepad.navigator.onConnected = function (that) {
+        // Store the gamepad info if no other gamepad is already connected.
+        if (!that.model.connected) {
+            // Scan the state of gamepad frequently.
+            that.options.connectivityIntervalReference = setInterval(function () {
+                // Retrieve the list of gamepads.
+                var gamepadsList = navigator.getGamepads(),
+                    combinedGamepadData = {
+                        connected: false,
+                        axes: {},
+                        buttons: {}
+                    };
 
-                modelUpdateTransaction.fireChangeRequest({ path: "index", value: null });
+                // Combine the inputs from all the gamepads.
+                for (var index = 0; index < gamepadsList.length; index++) {
+                    // Look for the gamepad data if it is connected.
+                    if (gamepadsList[index]) {
+                        // Set the connected status to true if any gamepad is available.
+                        combinedGamepadData.connected = true;
+
+                        // Combine the axes values from the gamepad currently scanned.
+                        fluid.each(gamepadsList[index].axes, function (axesValue, axesIndex) {
+                            if (!combinedGamepadData.axes[axesIndex]) {
+                                combinedGamepadData.axes[axesIndex] = 0;
+                            }
+                            combinedGamepadData.axes[axesIndex] += axesValue;
+                        });
+
+                        // Combine the button values from the gamepad currently scanned.
+                        fluid.each(gamepadsList[index].buttons, function (buttonObject, buttonIndex) {
+                            if (!combinedGamepadData.buttons[buttonIndex]) {
+                                combinedGamepadData.buttons[buttonIndex] = 0;
+                            }
+                            combinedGamepadData.buttons[buttonIndex] += buttonObject.value;
+                        });
+                    }
+                }
+
+                /**
+                 * If at least one gamepad is available then update the component's model
+                 * as per the combined inputs.
+                 */
+                if (combinedGamepadData.connected) {
+                    // Initiate the gamepad navigator model transaction.
+                    var modelUpdateTransaction = that.applier.initiate();
+
+                    modelUpdateTransaction.fireChangeRequest({ path: "connected", value: combinedGamepadData.connected });
+                    modelUpdateTransaction.fireChangeRequest({ path: "axes", value: combinedGamepadData.axes });
+                    modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: combinedGamepadData.buttons });
+
+                    // Commit the current state of gamepad.
+                    modelUpdateTransaction.commit();
+                }
+            }, that.options.frequency);
+        }
+    };
+
+    /**
+     *
+     * A listener for the gamepad navigator component's event "onGamepadDisconnected".
+     * Handles the gamepads and fires the component's "onGamepadConnected" event if it
+     * finds any other connected gamepad after a gamepad is disconnected.
+     *
+     * @param {Object} that - The gamepad navigator component.
+     * @param {Object} event - The window's "gamepaddisconnected" event.
+     *
+     */
+    gamepad.navigator.onDisconnected = function (that, event) {
+        /**
+         * Ensure that the gamepad navigator doesn't break if any other gamepad is
+         * disconnected.
+         */
+        if (that.model.index === event.gamepad.index) {
+            // Stop the interval loop scanning the gamepad state.
+            clearInterval(that.options.connectivityIntervalReference);
+
+            // Assume by default that no other gamepad is connected/available.
+            var isGamepadAvailable = false;
+
+            // Check if any other gamepad is already connected.
+            for (var index = 0; index < navigator.getGamepads().length; index++) {
+                if (navigator.getGamepads()[index] !== null) {
+                    isGamepadAvailable = true;
+                }
+            }
+
+            /**
+             * Fire the "onGamepadConnected" event of the component to maintain
+             * connection to other gamepads if available. Otherwise, restore the
+             * component's model to its initial state.
+             */
+            var modelUpdateTransaction = that.applier.initiate();
+            modelUpdateTransaction.fireChangeRequest({ path: "connected", value: false });
+
+            if (isGamepadAvailable) {
+                /**
+                 * Commit the connected state as false for the onGamepadConnected event to
+                 * work.
+                 */
+                modelUpdateTransaction.commit();
+                that.events.onGamepadConnected.fire();
+            }
+            else {
                 modelUpdateTransaction.fireChangeRequest({ path: "axes", value: [] });
                 modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: [] });
 
                 // Commit the initial model.
                 modelUpdateTransaction.commit();
             }
-        });
-    };
-
-    /**
-     *
-     * Converts the input array into an object with the keys as the index of the
-     * corresponding element.
-     *
-     * @param {Array} array - The buttons and axes array to be converted into an object.
-     * @return {Object} outputObject - The transformed object.
-     *
-     */
-    gamepad.gamepadNavigator.arrayToObject = function (array) {
-        var outputObject = {};
-        fluid.each(array, function (inputData, index) {
-            /**
-             * Button data is stored as an array of objects whereas axes data is stored
-             * as an array of floating numbers. To obtain the primary values, we need to
-             * access both differently.
-             */
-            outputObject[index] = fluid.isPrimitive(inputData) ? inputData : inputData.value;
-        });
-        return outputObject;
+        }
     };
 
     // Create an instance of the gamepad navigator.
-    gamepad.gamepadNavigator();
+    gamepad.navigator();
 })(fluid);
