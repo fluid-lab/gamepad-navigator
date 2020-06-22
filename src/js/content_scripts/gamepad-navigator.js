@@ -33,12 +33,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             onGamepadConnected: "{that}.onConnected",
             onGamepadDisconnected: "{that}.onDisconnected"
         },
+        window: window,
         frequency: 100,
         connectivityIntervalReference: null,
         invokers: {
             attachListener: {
                 funcName: "gamepad.navigator.attachListener",
-                args: ["{that}", "{window}"]
+                args: ["{that}", "{that}.options.window"]
             },
             onConnected: {
                 funcName: "gamepad.navigator.onConnected",
@@ -185,7 +186,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             modelUpdateTransaction.commit();
         }
     };
-
-    // Create an instance of the gamepad navigator.
-    gamepad.navigator();
 })(fluid);
