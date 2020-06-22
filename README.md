@@ -19,13 +19,12 @@ Some of the game controllers, such as the
 and the [one-handed controllers](https://www.evilcontrollers.com/ps4-one-handed-controller), strive to include a
 broader range of people in traditional PC and console gaming.
 
-The Gamepad Navigator is a chrome extension that allows the users to navigate the browsers using a game controller and
-an alternative to a keyboard or mouse for browser navigation. The various buttons and analog sticks on the gamepad will
-serve as inputs for the different types of navigation features or actions on the browser and that the extension has to
-offer. These inputs are read from the gamepads using the
-[HTML5 Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) and processed via
-[Infusion](https://fluidproject.org/infusion.html). The navigation features or operations can be reconfigured from the
-application to redefine what each button and analog has to do as the user wants.
+The Gamepad Navigator is a Chrome extension that allows the users to navigate Chromium-based browsers using a game
+controller and an alternative to a keyboard or mouse for browser navigation. The various buttons and analog sticks on
+the gamepad will serve as inputs for the different types of navigation features or actions of the browser. These inputs
+are read from the gamepads using the [HTML5 Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API)
+and processed via [Infusion](https://fluidproject.org/infusion.html). The navigation features or operations can be
+reconfigured from the application to redefine what each d-pad, thumbstick, button, and trigger does.
 
 ## Installation
 

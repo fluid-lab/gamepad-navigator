@@ -25,10 +25,15 @@ module.exports = function (grunt) {
             }
         },
         usebanner: {
+            options: {
+                licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
+                currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
+                currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m
+            },
             jsAndJson5: {
                 options: {
-                    replace: "<%= currentJsAndJson5Banner %>",
-                    banner: "/*\n<%= licenseBanner %>*/\n"
+                    replace: "<%= usebanner.options.currentJsAndJson5Banner %>",
+                    banner: "/*\n<%= usebanner.options.licenseBanner %>*/\n"
                 },
                 files: {
                     src: ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js", "./*.json5", "tests/**/*.json5"]
@@ -36,8 +41,8 @@ module.exports = function (grunt) {
             },
             markdown: {
                 options: {
-                    replace: "<%= currentMarkdownBanner %>",
-                    banner: "<!--\n<%= licenseBanner %>-->\n"
+                    replace: "<%= usebanner.options.currentMarkdownBanner %>",
+                    banner: "<!--\n<%= usebanner.options.licenseBanner %>-->\n"
                 },
                 files: {
                     src: ["./*.md", "tests/**/*.md", "docs/*.md"]
@@ -62,10 +67,7 @@ module.exports = function (grunt) {
                 src: "**",
                 dest: "dist/"
             }
-        },
-        licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
-        currentMarkdownBanner: /^(<!--)\s[\w\W]+?(-->)\s\s/m,
-        currentJsAndJson5Banner: /^\/\*\sCopyright \(c\)[\w\W]+?\s\*\/\s\s/m
+        }
     });
     grunt.loadNpmTasks("gpii-grunt-lint-all");
     grunt.loadNpmTasks("grunt-banner");
@@ -76,5 +78,5 @@ module.exports = function (grunt) {
     grunt.registerTask("banner", "Add copyright banner at the top of files.", ["usebanner"]);
     grunt.registerTask("build", "Build an unpacked extension.", ["clean", "copy"]);
 
-    grunt.registerTask("default", ["build"]);
+    grunt.registerTask("default", ["lint", "banner", "build"]);
 };
