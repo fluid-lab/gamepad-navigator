@@ -10,7 +10,6 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* eslint-env browser */
 /* global gamepad */
 
 (function (fluid, $) {
@@ -23,23 +22,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll horizontally across the webpage.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Boolean} invert - Determine if the scroll should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.scrollHorizontally = function (that, value) {
-        /**
-         * Scroll the webpage horizontally only if the input's absolute value is more
-         * than the specified value. Otherwise, stop scrolling across the webpage.
-         */
+    gamepad.inputMapperUtils.scrollHorizontally = function (that, value, speedFactor, invert) {
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1;
+        value = value * inversionFactor;
         if (value > 0) {
-            that.scrollRight(value);
+            clearInterval(that.options.members.intervalRecords.leftScroll);
+            that.scrollRight(value, speedFactor);
         }
         else if (value < 0) {
-            that.scrollLeft(-1 * value);
+            clearInterval(that.options.members.intervalRecords.rightScroll);
+            that.scrollLeft(-1 * value, speedFactor);
         }
         else {
-            clearInterval(that.options.intervalRecord.leftScroll);
-            clearInterval(that.options.intervalRecord.rightScroll);
+            clearInterval(that.options.members.intervalRecords.leftScroll);
+            clearInterval(that.options.members.intervalRecords.rightScroll);
         }
     };
 
@@ -48,25 +50,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in left direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollLeft = function (that, value) {
+    gamepad.inputMapperUtils.scrollLeft = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.intervalRecord.leftScroll);
+        clearInterval(that.options.members.intervalRecords.leftScroll);
 
         /**
          * Scroll the webpage towards the left only if the input value is more than the
-         * specified value.
+         * cutoff value.
          */
-        if (value > 0.20) {
+        if (value > that.options.cutoffValue) {
             // Scroll to the left according to the new input value.
-            that.options.intervalRecord.leftScroll = setInterval(function () {
-                var xOffset = $(window).scrollLeft();
-                $(window).scrollLeft(xOffset - value * 50);
+            that.options.members.intervalRecords.leftScroll = setInterval(function () {
+                var xOffset = $(that.options.windowObject).scrollLeft();
+                $(that.options.windowObject).scrollLeft(xOffset - value * 50 * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -76,25 +79,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage towards the right direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollRight = function (that, value) {
+    gamepad.inputMapperUtils.scrollRight = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.intervalRecord.rightScroll);
+        clearInterval(that.options.members.intervalRecords.rightScroll);
 
         /**
          * Scroll the webpage towards the right only if the input value is more than the
-         * specified value.
+         * cutoff value.
          */
-        if (value > 0.20) {
+        if (value > that.options.cutoffValue) {
             // Scroll to the right according to the new input value.
-            that.options.intervalRecord.rightScroll = setInterval(function () {
-                var xOffset = $(window).scrollLeft();
-                $(window).scrollLeft(xOffset + value * 50);
+            that.options.members.intervalRecords.rightScroll = setInterval(function () {
+                var xOffset = $(that.options.windowObject).scrollLeft();
+                $(that.options.windowObject).scrollLeft(xOffset + value * 50 * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -104,23 +108,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll vertically across the webpage.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Boolean} invert - Determine if the scroll should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.scrollVertically = function (that, value) {
-        /**
-         * Scroll the webpage vertically only if the input's absolute value is more than
-         * the specified value. Otherwise, stop scrolling across the webpage.
-         */
+    gamepad.inputMapperUtils.scrollVertically = function (that, value, speedFactor, invert) {
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1;
+        value = value * inversionFactor;
         if (value > 0) {
-            that.scrollDown(value);
+            clearInterval(that.options.members.intervalRecords.upwardScroll);
+            that.scrollDown(value, speedFactor);
         }
         else if (value < 0) {
-            that.scrollUp(-1 * value);
+            clearInterval(that.options.members.intervalRecords.downwardScroll);
+            that.scrollUp(-1 * value, speedFactor);
         }
         else {
-            clearInterval(that.options.intervalRecord.upwardScroll);
-            clearInterval(that.options.intervalRecord.downwardScroll);
+            clearInterval(that.options.members.intervalRecords.upwardScroll);
+            clearInterval(that.options.members.intervalRecords.downwardScroll);
         }
     };
 
@@ -129,25 +136,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in upward direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollUp = function (that, value) {
+    gamepad.inputMapperUtils.scrollUp = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.intervalRecord.upwardScroll);
+        clearInterval(that.options.members.intervalRecords.upwardScroll);
 
         /**
-         * Scroll the webpage upward only if the input value is more than the specified
+         * Scroll the webpage upward only if the input value is more than the cutoff
          * value.
          */
-        if (value > 0.20) {
+        if (value > that.options.cutoffValue) {
             // Scroll upward according to the new input value.
-            that.options.intervalRecord.upwardScroll = setInterval(function () {
-                var yOffset = $(window).scrollTop();
-                $(window).scrollTop(yOffset - value * 50);
+            that.options.members.intervalRecords.upwardScroll = setInterval(function () {
+                var yOffset = $(that.options.windowObject).scrollTop();
+                $(that.options.windowObject).scrollTop(yOffset - value * 50 * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -157,25 +165,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in downward direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} value - The value of the gamepad input (in pixels).
+     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollDown = function (that, value) {
+    gamepad.inputMapperUtils.scrollDown = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.intervalRecord.downwardScroll);
+        clearInterval(that.options.members.intervalRecords.downwardScroll);
 
         /**
-         * Scroll the webpage downward only if the input value is more than the specified
+         * Scroll the webpage downward only if the input value is more than the cutoff
          * value.
          */
-        if (value > 0.20) {
+        if (value > that.options.cutoffValue) {
             // Scroll upward according to the new input value.
-            that.options.intervalRecord.downwardScroll = setInterval(function () {
-                var yOffset = $(window).scrollTop();
-                $(window).scrollTop(yOffset + value * 50);
+            that.options.members.intervalRecords.downwardScroll = setInterval(function () {
+                var yOffset = $(that.options.windowObject).scrollTop();
+                $(that.options.windowObject).scrollTop(yOffset + value * 50 * speedFactor);
             }, that.options.frequency);
         }
     };
