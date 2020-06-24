@@ -42,14 +42,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         speedFactor: 1
                     },
                     "4": {
-                        defaultAction: null,
+                        defaultAction: "reverseTab",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 2.5
                     },
                     "5": {
-                        defaultAction: null,
+                        defaultAction: "forwardTab",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 2.5
                     },
                     "6": {
                         defaultAction: null,
@@ -124,9 +124,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         invert: false
                     },
                     "3": {
-                        defaultAction: null,
+                        defaultAction: "analogTabbing",
                         currentAction: null,
-                        speedFactor: 1,
+                        speedFactor: 2.5,
                         invert: false
                     }
                 }
@@ -150,8 +150,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 upwardScroll: null,
                 downwardScroll: null,
                 leftScroll: null,
-                rightScroll: null
-            }
+                rightScroll: null,
+                forwardTab: null,
+                reverseTab: null
+            },
+            currentTabIndex: 0
         },
         cutoffValue: 0.20,
         invokers: {
@@ -186,6 +189,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             scrollDown: {
                 funcName: "gamepad.inputMapperUtils.scrollDown",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
+            },
+            analogTabbing: {
+                funcName: "gamepad.inputMapperUtils.analogTabbing",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            },
+            forwardTab: {
+                funcName: "gamepad.inputMapperUtils.forwardTab",
+                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+            },
+            reverseTab: {
+                funcName: "gamepad.inputMapperUtils.reverseTab",
+                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+            },
+            tabindexSortFilter: {
+                funcName: "gamepad.inputMapperUtils.tabindexSortFilter",
+                args: ["{arguments}.0", "{arguments}.1"]
             }
         }
     });
