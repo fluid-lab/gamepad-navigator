@@ -51,7 +51,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}"]
             },
             clearConnectivityInterval: {
-                funcName: "gamepad.navigator.clearConnectivityInterval",
+                funcName: "clearInterval",
                 args: ["{that}.options.members.connectivityIntervalReference"]
             }
         }
@@ -188,18 +188,5 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Commit the initial model.
             modelUpdateTransaction.commit();
         }
-    };
-
-    /**
-     *
-     * A listener for the gamepad navigator component to clear the connectivity interval
-     * when the instance of the component is destroyed.
-     *
-     * @param {Number} connectivityIntervalReference - The reference to the gamepad
-     *                                                 connection interval loop.
-     *
-     */
-    gamepad.navigator.clearConnectivityInterval = function (connectivityIntervalReference) {
-        clearInterval(connectivityIntervalReference);
     };
 })(fluid);
