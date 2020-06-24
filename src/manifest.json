@@ -6,6 +6,11 @@
     "manifest_version": 2,
     "content_scripts": [{
         "matches": ["<all_urls>"],
-        "js": ["js/lib/infusion/infusion-all.min.js", "js/content_scripts/gamepad-navigator.js"]
+        "js": [
+            "js/lib/infusion/infusion-all.min.js",
+            "js/content_scripts/gamepad-navigator.js",
+            "js/content_scripts/input-mapper-utils.js",
+            "js/content_scripts/input-mapper.js"
+        ]
     }]
 }

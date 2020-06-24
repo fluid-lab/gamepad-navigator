@@ -10,8 +10,6 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* eslint-env browser */
-
 (function (fluid) {
     "use strict";
 
@@ -31,14 +29,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         listeners: {
             onCreate: "{that}.attachListener",
             onGamepadConnected: "{that}.onConnected",
-            onGamepadDisconnected: "{that}.onDisconnected"
+            onGamepadDisconnected: "{that}.onDisconnected",
+            "onDestroy.clearConnectivityInterval": "{that}.clearConnectivityInterval"
         },
-        frequency: 100,
-        connectivityIntervalReference: null,
+        windowObject: window,
+        frequency: 50,
+        members: {
+            connectivityIntervalReference: null
+        },
         invokers: {
             attachListener: {
                 funcName: "gamepad.navigator.attachListener",
-                args: ["{that}", "{window}"]
+                args: ["{that}"]
             },
             onConnected: {
                 funcName: "gamepad.navigator.onConnected",
@@ -47,6 +49,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             onDisconnected: {
                 funcName: "gamepad.navigator.onDisconnected",
                 args: ["{that}"]
+            },
+            clearConnectivityInterval: {
+                funcName: "clearInterval",
+                args: ["{that}.options.members.connectivityIntervalReference"]
             }
         }
     });
@@ -57,17 +63,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * component's events on being triggered.
      *
      * @param {Object} that - The gamepad navigator component.
-     * @param {Object} window - The browser's "window" object.
      *
      */
-    gamepad.navigator.attachListener = function (that, window) {
+    gamepad.navigator.attachListener = function (that) {
         // When a gamepad is connected
-        window.addEventListener("gamepadconnected", function () {
+        that.options.windowObject.addEventListener("gamepadconnected", function () {
             that.events.onGamepadConnected.fire();
         });
 
         // When gamepad is disconnected
-        window.addEventListener("gamepaddisconnected", function () {
+        that.options.windowObject.addEventListener("gamepaddisconnected", function () {
             that.events.onGamepadDisconnected.fire();
         });
     };
@@ -85,7 +90,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // Store the gamepad info if no other gamepad is already connected.
         if (!that.model.connected) {
             // Scan the state of gamepad frequently.
-            that.options.connectivityIntervalReference = setInterval(function () {
+            that.options.members.connectivityIntervalReference = setInterval(function () {
                 // Retrieve the list of gamepads.
                 var gamepadsList = navigator.getGamepads(),
                     combinedGamepadData = {
@@ -145,12 +150,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * finds any other connected gamepad after a gamepad is disconnected.
      *
      * @param {Object} that - The gamepad navigator component.
-     * @param {Object} event - The window's "gamepaddisconnected" event.
      *
      */
     gamepad.navigator.onDisconnected = function (that) {
         // Stop the interval loop scanning the gamepad state.
-        clearInterval(that.options.connectivityIntervalReference);
+        clearInterval(that.options.members.connectivityIntervalReference);
 
         // Assume by default that no other gamepad is connected/available.
         var isGamepadAvailable = false;
@@ -185,7 +189,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             modelUpdateTransaction.commit();
         }
     };
-
-    // Create an instance of the gamepad navigator.
-    gamepad.navigator();
 })(fluid);
