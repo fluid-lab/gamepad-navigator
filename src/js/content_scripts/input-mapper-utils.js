@@ -24,7 +24,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input (in pixels).
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
-     * @param {Boolean} invert - Determine if the scroll should be in opposite order.
+     * @param {Boolean} invert - Whether the scroll should be in opposite order.
      *
      */
     gamepad.inputMapperUtils.scrollHorizontally = function (that, value, speedFactor, invert) {
@@ -32,16 +32,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
         if (value > 0) {
-            clearInterval(that.options.members.intervalRecords.leftScroll);
+            clearInterval(that.intervalRecords.leftScroll);
             that.scrollRight(value, speedFactor);
         }
         else if (value < 0) {
-            clearInterval(that.options.members.intervalRecords.rightScroll);
+            clearInterval(that.intervalRecords.rightScroll);
             that.scrollLeft(-1 * value, speedFactor);
         }
         else {
-            clearInterval(that.options.members.intervalRecords.leftScroll);
-            clearInterval(that.options.members.intervalRecords.rightScroll);
+            clearInterval(that.intervalRecords.leftScroll);
+            clearInterval(that.intervalRecords.rightScroll);
         }
     };
 
@@ -59,7 +59,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.members.intervalRecords.leftScroll);
+        clearInterval(that.intervalRecords.leftScroll);
 
         /**
          * Scroll the webpage towards the left only if the input value is more than the
@@ -67,7 +67,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         if (value > that.options.cutoffValue) {
             // Scroll to the left according to the new input value.
-            that.options.members.intervalRecords.leftScroll = setInterval(function () {
+            that.intervalRecords.leftScroll = setInterval(function () {
                 var xOffset = $(that.options.windowObject).scrollLeft();
                 $(that.options.windowObject).scrollLeft(xOffset - value * 50 * speedFactor);
             }, that.options.frequency);
@@ -88,7 +88,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.members.intervalRecords.rightScroll);
+        clearInterval(that.intervalRecords.rightScroll);
 
         /**
          * Scroll the webpage towards the right only if the input value is more than the
@@ -96,7 +96,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         if (value > that.options.cutoffValue) {
             // Scroll to the right according to the new input value.
-            that.options.members.intervalRecords.rightScroll = setInterval(function () {
+            that.intervalRecords.rightScroll = setInterval(function () {
                 var xOffset = $(that.options.windowObject).scrollLeft();
                 $(that.options.windowObject).scrollLeft(xOffset + value * 50 * speedFactor);
             }, that.options.frequency);
@@ -110,7 +110,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input (in pixels).
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
-     * @param {Boolean} invert - Determine if the scroll should be in opposite order.
+     * @param {Boolean} invert - Whether the scroll should be in opposite order.
      *
      */
     gamepad.inputMapperUtils.scrollVertically = function (that, value, speedFactor, invert) {
@@ -118,16 +118,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
         if (value > 0) {
-            clearInterval(that.options.members.intervalRecords.upwardScroll);
+            clearInterval(that.intervalRecords.upwardScroll);
             that.scrollDown(value, speedFactor);
         }
         else if (value < 0) {
-            clearInterval(that.options.members.intervalRecords.downwardScroll);
+            clearInterval(that.intervalRecords.downwardScroll);
             that.scrollUp(-1 * value, speedFactor);
         }
         else {
-            clearInterval(that.options.members.intervalRecords.upwardScroll);
-            clearInterval(that.options.members.intervalRecords.downwardScroll);
+            clearInterval(that.intervalRecords.upwardScroll);
+            clearInterval(that.intervalRecords.downwardScroll);
         }
     };
 
@@ -145,7 +145,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.members.intervalRecords.upwardScroll);
+        clearInterval(that.intervalRecords.upwardScroll);
 
         /**
          * Scroll the webpage upward only if the input value is more than the cutoff
@@ -153,7 +153,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         if (value > that.options.cutoffValue) {
             // Scroll upward according to the new input value.
-            that.options.members.intervalRecords.upwardScroll = setInterval(function () {
+            that.intervalRecords.upwardScroll = setInterval(function () {
                 var yOffset = $(that.options.windowObject).scrollTop();
                 $(that.options.windowObject).scrollTop(yOffset - value * 50 * speedFactor);
             }, that.options.frequency);
@@ -174,7 +174,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
          */
-        clearInterval(that.options.members.intervalRecords.downwardScroll);
+        clearInterval(that.intervalRecords.downwardScroll);
 
         /**
          * Scroll the webpage downward only if the input value is more than the cutoff
@@ -182,7 +182,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         if (value > that.options.cutoffValue) {
             // Scroll upward according to the new input value.
-            that.options.members.intervalRecords.downwardScroll = setInterval(function () {
+            that.intervalRecords.downwardScroll = setInterval(function () {
                 var yOffset = $(that.options.windowObject).scrollTop();
                 $(that.options.windowObject).scrollTop(yOffset + value * 50 * speedFactor);
             }, that.options.frequency);
@@ -191,28 +191,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Tab through the webpage using analog sticks.
+     * Tab through the webpage using thumbsticks.
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
      * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
-     * @param {Boolean} invert - Determine if the tabbing should be in opposite order.
+     * @param {Boolean} invert - Whether the tabbing should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.analogTabbing = function (that, value, speedFactor, invert) {
+    gamepad.inputMapperUtils.thumbstickTabbing = function (that, value, speedFactor, invert) {
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
-        if (value > 0.20) {
-            clearInterval(that.options.members.intervalRecords.reverseTab);
+        if (value > 0) {
+            clearInterval(that.intervalRecords.reverseTab);
             that.forwardTab(value, speedFactor);
         }
-        else if (value < -0.20) {
-            clearInterval(that.options.members.intervalRecords.forwardTab);
+        else if (value < 0) {
+            clearInterval(that.intervalRecords.forwardTab);
             that.reverseTab(-1 * value, speedFactor);
         }
         else {
-            clearInterval(that.options.members.intervalRecords.forwardTab);
-            clearInterval(that.options.members.intervalRecords.reverseTab);
+            clearInterval(that.intervalRecords.forwardTab);
+            clearInterval(that.intervalRecords.reverseTab);
         }
     };
 
@@ -227,36 +227,39 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.inputMapperUtils.forwardTab = function (that, value, speedFactor) {
         // Stop tabbing for the previous input value.
-        clearInterval(that.options.members.intervalRecords.forwardTab);
+        clearInterval(that.intervalRecords.forwardTab);
 
         if (value > that.options.cutoffValue) {
-            that.options.members.intervalRecords.forwardTab = setInterval(function () {
+            that.intervalRecords.forwardTab = setInterval(function () {
                 // Obtain the tabbable DOM elements and sort them.
                 var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter),
                     length = tabbableElements.length;
 
-                /**
-                 * If the body element of the page is focused or if no element is
-                 * currently focused, shift the focus to the first element. Otherwise
-                 * shift the focus to the next element.
-                 */
-                if (document.activeElement === document.querySelector("body") || !document.activeElement) {
-                    tabbableElements[0].focus();
-                }
-                else {
-                    var activeElementIndex = tabbableElements.indexOf(document.activeElement);
-
+                // Tab only if at least one tabbable element is available.
+                if (length) {
                     /**
-                     * If the currently focused element is not found in the list, refer to
-                     * the stored value of the index.
+                     * If the body element of the page is focused or if no element is
+                     * currently focused, shift the focus to the first element. Otherwise
+                     * shift the focus to the next element.
                      */
-                    if (activeElementIndex === -1) {
-                        activeElementIndex = that.options.members.currentTabIndex;
+                    if (document.activeElement === document.querySelector("body") || !document.activeElement) {
+                        tabbableElements[0].focus();
                     }
-                    tabbableElements[(activeElementIndex + 1) % length].focus();
+                    else {
+                        var activeElementIndex = tabbableElements.indexOf(document.activeElement);
 
-                    // Store the index of the currently focused element.
-                    that.options.members.currentTabIndex = (activeElementIndex + 1) % length;
+                        /**
+                         * If the currently focused element is not found in the list, refer to
+                         * the stored value of the index.
+                         */
+                        if (activeElementIndex === -1) {
+                            activeElementIndex = that.currentTabIndex;
+                        }
+                        tabbableElements[(activeElementIndex + 1) % length].focus();
+
+                        // Store the index of the currently focused element.
+                        that.currentTabIndex = (activeElementIndex + 1) % length;
+                    }
                 }
             }, that.options.frequency * speedFactor);
         }
@@ -273,35 +276,41 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.inputMapperUtils.reverseTab = function (that, value, speedFactor) {
         // Stop tabbing for the previous input value.
-        clearInterval(that.options.members.intervalRecords.reverseTab);
+        clearInterval(that.intervalRecords.reverseTab);
 
         if (value > that.options.cutoffValue) {
-            that.options.members.intervalRecords.reverseTab = setInterval(function () {
+            that.intervalRecords.reverseTab = setInterval(function () {
                 // Obtain the tabbable DOM elements and sort them.
                 var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter),
                     length = tabbableElements.length;
 
-                /**
-                 * If the body element of the page is focused, shift the focus to the last
-                 * element. Otherwise shift the focus to the previous element.
-                 */
-                if (document.activeElement === document.querySelector("body") || !document.activeElement) {
-                    tabbableElements[length - 1].focus();
-                }
-                else {
-                    var activeElementIndex = tabbableElements.indexOf(document.activeElement);
-
+                // Tab only if at least one tabbable element is available.
+                if (length) {
                     /**
-                     * If the currently focused element is not found in the list, refer to
-                     * the stored value of the index.
+                     * If the body element of the page is focused, shift the focus to the last
+                     * element. Otherwise shift the focus to the previous element.
                      */
-                    if (activeElementIndex === -1) {
-                        activeElementIndex = that.options.members.currentTabIndex;
+                    if (document.activeElement === document.querySelector("body") || !document.activeElement) {
+                        tabbableElements[length - 1].focus();
                     }
-                    tabbableElements[(activeElementIndex - 1) % length].focus();
+                    else {
+                        var activeElementIndex = tabbableElements.indexOf(document.activeElement);
 
-                    // Store the index of the currently focused element.
-                    that.options.members.currentTabIndex = (activeElementIndex - 1) % length;
+                        /**
+                         * If the currently active element is not found in the list,
+                         * refer to the stored value of the index.
+                         */
+                        if (activeElementIndex === -1) {
+                            activeElementIndex = that.currentTabIndex;
+                        }
+                        else if (activeElementIndex === 0) {
+                            activeElementIndex = length;
+                        }
+                        tabbableElements[activeElementIndex - 1].focus();
+
+                        // Store the index of the currently focused element.
+                        that.currentTabIndex = activeElementIndex - 1;
+                    }
                 }
             }, that.options.frequency * speedFactor);
         }
