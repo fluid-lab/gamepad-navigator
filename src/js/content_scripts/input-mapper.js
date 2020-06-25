@@ -19,6 +19,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.inputMapper", {
         gradeNames: ["gamepad.navigator"],
         model: {
+            // TODO: Make functions used in axes to be reusable for analogue buttons.
             map: {
                 buttons: {
                     // Face Button.
@@ -195,6 +196,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}.intervalRecords"]
             },
             /**
+             * TODO: Investigate, identify, and fix tab navigation issues.
              * TODO: Add tests to check if the elements are returned in the default
              * order of their tabindex.
              */
