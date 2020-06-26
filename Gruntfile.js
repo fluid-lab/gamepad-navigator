@@ -61,6 +61,12 @@ module.exports = function (grunt) {
                 src: "node_modules/infusion/dist/infusion-all.min.js",
                 dest: "dist/js/lib/infusion/"
             },
+            ally: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/ally.js/ally.min.js",
+                dest: "dist/js/lib/ally/"
+            },
             source: {
                 expand: true,
                 cwd: "src",

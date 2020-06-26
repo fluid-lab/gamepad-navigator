@@ -15,6 +15,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     var gamepad = fluid.registerNamespace("gamepad");
 
+    // TODO: Add tests to detect extension errors.
     fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
@@ -52,7 +53,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             clearConnectivityInterval: {
                 funcName: "clearInterval",
-                args: ["{that}.options.members.connectivityIntervalReference"]
+                args: ["{that}.connectivityIntervalReference"]
             }
         }
     });
@@ -90,7 +91,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // Store the gamepad info if no other gamepad is already connected.
         if (!that.model.connected) {
             // Scan the state of gamepad frequently.
-            that.options.members.connectivityIntervalReference = setInterval(function () {
+            that.connectivityIntervalReference = setInterval(function () {
                 // Retrieve the list of gamepads.
                 var gamepadsList = navigator.getGamepads(),
                     combinedGamepadData = {
@@ -154,7 +155,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.navigator.onDisconnected = function (that) {
         // Stop the interval loop scanning the gamepad state.
-        clearInterval(that.options.members.connectivityIntervalReference);
+        clearInterval(that.connectivityIntervalReference);
 
         // Assume by default that no other gamepad is connected/available.
         var isGamepadAvailable = false;

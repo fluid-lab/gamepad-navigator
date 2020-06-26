@@ -16,6 +16,7 @@
         "lint": "grunt lint"
     },
     "dependencies": {
+        "ally.js": "1.4.1",
         "infusion": "3.0.0-dev.20200326T173810Z.24ddb2718"
     },
     "devDependencies": {
