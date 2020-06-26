@@ -310,6 +310,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             clearInterval(record);
         });
     };
-
-    gamepad.inputMapper();
 })(fluid);
