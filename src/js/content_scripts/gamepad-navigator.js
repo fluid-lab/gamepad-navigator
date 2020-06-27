@@ -30,7 +30,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         listeners: {
             onCreate: "{that}.attachListener",
             onGamepadConnected: "{that}.onConnected",
-            onGamepadDisconnected: "{that}.onDisconnected",
+            "onGamepadDisconnected.handleConectedGamepads": "{that}.onDisconnected",
             "onDestroy.clearConnectivityInterval": "{that}.clearConnectivityInterval"
         },
         windowObject: window,
