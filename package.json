@@ -13,7 +13,8 @@
     },
     "homepage": "https://github.com/fluid-lab/gamepad-navigator#readme",
     "scripts": {
-        "lint": "grunt lint"
+        "lint": "grunt lint",
+        "test": "testem ci --file tests/testem.json"
     },
     "dependencies": {
         "ally.js": "1.4.1",
