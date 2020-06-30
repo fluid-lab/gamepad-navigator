@@ -12,7 +12,7 @@
             "js/content_scripts/gamepad-navigator.js",
             "js/content_scripts/input-mapper-utils.js",
             "js/content_scripts/input-mapper.js",
-            "js/content_scripts/instance.js"
+            "js/content_scripts/input-mapper-instance.js"
         ]
     }]
 }

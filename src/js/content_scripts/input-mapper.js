@@ -191,7 +191,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             currentTabIndex: 0
         },
         cutoffValue: 0.20,
-        multiplicationFactor: 50,
+        scrollInputMultiplier: 50,
         invokers: {
             produceNavigation: {
                 funcName: "gamepad.inputMapper.produceNavigation",
