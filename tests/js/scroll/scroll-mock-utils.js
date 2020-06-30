@@ -29,7 +29,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} inputButtonsSpec - The buttons with their values.
      *
-     * @return {Object} - The mock of the gamepad.
+     * @return {Array} - The mock of the gamepad.
      *
      */
     gamepad.tests.utils.unidirectional.buttons = function (inputButtonsSpec) {
@@ -54,7 +54,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} inputAxesSpec - The axes with their values.
      *
-     * @return {Object} - The mock of the gamepad.
+     * @return {Array} - The mock of the gamepad.
      *
      */
     gamepad.tests.utils.unidirectional.axes = function (inputAxesSpec) {
@@ -77,7 +77,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Number} inputAxes - The index number of the axes.
      *
-     * @return {Object} - The mock of the gamepad.
+     * @return {Array} - The mock of the gamepad.
      *
      */
     gamepad.tests.utils.bidirectional.oneAxis = function (inputAxes) {
@@ -112,7 +112,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} inputAxesSpec - The axes with their values.
      *
-     * @return {Object} - The mock of the gamepad.
+     * @return {Array} - The mock of the gamepad.
      *
      */
     gamepad.tests.utils.bidirectional.diagonalAxes = function (inputAxesSpec) {

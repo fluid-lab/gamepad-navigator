@@ -26,13 +26,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *   buttons: { "2": 1 }
      * }
      *
-     * The above inputSpec will return a gamepad mock with the value of button 2 to 1.
+     * The above inputSpec returns a gamepad mock with the value of button 2 set to 1.
      *
      * {
      *   axes: { "1": 0.753 }
      * }
      *
-     * The above inputSpec will return a gamepad mock with the value of axes 2 to 0.753.
+     * The above inputSpec return a gamepad mock with the value of axes 2 set to 0.753.
      *
      * {
      *   buttons: {
@@ -42,8 +42,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *   axes: { "3": 0.92 }
      * }
      *
-     * The above inputSpec will return a gamepad mock with the value of button 5 to 1,
-     * button 11 to 1, and of axes 3 to 0.92.
+     * The above inputSpec returns a gamepad mock with the value of button 5 set to 1,
+     * button 11 set to 1, and of axes 3 set to 0.92.
      *
      * @param {Object} inputSpec - (optional) The object containing the desired value for
      *                             the gamepad inputs.

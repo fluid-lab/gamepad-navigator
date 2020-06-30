@@ -1,9 +1,4 @@
 {
     "test_page": "tests/all-tests.html",
-    "launch": "Chrome",
-    "browser_args": {
-        "Chrome": [
-            "--disable-extensions-except=dist/"
-        ]
-    }
+    "launch": "Chrome"
 }
