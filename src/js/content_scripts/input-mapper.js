@@ -228,10 +228,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.forwardTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
-            /**
-             * TODO: Add tests to check if the browser window's position changes using
-             * the gamepad.
-             */
             scrollUp: {
                 funcName: "gamepad.inputMapperUtils.scrollUp",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]

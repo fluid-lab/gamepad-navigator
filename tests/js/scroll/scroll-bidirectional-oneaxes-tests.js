@@ -26,7 +26,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 gamepad.tests.count = 3;
                 gamepad.tests.frequency = 50;
 
-                // Make sure the gamepad should be connected with no buttons/axes disturbed initially.
+                // To test the gamepad's initial state.
                 gamepad.tests.modelAtRest = {
                     connected: true,
                     axes: {},
@@ -95,13 +95,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     resolve(window.scrollX);
                 }, gamepad.tests.frequency * 3);
             }).then(function (previousXCoordinate) {
-
                 // Wait for a few milliseconds for the webpage to scroll.
                 setTimeout(function () {
-                    jqUnit.assertNotEquals("The page should have been scrolled towards the left.", previousXCoordinate, window.scrollX);
-
                     // Restore the gamepad back to its neutral state.
                     gamepad.tests.navigator.pollGamepads();
+
+                    // Check if the webpage has scrolled towards the left.
+                    jqUnit.assertNotEquals("The page should have been scrolled towards the left.", previousXCoordinate, window.scrollX);
                     jqUnit.start();
                 }, gamepad.tests.frequency * 3);
             });
@@ -150,13 +150,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     resolve(window.scrollY);
                 }, gamepad.tests.frequency * 3);
             }).then(function (previousYCoordinate) {
+                // Wait for a few milliseconds for the webpage to scroll.
                 setTimeout(function () {
-
-                    // Wait for a few milliseconds for the webpage to scroll.
-                    jqUnit.assertNotEquals("The page should have been scrolled up.", previousYCoordinate, window.scrollY);
-
                     // Restore the gamepad back to its neutral state.
                     gamepad.tests.navigator.pollGamepads();
+
+                    // Check if the webpage has scrolled up.
+                    jqUnit.assertNotEquals("The page should have been scrolled up.", previousYCoordinate, window.scrollY);
                     jqUnit.start();
                 }, gamepad.tests.frequency * 3);
             });

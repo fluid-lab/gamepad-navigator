@@ -26,7 +26,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 gamepad.tests.count = 2;
                 gamepad.tests.frequency = 50;
 
-                // Make sure the gamepad should be connected with no buttons/axes disturbed initially.
+                // To test the gamepad's initial state.
                 gamepad.tests.modelAtRest = {
                     connected: true,
                     axes: {},
@@ -82,11 +82,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Wait for a few milliseconds for the webpage to scroll.
             setTimeout(function () {
-                var scrolledBottomRight = (window.scrollY !== 0) && (window.scrollX !== 0);
-                jqUnit.assertTrue("The page should have scrolled towards the bottom-right corner.", scrolledBottomRight);
-
                 // Restore the gamepad back to its neutral state.
                 gamepad.tests.navigator.pollGamepads();
+
+                // Check if the webpage has scrolled towards the bottom-right corner.
+                var scrolledBottomRight = (window.scrollY !== 0) && (window.scrollX !== 0);
+                jqUnit.assertTrue("The page should have scrolled towards the bottom-right corner.", scrolledBottomRight);
                 jqUnit.start();
             }, gamepad.tests.frequency * 3);
         });
@@ -121,11 +122,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Wait for a few milliseconds for the webpage to scroll.
             setTimeout(function () {
-                var scrolledBottomLeft = (window.scrollY > 0) && (window.scrollX < 400);
-                jqUnit.assertTrue("The page should have scrolled towards the bottom-left corner.", scrolledBottomLeft);
-
                 // Restore the gamepad back to its neutral state.
                 gamepad.tests.navigator.pollGamepads();
+
+                // Check if the webpage has scrolled towards the bottom-left corner.
+                var scrolledBottomLeft = (window.scrollY > 0) && (window.scrollX < 400);
+                jqUnit.assertTrue("The page should have scrolled towards the bottom-left corner.", scrolledBottomLeft);
                 jqUnit.start();
             }, gamepad.tests.frequency * 3);
         });
@@ -160,11 +162,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Wait for a few milliseconds for the webpage to scroll.
             setTimeout(function () {
-                var towardsTopLeft = (window.scrollY < 400) && (window.scrollX < 400);
-                jqUnit.assertTrue("The page should have scrolled towards the top-left corner.", towardsTopLeft);
-
                 // Restore the gamepad back to its neutral state.
                 gamepad.tests.navigator.pollGamepads();
+
+                // Check if the webpage has scrolled towards the top-left corner.
+                var towardsTopLeft = (window.scrollY < 400) && (window.scrollX < 400);
+                jqUnit.assertTrue("The page should have scrolled towards the top-left corner.", towardsTopLeft);
                 jqUnit.start();
             }, gamepad.tests.frequency * 3);
         });
@@ -199,11 +202,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Wait for a few milliseconds for the webpage to scroll.
             setTimeout(function () {
-                var towardsTopRight = (window.scrollY < 400) && (window.scrollX > 0);
-                jqUnit.assertTrue("The page should have scrolled towards the top-right corner.", towardsTopRight);
-
                 // Restore the gamepad back to its neutral state.
                 gamepad.tests.navigator.pollGamepads();
+
+                // Check if the webpage has scrolled towards the top-right corner.
+                var towardsTopRight = (window.scrollY < 400) && (window.scrollX > 0);
+                jqUnit.assertTrue("The page should have scrolled towards the top-right corner.", towardsTopRight);
                 jqUnit.start();
             }, gamepad.tests.frequency * 3);
         });
