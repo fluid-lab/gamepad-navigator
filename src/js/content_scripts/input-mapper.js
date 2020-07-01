@@ -197,27 +197,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             /**
              * TODO: Investigate, identify, and fix tab navigation issues.
-             * TODO: Add tests to check if the elements are returned in the default
-             * order of their tabindex.
              */
             tabindexSortFilter: {
                 funcName: "gamepad.inputMapperUtils.tabindexSortFilter",
                 args: ["{arguments}.0", "{arguments}.1"]
             },
-            /**
-             * TODO: Add tests to check if the gamepad tabs to the previous element.
-             * TODO: Add tests to check if the gamepad can jump the focus from the first
-             * to the last element.
-             */
             reverseTab: {
                 funcName: "gamepad.inputMapperUtils.reverseTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
-            /**
-             * TODO: Add tests to check if the gamepad tabs to the next element.
-             * TODO: Add test to check if the gamepad can jump the focus from the last
-             * to the first element.
-             */
             forwardTab: {
                 funcName: "gamepad.inputMapperUtils.forwardTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
@@ -250,7 +238,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.scrollVertically",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
-            // TODO: Add tests to check if the gamepad tabs in the default order.
             // TODO: Add tests for when the number of tabbable elements changes.
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.thumbstickTabbing",

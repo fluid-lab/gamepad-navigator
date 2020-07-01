@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Gamepad Navigator Tests</title>
+
+    <link rel="stylesheet" media="screen" href="../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
+    <link rel="stylesheet" href="../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
+
+    <script type="text/javascript" src="../node_modules/infusion/dist/infusion-all.min.js"></script>
+    <script type="text/javascript" src="../node_modules/infusion/tests/lib/qunit/js/qunit.js"></script>
+    <script type="text/javascript" src="/testem.js"></script>
+    <script type="text/javascript" src="../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.js"></script>
+    <script>
+        QUnit.testSuites([
+            "./html/scroll-tests.html",
+            "./html/tab-tests.html"
+        ]);
+    </script>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+</div>
+</body>
+</html>
