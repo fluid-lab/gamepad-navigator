@@ -15,95 +15,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 (function (fluid) {
     "use strict";
 
+    fluid.registerNamespace("gamepad.tests.utils");
     fluid.registerNamespace("gamepad.tests.utils.unidirectional");
     fluid.registerNamespace("gamepad.tests.utils.bidirectional");
 
     /**
      *
-     * Generates a mock for the unidirectional button tests for scroll. The inputButton
-     * should be in the following format:
+     * Generates a mock for the unidirectional button tests for scroll.
      *
-     * inputButton = {
-     *     "5": 0.75
-     * }
-     *
-     * @param {Object} inputButtonsSpec - The buttons with their values.
+     * @param {Object} inputButton - The index number of the button.
      *
      * @return {Array} - The mock of the gamepad.
      *
      */
-    gamepad.tests.utils.unidirectional.buttons = function (inputButtonsSpec) {
-        var gamepadMock = [];
-        if (gamepad.tests.windowObject.count > 0) {
-            gamepadMock = gamepad.tests.utils.generateGamepadMock({
-                buttons: inputButtonsSpec
-            });
-            gamepad.tests.windowObject.count--;
+    gamepad.tests.utils.unidirectional.buttons = function (inputButton) {
+        var gamepadMock = null,
+            inputSpec = { buttons: {} };
+
+        // Initial count is set to 2 in all cases.
+        if (gamepad.tests.count === 1) {
+            inputSpec.buttons[inputButton] = 1;
         }
+
+        // Return a list of gamepad objects (with no buttons/axes disturbed by default).
+        gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
+
+        // Reduce the count on every call.
+        gamepad.tests.count--;
         return gamepadMock;
     };
 
     /**
      *
-     * Generates a mock for the unidirectional axes tests for scroll. The inputAxes
-     * should be in the following format:
-     *
-     * inputAxes = {
-     *     "1": 0.75
-     * }
-     *
-     * @param {Object} inputAxesSpec - The axes with their values.
-     *
-     * @return {Array} - The mock of the gamepad.
-     *
-     */
-    gamepad.tests.utils.unidirectional.axes = function (inputAxesSpec) {
-        var gamepadMock = [];
-        if (gamepad.tests.windowObject.count > 4) {
-            gamepadMock = gamepad.tests.utils.generateGamepadMock();
-        }
-        else if (gamepad.tests.windowObject.count > 0) {
-            gamepadMock = gamepad.tests.utils.generateGamepadMock({
-                axes: inputAxesSpec
-            });
-        }
-        gamepad.tests.windowObject.count--;
-        return gamepadMock;
-    };
-
-    /**
-     *
-     * Generates a mock for the bidirectional tests for scroll.
-     *
-     * @param {Number} inputAxes - The index number of the axes.
-     *
-     * @return {Array} - The mock of the gamepad.
-     *
-     */
-    gamepad.tests.utils.bidirectional.oneAxis = function (inputAxes) {
-        var gamepadMock = [],
-            inputSpec = { axes: {} };
-        if (gamepad.tests.windowObject.count === 10) {
-            gamepadMock = gamepad.tests.utils.generateGamepadMock();
-        }
-        else if (gamepad.tests.windowObject.count > 4) {
-            // Scroll down.
-            inputSpec.axes[inputAxes] = 1;
-            gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
-        }
-        else if (gamepad.tests.windowObject.count > 0) {
-            // Scroll up.
-            inputSpec.axes[inputAxes] = -1;
-            gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
-        }
-        gamepad.tests.windowObject.count--;
-        return gamepadMock;
-    };
-
-    /**
-     *
-     * Generates a mock for the bidirectional diagonal axes tests for scroll. The
-     * inputAxes should be in the following format:
+     * Generates a mock for the tests using axes for scroll. The inputAxes should be in
+     * the following format:
      *
      * inputAxes = {
      *     "0": 1
@@ -115,17 +60,48 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @return {Array} - The mock of the gamepad.
      *
      */
-    gamepad.tests.utils.bidirectional.diagonalAxes = function (inputAxesSpec) {
-        var gamepadMock = [];
-        if (gamepad.tests.windowObject.count > 4) {
+    gamepad.tests.utils.mockFromAxes = function (inputAxesSpec) {
+        // Return a list of gamepad objects with no buttons/axes disturbed (by default).
+        var gamepadMock = null;
+
+        // Initial count is set to 2 in all cases.
+        if (gamepad.tests.count === 1) {
+            gamepadMock = gamepad.tests.utils.generateGamepadMock({ axes: inputAxesSpec });
+        }
+        else {
             gamepadMock = gamepad.tests.utils.generateGamepadMock();
         }
-        else if (gamepad.tests.windowObject.count > 0) {
-            gamepadMock = gamepad.tests.utils.generateGamepadMock({
-                axes: inputAxesSpec
-            });
+
+        // Reduce the count on every call.
+        gamepad.tests.count--;
+        return gamepadMock;
+    };
+
+    /**
+     *
+     * Generates a mock for the bidirectional oneaxes tests for scroll.
+     *
+     * @param {Number} inputAxes - The index number of the axes.
+     *
+     * @return {Array} - The mock of the gamepad.
+     *
+     */
+    gamepad.tests.utils.bidirectional.oneAxes = function (inputAxes) {
+        var inputSpec = { axes: {} };
+
+        // Initial count is set to 3 in all cases.
+        if (gamepad.tests.count === 2) {
+            inputSpec.axes[inputAxes] = 1;
         }
-        gamepad.tests.windowObject.count--;
+        else if (gamepad.tests.count === 1) {
+            inputSpec.axes[inputAxes] = -1;
+        }
+
+        // Return a list of gamepad objects (with no buttons/axes disturbed by default).
+        var gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
+
+        // Reduce the count on every call.
+        gamepad.tests.count--;
         return gamepadMock;
     };
 })(fluid);
