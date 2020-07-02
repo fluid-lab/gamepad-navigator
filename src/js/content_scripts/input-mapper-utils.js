@@ -349,4 +349,49 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             return 0;
         }
     };
+
+    /**
+     *
+     * Click on the currently focused element.
+     *
+     * @param {Integer} value - The value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.click = function (value) {
+        if (value > 0) {
+            /**
+             * If SELECT element is currently focused, toggle its state. Otherwise perform
+             * the regular click operation.
+             */
+            if (document.activeElement.nodeName === "SELECT") {
+                var optionsLength = 0;
+
+                // Compute the number of options and store it.
+                document.activeElement.childNodes.forEach(function (childNode) {
+                    if (childNode.nodeName === "OPTION") {
+                        optionsLength++;
+                    }
+                });
+
+                // Toggle the SELECT dropdown.
+                if (!document.activeElement.getAttribute("size") || document.activeElement.getAttribute("size") === "1") {
+                    /**
+                     * Allow limited expansion to avoid an overflowing list, considering the
+                     * list could go as large as 100 or more (for example, a list of
+                     * countries)
+                     */
+                    var length = optionsLength < 15 ? optionsLength : 15;
+                    document.activeElement.setAttribute("size", length);
+                }
+                else {
+                    // Restore the size of the dropdown.
+                    document.activeElement.setAttribute("size", 1);
+                }
+            }
+            else {
+                // Click on the focused element.
+                document.activeElement.click();
+            }
+        }
+    };
 })(fluid, jQuery);

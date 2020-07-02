@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Gamepad Navigator Tabbing Tests</title>
+
+        <link rel="stylesheet" media="screen" href="../../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
+        <link rel="stylesheet" href="../../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
+
+        <script type="text/javascript" src="../../node_modules/infusion/dist/infusion-all.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/ally.js/ally.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/lib/qunit/js/qunit.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/test-core/jqUnit/js/jqUnit.js"></script>
+
+        <script type="text/javascript" src="../../src/js/content_scripts/gamepad-navigator.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-utils.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper.js"></script>
+
+        <script type="text/javascript" src="../js/gamepad-mock.js"></script>
+        <script type="text/javascript" src="../js/click/click-mock-utils.js"></script>
+        <script type="text/javascript" src="../js/click/click-basic-tests.js"></script>
+        <script type="text/javascript" src="../js/click/click-dropdown-tests.js"></script>
+    </head>
+    <body id="body">
+        <h1 id="qunit-header">Gamepad Navigator Click Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+
+        <div class="test-elements">
+            <br>
+            <button type="button" onclick="gamepad.tests.clicked = true;">Sample Button</button>
+            <br><br>
+            <fieldset id="radios">
+                <input type="radio" id="radio-one" name="group1" value="Radio One"><label for="radio-one">Radio One</label><br>
+                <input type="radio" id="radio-two" name="group1" value="Radio Two"><label for="radio-two">Radio Two</label>
+            </fieldset><br>
+            <fieldset id="checkboxes">
+                <input type="checkbox" id="checkbox-one" name="group1">
+                <label for="checkbox-one"> Checkbox One</label><br>
+                <input type="checkbox" id="checkbox-two" name="group1">
+                <label for="checkbox-two"> Checkbox Two</label><br>
+                <input type="checkbox" id="checkbox-three" name="group1">
+                <label for="checkbox-three"> Checkbox Three</label>
+            </fieldset><br>
+            <br>
+            <label for="dropdown-short">Short Dropdown: </label>
+            <select id="dropdown-short">
+                <option id="short-one">one</option>
+                <option id="short-two">two</option>
+                <option id="short-three">three</option>
+                <option id="short-four">four</option>
+                <option id="short-five">five</option>
+            </select>
+            <br><br>
+            <label for="dropdown-long">Long Dropdown: </label>
+            <select id="dropdown-long">
+                <option id="long-one">one</option>
+                <option id="long-two">two</option>
+                <option id="long-three">three</option>
+                <option id="long-four">four</option>
+                <option id="long-five">five</option>
+                <option id="long-six">six</option>
+                <option id="long-seven">seven</option>
+                <option id="long-eight">eight</option>
+                <option id="long-nine">nine</option>
+                <option id="long-ten">ten</option>
+                <option id="long-eleven">eleven</option>
+                <option id="long-twelve">twelve</option>
+                <option id="long-thirteen">thirteen</option>
+                <option id="long-fourteen">fourteen</option>
+                <option id="long-fifteen">fifteen</option>
+                <option id="long-sixteen">sixteen</option>
+                <option id="long-seventeen">seventeen</option>
+                <option id="long-eighteen">eighteen</option>
+                <option id="long-nineteen">nineteen</option>
+                <option id="long-twenty">twenty</option>
+            </select>
+        </div>
+    </body>
+</html>
