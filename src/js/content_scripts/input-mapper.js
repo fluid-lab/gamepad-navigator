@@ -172,7 +172,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         listeners: {
-            "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords"
+            "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
+            /**
+             * TODO: Adjust the gamepaddisconnected event so that the other gamepad's
+             * navigation doesn't break.
+             */
+            "onGamepadDisconnected.clearIntervalRecords": "{that}.clearIntervalRecords"
         },
         members: {
             intervalRecords: {
@@ -186,6 +191,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             currentTabIndex: 0
         },
         cutoffValue: 0.20,
+        scrollInputMultiplier: 50,
         invokers: {
             produceNavigation: {
                 funcName: "gamepad.inputMapper.produceNavigation",
@@ -222,10 +228,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.forwardTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
-            /**
-             * TODO: Add tests to check if the browser window's position changes using
-             * the gamepad.
-             */
             scrollUp: {
                 funcName: "gamepad.inputMapperUtils.scrollUp",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
@@ -310,6 +312,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             clearInterval(record);
         });
     };
-
-    gamepad.inputMapper();
 })(fluid);

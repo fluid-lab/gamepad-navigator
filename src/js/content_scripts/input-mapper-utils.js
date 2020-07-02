@@ -69,7 +69,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Scroll to the left according to the new input value.
             that.intervalRecords.leftScroll = setInterval(function () {
                 var xOffset = $(that.options.windowObject).scrollLeft();
-                $(that.options.windowObject).scrollLeft(xOffset - value * 50 * speedFactor);
+                $(that.options.windowObject).scrollLeft(xOffset - value * that.options.scrollInputMultiplier * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -98,7 +98,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Scroll to the right according to the new input value.
             that.intervalRecords.rightScroll = setInterval(function () {
                 var xOffset = $(that.options.windowObject).scrollLeft();
-                $(that.options.windowObject).scrollLeft(xOffset + value * 50 * speedFactor);
+                $(that.options.windowObject).scrollLeft(xOffset + value * that.options.scrollInputMultiplier * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -155,7 +155,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Scroll upward according to the new input value.
             that.intervalRecords.upwardScroll = setInterval(function () {
                 var yOffset = $(that.options.windowObject).scrollTop();
-                $(that.options.windowObject).scrollTop(yOffset - value * 50 * speedFactor);
+                $(that.options.windowObject).scrollTop(yOffset - value * that.options.scrollInputMultiplier * speedFactor);
             }, that.options.frequency);
         }
     };
@@ -184,7 +184,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Scroll upward according to the new input value.
             that.intervalRecords.downwardScroll = setInterval(function () {
                 var yOffset = $(that.options.windowObject).scrollTop();
-                $(that.options.windowObject).scrollTop(yOffset + value * 50 * speedFactor);
+                $(that.options.windowObject).scrollTop(yOffset + value * that.options.scrollInputMultiplier * speedFactor);
             }, that.options.frequency);
         }
     };
