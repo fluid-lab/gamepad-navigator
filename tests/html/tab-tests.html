@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Gamepad Navigator Tabbing Tests</title>
+
+        <link rel="stylesheet" media="screen" href="../../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
+        <link rel="stylesheet" href="../../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
+
+        <script type="text/javascript" src="../../node_modules/infusion/dist/infusion-all.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/ally.js/ally.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/lib/qunit/js/qunit.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/test-core/jqUnit/js/jqUnit.js"></script>
+
+        <script type="text/javascript" src="../../src/js/content_scripts/gamepad-navigator.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-utils.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper.js"></script>
+
+        <script type="text/javascript" src="../js/gamepad-mock.js"></script>
+        <script type="text/javascript" src="../js/tab/tab-mock-utils.js"></script>
+        <script type="text/javascript" src="../js/tab/tab-order-tests.js"></script>
+        <script type="text/javascript" src="../js/tab/tab-button-discrete-tests.js"></script>
+        <script type="text/javascript" src="../js/tab/tab-button-continuous-tests.js"></script>
+        <script type="text/javascript" src="../js/tab/tab-axes-tests.js"></script>
+    </head>
+    <body id="body">
+        <h1 id="qunit-header">Gamepad Navigator Tab Navigation Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+
+        <div class="test-elements">
+            <label for="third">Three (tabindex=3)</label>
+            <input type="text" tabindex="3" id="third"><br><br>
+            <label for="second">Two (tabindex=2)</label>
+            <input type="text" tabindex="2" id="second"><br><br>
+            <a href="#">Without tabindex</a><br><br>
+            <label for="first">One (tabindex=1)</label>
+            <select tabindex="1" id="first">
+                <option>option</option>
+                <option>another option</option>
+            </select><br><br>
+            <div tabindex="5" id="fifth">Five (tabindex=5)</div><br>
+            <label><input type="checkbox">Random Checkbox (no tabindex)</label><br><br>
+            <label for="fourth">Four (tabindex=4)</label>
+            <input type="text" tabindex="4" id="fourth"><br><br>
+            <div tabindex="0" id="last">Last (div with tabindex=0)</div><br>
+            <button tabindex="-1">Button with tabindex=-1</button>
+        </div>
+    </body>
+</html>
