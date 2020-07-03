@@ -19,6 +19,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.registerNamespace("gamepad.tests.utils.dropdown");
     fluid.registerNamespace("gamepad.tests.utils.element");
 
+    // Custom gamepad navigator component grade for simple click tests.
+    fluid.defaults("gamepad.tests.inputMapperForSimpleClickTests", {
+        gradeNames: ["gamepad.inputMapper"],
+        windowObject: gamepad.tests.windowObject,
+        members: { count: 2 }
+    });
+
+    // Custom gamepad navigator component grade for select dropdown click tests.
+    fluid.defaults("gamepad.tests.inputMapperForDropdownClickTests", {
+        gradeNames: ["gamepad.inputMapper"],
+        windowObject: gamepad.tests.windowObject,
+        members: { count: 4 }
+    });
+
     /**
      *
      * Generates a mock for the click tests for dropdown menus.
@@ -26,7 +40,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} inputButton - The index number of the button.
      *
      * @param {Object} testNavigatorInstance - The instance of the gamepad navigator's
-     *                                         inputMapper component under test.
+     *                                         custom inputMapper component (for select
+     *                                         dropdown) under test.
      *
      * @return {Array} - The mock of the gamepad.
      *
@@ -56,7 +71,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} inputButton - The index number of the button.
      *
      * @param {Object} testNavigatorInstance - The instance of the gamepad navigator's
-     *                                         inputMapper component under test.
+     *                                         custom inputMapper component (for simple
+     *                                         DOM elements) under test.
      *
      * @return {Array} - The mock of the gamepad.
      *

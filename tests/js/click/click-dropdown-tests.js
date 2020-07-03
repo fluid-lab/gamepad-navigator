@@ -41,10 +41,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $("#dropdown-short").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                members: { count: 4 }
-            });
+            gamepad.tests.navigator = gamepad.tests.inputMapperForDropdownClickTests();
             gamepad.tests.utils.initialClickTestChecks("#dropdown-short", gamepad.tests.navigator);
 
             // Update the gamepad to click on the short dropdown.
@@ -73,10 +70,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $("#dropdown-long").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                members: { count: 4 }
-            });
+            gamepad.tests.navigator = gamepad.tests.inputMapperForDropdownClickTests();
             gamepad.tests.utils.initialClickTestChecks("#dropdown-long", gamepad.tests.navigator);
 
             // Update the gamepad to click on the long dropdown.

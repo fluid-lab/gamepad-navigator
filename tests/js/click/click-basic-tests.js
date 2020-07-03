@@ -47,10 +47,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $("button").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                members: { count: 2 }
-            });
+            gamepad.tests.navigator = gamepad.tests.inputMapperForSimpleClickTests();
             gamepad.tests.utils.initialClickTestChecks("button", gamepad.tests.navigator);
 
             // Update the gamepad to click on the button element.
@@ -72,10 +69,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $("#radio-one").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                members: { count: 2 }
-            });
+            gamepad.tests.navigator = gamepad.tests.inputMapperForSimpleClickTests();
             gamepad.tests.utils.initialClickTestChecks("#radio-one", gamepad.tests.navigator);
 
             // Update the gamepad to click on the radio button.
@@ -97,10 +91,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $("#checkbox-one").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                members: { count: 2 }
-            });
+            gamepad.tests.navigator = gamepad.tests.inputMapperForSimpleClickTests();
             gamepad.tests.utils.initialClickTestChecks("#checkbox-one", gamepad.tests.navigator);
 
             // Update the gamepad to click on the checkbox element.
