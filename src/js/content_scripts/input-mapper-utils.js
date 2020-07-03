@@ -351,6 +351,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     /**
+     * TODO: Replace count global variable as members in tests apart from the click tests.
+     * TODO: Replace the initial focus/webpage checks and modelAtRest global variable
+     *       setup with helper functions in tests apart from the click tests.
+     * TODO: Add horizontal rule between the QUnit markup and test-fixture block in tests
+     *       apart from the click tests.
+     */
+
+    /**
      *
      * Click on the currently focused element.
      *
@@ -376,16 +384,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // Toggle the SELECT dropdown.
                 if (!document.activeElement.getAttribute("size") || document.activeElement.getAttribute("size") === "1") {
                     /**
+                     * Store the initial size of the dropdown in a separate attribute
+                     * (if specified already).
+                     */
+                    var initialSizeString = document.activeElement.getAttribute("size");
+                    if (initialSizeString) {
+                        document.activeElement.setAttribute("initialSize", parseInt(initialSizeString));
+                    }
+
+                    /**
                      * Allow limited expansion to avoid an overflowing list, considering the
                      * list could go as large as 100 or more (for example, a list of
-                     * countries)
+                     * countries).
                      */
-                    var length = optionsLength < 15 ? optionsLength : 15;
+                    var length = Math.min(15, optionsLength);
                     document.activeElement.setAttribute("size", length);
                 }
                 else {
+                    // Obtain the initial size of the dropdown.
+                    var sizeString = document.activeElement.getAttribute("initialSize") || "1";
+
                     // Restore the size of the dropdown.
-                    document.activeElement.setAttribute("size", 1);
+                    document.activeElement.setAttribute("size", parseInt(sizeString));
                 }
             }
             else {

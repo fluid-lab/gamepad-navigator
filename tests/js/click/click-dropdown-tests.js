@@ -23,25 +23,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         jqUnit.module("Gamepad Navigator Dropdown Click Tests", {
             setup: function () {
                 gamepad.tests.windowObject = window;
-                gamepad.tests.count = 4;
-
-                // To test the gamepad's initial state.
-                gamepad.tests.modelAtRest = {
-                    connected: true,
-                    axes: {},
-                    buttons: {}
-                };
-
-                // Initialize in accordance with the 18 buttons on the PS4 controller.
-                for (var buttonNumber = 0; buttonNumber < 18; buttonNumber++) {
-                    gamepad.tests.modelAtRest.buttons[buttonNumber] = 0;
-                }
-
-                // Initialize in accordance with the 4 axes on the PS4 controller.
-                for (var axesNumber = 0; axesNumber < 4; axesNumber++) {
-                    gamepad.tests.modelAtRest.axes[axesNumber] = 0;
-                }
-
                 jqUnit.expect(6);
             },
             teardown: function () {
@@ -53,7 +34,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.test("Short dropdowns expand to their original length on click.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.dropdown.click(0);
+                return gamepad.tests.utils.dropdown.click(0, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., focus on the short dropdown.
@@ -61,14 +42,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Confirm that the instance of the gamepad navigator is created.
             gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject
+                windowObject: gamepad.tests.windowObject,
+                members: { count: 4 }
             });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not have changed.", document.querySelector("#dropdown-short"), document.activeElement);
+            gamepad.tests.utils.initialClickTestChecks("#dropdown-short", gamepad.tests.navigator);
 
             // Update the gamepad to click on the short dropdown.
             gamepad.tests.navigator.pollGamepads();
@@ -89,7 +66,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.test("Long dropdowns expand to the first 15 options on click.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.dropdown.click(0);
+                return gamepad.tests.utils.dropdown.click(0, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., focus on the long dropdown.
@@ -97,14 +74,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Confirm that the instance of the gamepad navigator is created.
             gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject
+                windowObject: gamepad.tests.windowObject,
+                members: { count: 4 }
             });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not have changed.", document.querySelector("#dropdown-long"), document.activeElement);
+            gamepad.tests.utils.initialClickTestChecks("#dropdown-long", gamepad.tests.navigator);
 
             // Update the gamepad to click on the long dropdown.
             gamepad.tests.navigator.pollGamepads();

@@ -23,25 +23,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         jqUnit.module("Gamepad Navigator Basic Click Tests", {
             setup: function () {
                 gamepad.tests.windowObject = window;
-                gamepad.tests.count = 2;
-
-                // To test the gamepad's initial state.
-                gamepad.tests.modelAtRest = {
-                    connected: true,
-                    axes: {},
-                    buttons: {}
-                };
-
-                // Initialize in accordance with the 18 buttons on the PS4 controller.
-                for (var buttonNumber = 0; buttonNumber < 18; buttonNumber++) {
-                    gamepad.tests.modelAtRest.buttons[buttonNumber] = 0;
-                }
-
-                // Initialize in accordance with the 4 axes on the PS4 controller.
-                for (var axesNumber = 0; axesNumber < 4; axesNumber++) {
-                    gamepad.tests.modelAtRest.axes[axesNumber] = 0;
-                }
-
                 jqUnit.expect(5);
             },
             teardown: function () {
@@ -53,9 +34,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.test("Buttons can be clicked.", function () {
             // Set the initial conditions and requirements.
-            gamepad.tests.clicked = false;
+            document.querySelector("button").addEventListener("click", function () {
+                var button = document.querySelector("button"),
+                    timesClicked = button.getAttribute("timesClicked") || "0";
+                button.setAttribute("timesClicked", parseInt(timesClicked) + 1);
+            });
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.element.click(0);
+                return gamepad.tests.utils.element.click(0, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., focus on the button element.
@@ -63,20 +48,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Confirm that the instance of the gamepad navigator is created.
             gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject
+                windowObject: gamepad.tests.windowObject,
+                members: { count: 2 }
             });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not have changed.", document.querySelector("button"), document.activeElement);
+            gamepad.tests.utils.initialClickTestChecks("button", gamepad.tests.navigator);
 
             // Update the gamepad to click on the button element.
             gamepad.tests.navigator.pollGamepads();
 
             // Check if the button has been clicked.
-            jqUnit.assertTrue("The button should have been clicked.", gamepad.tests.clicked);
+            jqUnit.assertEquals("The button should have been clicked.", "1", document.querySelector("button").getAttribute("timesClicked"));
 
             // Restore the gamepad back to its neutral state i.e., release the button.
             gamepad.tests.navigator.pollGamepads();
@@ -84,7 +65,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.test("Radio buttons can be selected by click.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.element.click(0);
+                return gamepad.tests.utils.element.click(0, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., focus on the radio button.
@@ -92,14 +73,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Confirm that the instance of the gamepad navigator is created.
             gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject
+                windowObject: gamepad.tests.windowObject,
+                members: { count: 2 }
             });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not have changed.", document.querySelector("#radio-one"), document.activeElement);
+            gamepad.tests.utils.initialClickTestChecks("#radio-one", gamepad.tests.navigator);
 
             // Update the gamepad to click on the radio button.
             gamepad.tests.navigator.pollGamepads();
@@ -113,7 +90,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.test("Checkboxes can be selected by click.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.element.click(0);
+                return gamepad.tests.utils.element.click(0, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., focus on the checkbox element.
@@ -121,14 +98,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Confirm that the instance of the gamepad navigator is created.
             gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject
+                windowObject: gamepad.tests.windowObject,
+                members: { count: 2 }
             });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not have changed.", document.querySelector("#checkbox-one"), document.activeElement);
+            gamepad.tests.utils.initialClickTestChecks("#checkbox-one", gamepad.tests.navigator);
 
             // Update the gamepad to click on the checkbox element.
             gamepad.tests.navigator.pollGamepads();

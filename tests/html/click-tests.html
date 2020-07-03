@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Gamepad Navigator Tabbing Tests</title>
+        <title>Gamepad Navigator Click Tests</title>
 
         <link rel="stylesheet" media="screen" href="../../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
         <link rel="stylesheet" href="../../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
@@ -17,6 +17,7 @@
         <script type="text/javascript" src="../../src/js/content_scripts/input-mapper.js"></script>
 
         <script type="text/javascript" src="../js/gamepad-mock.js"></script>
+        <script type="text/javascript" src="../js/test-utils.js"></script>
         <script type="text/javascript" src="../js/click/click-mock-utils.js"></script>
         <script type="text/javascript" src="../js/click/click-basic-tests.js"></script>
         <script type="text/javascript" src="../js/click/click-dropdown-tests.js"></script>
@@ -28,9 +29,10 @@
         <h2 id="qunit-userAgent"></h2>
         <ol id="qunit-tests"></ol>
 
+        <!-- Test HTML -->
         <div class="test-elements">
             <br>
-            <button type="button" onclick="gamepad.tests.clicked = true;">Sample Button</button>
+            <button type="button">Sample Button</button>
             <br><br>
             <fieldset id="radios">
                 <input type="radio" id="radio-one" name="group1" value="Radio One"><label for="radio-one">Radio One</label><br>

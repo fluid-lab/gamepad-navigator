@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* global gamepad */
+/* global gamepad, jqUnit */
 
 (function (fluid) {
     "use strict";
@@ -21,19 +21,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Generates a mock for the unidirectional button tests for scroll.
+     * Generates a mock for the click tests for dropdown menus.
      *
      * @param {Object} inputButton - The index number of the button.
+     *
+     * @param {Object} testNavigatorInstance - The instance of the gamepad navigator's
+     *                                         inputMapper component under test.
      *
      * @return {Array} - The mock of the gamepad.
      *
      */
-    gamepad.tests.utils.dropdown.click = function (inputButton) {
+    gamepad.tests.utils.dropdown.click = function (inputButton, testNavigatorInstance) {
         var gamepadMock = null,
             inputSpec = { buttons: {} };
 
-        // Initial count is set to 2 in all cases.
-        if (gamepad.tests.count === 1 || gamepad.tests.count === 3) {
+        // Initial count is set to 4 in all cases.
+        if (testNavigatorInstance.count === 1 || testNavigatorInstance.count === 3) {
             inputSpec.buttons[inputButton] = 1;
         }
 
@@ -41,25 +44,29 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
 
         // Reduce the count on every call.
-        gamepad.tests.count--;
+        testNavigatorInstance.count--;
         return gamepadMock;
     };
 
     /**
      *
-     * Generates a mock for the unidirectional button tests for scroll.
+     * Generates a mock for the click tests for clickable elements other than dropdown
+     * menus.
      *
      * @param {Object} inputButton - The index number of the button.
+     *
+     * @param {Object} testNavigatorInstance - The instance of the gamepad navigator's
+     *                                         inputMapper component under test.
      *
      * @return {Array} - The mock of the gamepad.
      *
      */
-    gamepad.tests.utils.element.click = function (inputButton) {
+    gamepad.tests.utils.element.click = function (inputButton, testNavigatorInstance) {
         var gamepadMock = null,
             inputSpec = { buttons: {} };
 
         // Initial count is set to 2 in all cases.
-        if (gamepad.tests.count === 1) {
+        if (testNavigatorInstance.count === 1) {
             inputSpec.buttons[inputButton] = 1;
         }
 
@@ -67,7 +74,27 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gamepadMock = gamepad.tests.utils.generateGamepadMock(inputSpec);
 
         // Reduce the count on every call.
-        gamepad.tests.count--;
+        testNavigatorInstance.count--;
         return gamepadMock;
+    };
+
+    /**
+     *
+     * A helper function for the initial checks for click tests after first polling cycle.
+     *
+     * @param {Object} elementQuery - The DOM element to be used for testing.
+     *
+     * @param {Object} testNavigatorInstance - The instance of the gamepad navigator's
+     *                                         inputMapper component under test.
+     *
+     */
+    gamepad.tests.utils.initialClickTestChecks = function (elementQuery, testNavigatorInstance) {
+        jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(testNavigatorInstance));
+        var modelAtRest = gamepad.tests.utils.initializeModelAtRest();
+
+        // Check the state of gamepad inputs and webpage after polling.
+        gamepad.tests.navigator.pollGamepads();
+        jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", modelAtRest, testNavigatorInstance.model);
+        jqUnit.assertEquals("The focus should not have changed.", document.querySelector(elementQuery), document.activeElement);
     };
 })(fluid);
