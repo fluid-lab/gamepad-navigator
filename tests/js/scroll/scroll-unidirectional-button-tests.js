@@ -23,26 +23,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         jqUnit.module("Gamepad Navigator Unidirectional Button Scrolling Tests", {
             setup: function () {
                 gamepad.tests.windowObject = window;
-                gamepad.tests.count = 2;
                 gamepad.tests.frequency = 50;
-
-                // To test the gamepad's initial state.
-                gamepad.tests.modelAtRest = {
-                    connected: true,
-                    axes: {},
-                    buttons: {}
-                };
-
-                // Initialize in accordance with the 18 buttons on the PS4 controller.
-                for (var buttonNumber = 0; buttonNumber < 18; buttonNumber++) {
-                    gamepad.tests.modelAtRest.buttons[buttonNumber] = 0;
-                }
-
-                // Initialize in accordance with the 4 axes on the PS4 controller.
-                for (var axesNumber = 0; axesNumber < 4; axesNumber++) {
-                    gamepad.tests.modelAtRest.axes[axesNumber] = 0;
-                }
-
                 jqUnit.expect(5);
             },
             teardown: function () {
@@ -54,22 +35,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll down using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(13);
+                return gamepad.tests.utils.unidirectional.buttons(13, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page to the top.
             $(window).scrollTop(0);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The initial vertical scroll position should not be changed.", 0, window.scrollY);
 
             // Update the gamepad to press button 13 for scrolling.
@@ -88,22 +62,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll up using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(12);
+                return gamepad.tests.utils.unidirectional.buttons(12, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the bottom.
             $(window).scrollTop(400);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The initial vertical scroll position should not be changed.", 400, window.scrollY);
 
             // Update the gamepad to press button 12 for scrolling.
@@ -123,22 +90,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll right using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(15);
+                return gamepad.tests.utils.unidirectional.buttons(15, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page to the left.
             $(window).scrollLeft(0);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The horizontal vertical scroll position should not be changed.", 0, window.scrollX);
 
             // Update the gamepad to press button 15 for scrolling.
@@ -157,22 +117,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll left using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(14);
+                return gamepad.tests.utils.unidirectional.buttons(14, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the right.
             $(window).scrollLeft(400);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The horizontal vertical scroll position should not be changed.", 400, window.scrollX);
 
             // Update the gamepad to press button 14 for scrolling.

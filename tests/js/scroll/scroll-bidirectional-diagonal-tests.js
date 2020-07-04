@@ -23,26 +23,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         jqUnit.module("Gamepad Navigator Bidirectional Diagonal Scrolling Tests", {
             setup: function () {
                 gamepad.tests.windowObject = window;
-                gamepad.tests.count = 2;
                 gamepad.tests.frequency = 50;
-
-                // To test the gamepad's initial state.
-                gamepad.tests.modelAtRest = {
-                    connected: true,
-                    axes: {},
-                    buttons: {}
-                };
-
-                // Initialize in accordance with the 18 buttons on the PS4 controller.
-                for (var buttonNumber = 0; buttonNumber < 18; buttonNumber++) {
-                    gamepad.tests.modelAtRest.buttons[buttonNumber] = 0;
-                }
-
-                // Initialize in accordance with the 4 axes on the PS4 controller.
-                for (var axesNumber = 0; axesNumber < 4; axesNumber++) {
-                    gamepad.tests.modelAtRest.axes[axesNumber] = 0;
-                }
-
                 jqUnit.expect(5);
             },
             teardown: function () {
@@ -57,7 +38,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 return gamepad.tests.utils.mockFromAxes({
                     "0": 1,
                     "1": 1
-                });
+                }, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page to the top-left corner.
@@ -65,15 +46,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $(window).scrollLeft(0);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             var towardsTopLeft = (window.scrollY === 0) && (window.scrollX === 0);
             jqUnit.assertTrue("The scroll position should be at the top-left of the webpage.", towardsTopLeft);
 
@@ -97,7 +71,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 return gamepad.tests.utils.mockFromAxes({
                     "0": -1,
                     "1": 1
-                });
+                }, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the top-right corner.
@@ -105,15 +79,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $(window).scrollLeft(400);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             var towardsTopRight = (window.scrollY === 0) && !(window.scrollX === 0);
             jqUnit.assertTrue("The scroll position should be towards the top-right of the webpage.", towardsTopRight);
 
@@ -137,7 +104,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 return gamepad.tests.utils.mockFromAxes({
                     "0": -1,
                     "1": -1
-                });
+                }, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the bottom-right corner.
@@ -145,15 +112,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $(window).scrollLeft(400);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             var towardsBottomRight = !(window.scrollY === 0) && !(window.scrollX === 0);
             jqUnit.assertTrue("The scroll position should be towards the bottom-right of the webpage.", towardsBottomRight);
 
@@ -177,7 +137,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 return gamepad.tests.utils.mockFromAxes({
                     "0": 1,
                     "1": -1
-                });
+                }, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the bottom-left corner.
@@ -185,15 +145,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             $(window).scrollLeft(0);
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
+            gamepad.tests.navigator = gamepad.tests.nonBidirectionalOneaxesTestsMapper({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             var towardsBottomLeft = !(window.scrollY === 0) && (window.scrollX === 0);
             jqUnit.assertTrue("The scroll position should be towards the bottom-left of the webpage.", towardsBottomLeft);
 
