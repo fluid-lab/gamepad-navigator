@@ -22,26 +22,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         jqUnit.module("Gamepad Navigator Button (Discrete) Tab Navigation Tests", {
             setup: function () {
                 gamepad.tests.windowObject = window;
-                gamepad.tests.count = 2;
                 gamepad.tests.frequency = 50;
-
-                // To test the gamepad's initial state.
-                gamepad.tests.modelAtRest = {
-                    connected: true,
-                    axes: {},
-                    buttons: {}
-                };
-
-                // Initialize in accordance with the 18 buttons on the PS4 controller.
-                for (var buttonNumber = 0; buttonNumber < 18; buttonNumber++) {
-                    gamepad.tests.modelAtRest.buttons[buttonNumber] = 0;
-                }
-
-                // Initialize in accordance with the 4 axes on the PS4 controller.
-                for (var axesNumber = 0; axesNumber < 4; axesNumber++) {
-                    gamepad.tests.modelAtRest.axes[axesNumber] = 0;
-                }
-
                 jqUnit.expect(5);
             },
             teardown: function () {
@@ -53,23 +34,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Tab from the last element to the first in discrete forward tabbing using buttons.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.buttons.tab(5);
+                return gamepad.tests.utils.buttons.tab(5, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the last element.
             $("#last").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not be changed after polling.", document.querySelector("#last"), document.activeElement);
+            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialClickTestChecks("#last", gamepad.tests.navigator);
 
             /**
              * Update the gamepad to press button 5 (right bumper) for forward tab
@@ -95,23 +68,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Tab from the first element to the last in discrete reverse tabbing using buttons.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.buttons.tab(4);
+                return gamepad.tests.utils.buttons.tab(4, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the first element.
             $("#first").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not be changed after polling.", document.querySelector("#first"), document.activeElement);
+            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialClickTestChecks("#first", gamepad.tests.navigator);
 
             /**
              * Update the gamepad to press button 4 (left bumper) for reverse tab
@@ -137,23 +102,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Change the focus to the next element in discrete forward tabbing using buttons.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.buttons.tab(5);
+                return gamepad.tests.utils.buttons.tab(5, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the first element.
             $("#first").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not be changed after polling.", document.querySelector("#first"), document.activeElement);
+            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialClickTestChecks("#first", gamepad.tests.navigator);
 
             /**
              * Update the gamepad to press button 5 (right bumper) for forward tab
@@ -174,23 +131,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Change the focus to the previous element in discrete reverse tabbing using buttons.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.buttons.tab(4);
+                return gamepad.tests.utils.buttons.tab(4, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on some element in the middle.
             $("#fifth").focus();
 
             // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.inputMapper({
-                windowObject: gamepad.tests.windowObject,
-                frequency: gamepad.tests.frequency
-            });
-            jqUnit.assertTrue("The Gamepad Navigator should be instantiated.", fluid.isComponent(gamepad.tests.navigator));
-
-            // Check the state of gamepad inputs and webpage after polling.
-            gamepad.tests.navigator.pollGamepads();
-            jqUnit.assertLeftHand("The gamepad should be connected with no buttons/axes disturbed initially.", gamepad.tests.modelAtRest, gamepad.tests.navigator.model);
-            jqUnit.assertEquals("The focus should not be changed after polling.", document.querySelector("#fifth"), document.activeElement);
+            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
+            gamepad.tests.utils.initialClickTestChecks("#fifth", gamepad.tests.navigator);
 
             /**
              * Update the gamepad to press button 4 (right bumper) for reverse tab
