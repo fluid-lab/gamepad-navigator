@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
@@ -33,4 +33,7 @@ jobs:
         run: $(npm bin)/grunt lint
 
       - name: Node Tests
-        run: npm test
+        run: xvfb-run --auto-servernum npm test
+
+      - name: Cleanup after xvfb
+        uses: bcomnes/cleanup-xvfb@v1
