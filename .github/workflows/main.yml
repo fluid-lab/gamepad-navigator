@@ -11,6 +11,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x]
+
     env:
       HEADLESS: true
 
@@ -20,7 +24,7 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
-	  node-version: 12.x
+          node-version: ${{ matrix.node-version }}
 
       - name: Install Node.js dependencies
         run: npm install
