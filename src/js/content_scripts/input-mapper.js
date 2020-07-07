@@ -25,7 +25,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     // Face Button.
                     // Cross on PlayStation controller & A on Xbox controller.
                     "0": {
-                        defaultAction: null,
+                        defaultAction: "click",
                         currentAction: null,
                         speedFactor: 1
                     },
@@ -202,8 +202,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}.intervalRecords"]
             },
             /**
-             * TODO: Investigate, identify, and fix tab navigation issues.
+             * TODO: Add tests for links and other elements that involve navigation
+             * between pages.
              */
+            click: {
+                funcName: "gamepad.inputMapperUtils.click",
+                args: ["{arguments}.0"]
+            },
+            // TODO: Investigate, identify, and fix tab navigation issues.
             tabindexSortFilter: {
                 funcName: "gamepad.inputMapperUtils.tabindexSortFilter",
                 args: ["{arguments}.0", "{arguments}.1"]
