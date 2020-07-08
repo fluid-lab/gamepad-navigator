@@ -10,7 +10,9 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-(function (fluid) {
+/* global ally, chrome */
+
+(function (fluid, $) {
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
@@ -39,14 +41,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     // Face Button.
                     // Square on PlayStation controller & X on Xbox controller.
                     "2": {
-                        defaultAction: null,
+                        defaultAction: "previousPageInHistory",
                         currentAction: null,
                         speedFactor: 1
                     },
                     // Face Button.
                     // Triangle on PlayStation controller & Y on Xbox controller.
                     "3": {
-                        defaultAction: null,
+                        defaultAction: "nextPageInHistory",
                         currentAction: null,
                         speedFactor: 1
                     },
@@ -153,7 +155,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     },
                     // Right thumbstick vertical axis.
                     "3": {
-                        defaultAction: null,
+                        defaultAction: "thumbstickHistoryNavigation",
                         currentAction: null,
                         speedFactor: 1,
                         invert: false
@@ -172,6 +174,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         listeners: {
+            "onCreate.restoreFocusBeforeHistoryNavigation": "{that}.restoreFocusBeforeHistoryNavigation",
             "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
             /**
              * TODO: Adjust the gamepaddisconnected event so that the other gamepad's
@@ -201,6 +204,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapper.clearIntervalRecords",
                 args: ["{that}.intervalRecords"]
             },
+            restoreFocusBeforeHistoryNavigation: {
+                funcName: "gamepad.inputMapper.restoreFocus",
+                args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
+            },
             /**
              * TODO: Add tests for links and other elements that involve navigation
              * between pages.
@@ -208,6 +215,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             click: {
                 funcName: "gamepad.inputMapperUtils.click",
                 args: ["{arguments}.0"]
+            },
+            previousPageInHistory: {
+                funcName: "gamepad.inputMapperUtils.previousPageInHistory",
+                args: ["{that}", "{arguments}.0"]
+            },
+            nextPageInHistory: {
+                funcName: "gamepad.inputMapperUtils.nextPageInHistory",
+                args: ["{that}", "{arguments}.0"]
             },
             // TODO: Investigate, identify, and fix tab navigation issues.
             tabindexSortFilter: {
@@ -250,6 +265,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            },
+            thumbstickHistoryNavigation: {
+                funcName: "gamepad.inputMapperUtils.thumbstickHistoryNavigation",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"]
             }
         }
     });
@@ -305,4 +324,37 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             clearInterval(record);
         });
     };
-})(fluid);
+
+    /**
+     *
+     * Restore the previously focused element on the webpage after history navigation.
+     *
+     * @param {Object} windowObject - The inputMapper component's windowObject option.
+     * @param {Function} tabindexSortFilter - The filter to be used for sorting elements
+     *                                        based on their tabindex value.
+     *
+     */
+    gamepad.inputMapper.restoreFocus = function (windowObject, tabindexSortFilter) {
+        $(document).ready(function () {
+            /**
+             * Get the index of the previously focused element stored in the local
+             * storage.
+             */
+            var pageAddress = windowObject.location.href;
+            chrome.storage.local.get([pageAddress], function (resultObject) {
+                // Focus only if some element was focused before the history navigation.
+                var activeElementIndex = resultObject[pageAddress];
+                if (activeElementIndex && activeElementIndex !== -1) {
+                    var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(tabindexSortFilter),
+                        activeElement = tabbableElements[activeElementIndex];
+                    if (activeElement) {
+                        activeElement.focus();
+                    }
+
+                    // Clear the stored index of the active element after usage.
+                    chrome.storage.local.remove([pageAddress]);
+                }
+            });
+        });
+    };
+})(fluid, jQuery);
