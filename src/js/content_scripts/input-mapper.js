@@ -10,9 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* global ally, chrome */
-
-(function (fluid, $) {
+(function (fluid) {
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
@@ -174,7 +172,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         listeners: {
-            "onCreate.restoreFocusBeforeHistoryNavigation": "{that}.restoreFocusBeforeHistoryNavigation",
             "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
             /**
              * TODO: Adjust the gamepaddisconnected event so that the other gamepad's
@@ -203,10 +200,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             clearIntervalRecords: {
                 funcName: "gamepad.inputMapper.clearIntervalRecords",
                 args: ["{that}.intervalRecords"]
-            },
-            restoreFocusBeforeHistoryNavigation: {
-                funcName: "gamepad.inputMapper.restoreFocus",
-                args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
             },
             /**
              * TODO: Add tests for links and other elements that involve navigation
@@ -324,37 +317,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             clearInterval(record);
         });
     };
-
-    /**
-     *
-     * Restore the previously focused element on the webpage after history navigation.
-     *
-     * @param {Object} windowObject - The inputMapper component's windowObject option.
-     * @param {Function} tabindexSortFilter - The filter to be used for sorting elements
-     *                                        based on their tabindex value.
-     *
-     */
-    gamepad.inputMapper.restoreFocus = function (windowObject, tabindexSortFilter) {
-        $(document).ready(function () {
-            /**
-             * Get the index of the previously focused element stored in the local
-             * storage.
-             */
-            var pageAddress = windowObject.location.href;
-            chrome.storage.local.get([pageAddress], function (resultObject) {
-                // Focus only if some element was focused before the history navigation.
-                var activeElementIndex = resultObject[pageAddress];
-                if (activeElementIndex && activeElementIndex !== -1) {
-                    var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(tabindexSortFilter),
-                        activeElement = tabbableElements[activeElementIndex];
-                    if (activeElement) {
-                        activeElement.focus();
-                    }
-
-                    // Clear the stored index of the active element after usage.
-                    chrome.storage.local.remove([pageAddress]);
-                }
-            });
-        });
-    };
-})(fluid, jQuery);
+})(fluid);

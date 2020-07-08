@@ -10,9 +10,61 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-(function (fluid) {
+/* global chrome, ally */
+
+(function (fluid, $) {
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
-    gamepad.inputMapper();
-})(fluid);
+    fluid.registerNamespace("gamepad.inputMapper");
+
+    /**
+     *
+     * Restore the previously focused element on the webpage after history navigation.
+     *
+     * @param {Object} windowObject - The inputMapper component's windowObject option.
+     * @param {Function} tabindexSortFilter - The filter to be used for sorting elements
+     *                                        based on their tabindex value.
+     *
+     */
+    gamepad.inputMapper.restoreFocus = function (windowObject, tabindexSortFilter) {
+        $(document).ready(function () {
+            /**
+             * Get the index of the previously focused element stored in the local
+             * storage.
+             */
+            var pageAddress = windowObject.location.href;
+            chrome.storage.local.get([pageAddress], function (resultObject) {
+                // Focus only if some element was focused before the history navigation.
+                var activeElementIndex = resultObject[pageAddress];
+                if (activeElementIndex && activeElementIndex !== -1) {
+                    var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(tabindexSortFilter),
+                        activeElement = tabbableElements[activeElementIndex];
+                    if (activeElement) {
+                        activeElement.focus();
+                    }
+
+                    // Clear the stored index of the active element after usage.
+                    chrome.storage.local.remove([pageAddress]);
+                }
+            });
+        });
+    };
+
+    // Create an instance of the component.
+    gamepad.inputMapper({
+        /**
+         * To avoid errors that are generated due to the presence of Chrome Extension
+         * APIs.
+         */
+        listeners: {
+            "onCreate.restoreFocusBeforeHistoryNavigation": "{that}.restoreFocusBeforeHistoryNavigation"
+        },
+        invokers: {
+            restoreFocusBeforeHistoryNavigation: {
+                funcName: "gamepad.inputMapper.restoreFocus",
+                args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
+            }
+        }
+    });
+})(fluid, jQuery);
