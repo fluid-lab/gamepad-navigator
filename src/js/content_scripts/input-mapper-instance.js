@@ -18,6 +18,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     var gamepad = fluid.registerNamespace("gamepad");
     fluid.registerNamespace("gamepad.inputMapper");
 
+    fluid.defaults("gamepad.inputMapper", {
+        gradeNames: ["gamepad.inputMapper.base"],
+        listeners: {
+            "onCreate.restoreFocus": "{that}.restoreFocus"
+        },
+        invokers: {
+            restoreFocus: {
+                funcName: "gamepad.inputMapper.restoreFocus",
+                args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
+            }
+        }
+    });
+
     /**
      *
      * Restore the previously focused element on the webpage after history navigation.
@@ -52,19 +65,5 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     // Create an instance of the component.
-    gamepad.inputMapper({
-        /**
-         * To avoid errors that are generated due to the presence of Chrome Extension
-         * APIs.
-         */
-        listeners: {
-            "onCreate.restoreFocusBeforeHistoryNavigation": "{that}.restoreFocusBeforeHistoryNavigation"
-        },
-        invokers: {
-            restoreFocusBeforeHistoryNavigation: {
-                funcName: "gamepad.inputMapper.restoreFocus",
-                args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
-            }
-        }
-    });
+    gamepad.inputMapper();
 })(fluid, jQuery);

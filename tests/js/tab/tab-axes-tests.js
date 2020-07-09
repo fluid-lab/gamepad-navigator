@@ -34,7 +34,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Tab from the last element to the first in forward tabbing using axes.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.forwardTab(2, gamepad.tests.navigator);
+                return gamepad.tests.utils.axes.forwardTab(3, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the last element.
@@ -68,7 +68,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Tab from the first element to the last in reverse tabbing using axes.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.reverseTab(2, gamepad.tests.navigator);
+                return gamepad.tests.utils.axes.reverseTab(3, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the first element.
@@ -102,7 +102,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Change the focus to one of the next elements in forward tabbing using axes.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.forwardTab(2, gamepad.tests.navigator);
+                return gamepad.tests.utils.axes.forwardTab(3, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on the first element.
@@ -138,7 +138,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Change the focus to one of the previous elements in reverse tabbing using axes.", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.reverseTab(2, gamepad.tests.navigator);
+                return gamepad.tests.utils.axes.reverseTab(3, gamepad.tests.navigator);
             };
 
             // Set initial conditions i.e., focus on some element in the middle.

@@ -21,14 +21,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     // Custom gamepad navigator component grade for simple click tests.
     fluid.defaults("gamepad.tests.inputMapperForSimpleClickTests", {
-        gradeNames: ["gamepad.inputMapper"],
+        gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
         members: { count: 2 }
     });
 
     // Custom gamepad navigator component grade for select dropdown click tests.
     fluid.defaults("gamepad.tests.inputMapperForDropdownClickTests", {
-        gradeNames: ["gamepad.inputMapper"],
+        gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
         members: { count: 4 }
     });
