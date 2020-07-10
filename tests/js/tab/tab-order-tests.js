@@ -25,7 +25,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                  * Get the list of tabbable elements in the order of their tabindex for
                  * verification.
                  */
-                gamepad.tests.sortedTabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(gamepad.inputMapperUtils.tabindexSortFilter);
+                gamepad.tests.sortedTabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(gamepad.inputMapperUtils.content.tabindexSortFilter);
             }
         });
 
