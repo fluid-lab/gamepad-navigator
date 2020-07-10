@@ -20,7 +20,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     // Custom gamepad navigator component grade for tab navigation tests.
     fluid.defaults("gamepad.tests.inputMapperForTabTests", {
-        gradeNames: ["gamepad.inputMapper"],
+        gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
         members: { count: 2 }
     });

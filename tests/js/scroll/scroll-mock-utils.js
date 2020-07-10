@@ -21,14 +21,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     // Custom gamepad navigator component grade for bidirectional one-axes tests.
     fluid.defaults("gamepad.tests.bidirectionalOneaxesTestsMapper", {
-        gradeNames: ["gamepad.inputMapper"],
+        gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
         members: { count: 3 }
     });
 
     // Custom gamepad navigator component grade for non-bidirectional one-axes tests.
     fluid.defaults("gamepad.tests.nonBidirectionalOneaxesTestsMapper", {
-        gradeNames: ["gamepad.inputMapper"],
+        gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
         members: { count: 2 }
     });

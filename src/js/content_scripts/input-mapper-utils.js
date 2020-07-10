@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* global gamepad, ally */
+/* global gamepad, ally, chrome */
 
 (function (fluid, $) {
     "use strict";
@@ -351,14 +351,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     /**
-     * TODO: Replace count global variable as members in tests apart from the click tests.
-     * TODO: Replace the initial focus/webpage checks and modelAtRest global variable
-     *       setup with helper functions in tests apart from the click tests.
-     * TODO: Add horizontal rule between the QUnit markup and test-fixture block in tests
-     *       apart from the click tests.
-     */
-
-    /**
      *
      * Click on the currently focused element.
      *
@@ -412,6 +404,96 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // Click on the focused element.
                 document.activeElement.click();
             }
+        }
+    };
+
+    // TODO: Add tests for history navigation.
+
+    /**
+     *
+     * Navigate to the previous/next page in history using thumbsticks.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Boolean} invert - Whether the history navigation should be in opposite
+     *                           order.
+     *
+     */
+    gamepad.inputMapperUtils.thumbstickHistoryNavigation = function (that, value, invert) {
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1;
+        value = value * inversionFactor;
+        if (value > 0) {
+            that.nextPageInHistory(value);
+        }
+        else if (value < 0) {
+            that.previousPageInHistory(-1 * value);
+        }
+    };
+
+    /**
+     *
+     * Navigate to the previous page in history.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.previousPageInHistory = function (that, value) {
+        if (value > that.options.cutoffValue) {
+            var activeElementIndex = null;
+
+            // Get the index of the currently active element, if available.
+            if (fluid.get(document, "activeElement")) {
+                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
+                activeElementIndex = tabbableElements.indexOf(document.activeElement);
+            }
+
+            /**
+             * Store the index of the active element in local storage object with its key
+             * set to the URL of the webpage and navigate back in history.
+             */
+            var storageData = {},
+                pageAddress = that.options.windowObject.location.href;
+            if (activeElementIndex !== -1) {
+                storageData[pageAddress] = activeElementIndex;
+            }
+            chrome.storage.local.set(storageData, function () {
+                that.options.windowObject.history.back();
+            });
+        }
+    };
+
+    /**
+     *
+     * Navigate to the next page in history.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.nextPageInHistory = function (that, value) {
+        if (value > that.options.cutoffValue) {
+            var activeElementIndex = null;
+
+            // Get the index of the currently active element, if available.
+            if (fluid.get(document, "activeElement")) {
+                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
+                activeElementIndex = tabbableElements.indexOf(document.activeElement);
+            }
+
+            /**
+             * Store the index of the active element in local storage object with its key
+             * set to the URL of the webpage and navigate forward in history.
+             */
+            var storageData = {},
+                pageAddress = that.options.windowObject.location.href;
+            if (activeElementIndex !== -1) {
+                storageData[pageAddress] = activeElementIndex;
+            }
+            chrome.storage.local.set(storageData, function () {
+                that.options.windowObject.history.forward();
+            });
         }
     };
 })(fluid, jQuery);

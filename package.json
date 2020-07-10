@@ -14,6 +14,7 @@
     "homepage": "https://github.com/fluid-lab/gamepad-navigator#readme",
     "scripts": {
         "lint": "grunt lint",
+        "postinstall": "grunt build",
         "test": "testem ci --file tests/testem.json"
     },
     "dependencies": {
