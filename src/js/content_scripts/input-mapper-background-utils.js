@@ -52,4 +52,43 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             chrome.runtime.sendMessage(actionData);
         }
     };
+
+    // TODO: Add continuous / long-press browser tab navigation, if needed.
+    // TODO: Add browser tab navigation for thumbsticks.
+
+    /**
+     *
+     * Sends message to the background script to switch to the previous tab.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.background.goToPreviousTab = function (that, value, oldValue) {
+        if (value < oldValue && oldValue > that.options.cutoffValue) {
+            var actionData = { actionName: "goToPreviousTab" };
+
+            // Send message to the background script to switch to previous tab.
+            chrome.runtime.sendMessage(actionData);
+        }
+    };
+
+    /**
+     *
+     * Sends message to the background script to switch to the next tab.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.background.goToNextTab = function (that, value, oldValue) {
+        if (value < oldValue && oldValue > that.options.cutoffValue) {
+            var actionData = { actionName: "goToNextTab" };
+
+            // Send message to the background script to switch to previous tab.
+            chrome.runtime.sendMessage(actionData);
+        }
+    };
 })(fluid);

@@ -28,6 +28,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapper.restoreFocus",
                 args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
             },
+            goToPreviousTab: {
+                funcName: "gamepad.inputMapperUtils.background.goToPreviousTab",
+                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+            },
+            goToNextTab: {
+                funcName: "gamepad.inputMapperUtils.background.goToNextTab",
+                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+            },
             closeCurrentTab: {
                 funcName: "gamepad.inputMapperUtils.background.closeCurrentTab",
                 args: ["{arguments}.0", "{arguments}.4"]

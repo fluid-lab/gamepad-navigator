@@ -41,7 +41,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 "this": "chrome.tabs",
                 method: "remove",
                 args: ["{arguments}.0"]
-            }
+            },
+            goToPreviousTab: "gamepad.messageListenerUtils.goToPreviousTab",
+            goToNextTab: "gamepad.messageListenerUtils.goToNextTab"
         }
     });
 
