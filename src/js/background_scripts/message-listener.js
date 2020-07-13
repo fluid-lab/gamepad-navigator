@@ -35,7 +35,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             openNewTab: {
                 funcName: "gamepad.messageListenerUtils.openNewTab",
-                args: ["{arguments}.2"]
+                args: ["{arguments}.2", "{arguments}.3"]
             },
             closeCurrentTab: {
                 "this": "chrome.tabs",
@@ -62,9 +62,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // Trigger the action only if a valid action is found.
             if (action) {
                 var invert = fluid.get(actionData, "invert"),
-                    active = fluid.get(actionData, "active");
+                    active = fluid.get(actionData, "active"),
+                    homepageURL = fluid.get(actionData, "homepageURL");
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                    action(tabs[0].id, invert, active);
+                    action(tabs[0].id, invert, active, homepageURL);
                 });
             }
         }

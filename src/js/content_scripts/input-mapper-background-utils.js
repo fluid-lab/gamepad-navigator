@@ -21,14 +21,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * Sends message to the background script to open a new tab.
      *
-     * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
      * @param {Boolean} background - Whether the new tab should open in background.
+     * @param {Integer} oldInputValue - The previous value of the gamepad input.
+     * @param {String} homepageURL - The URL for the new tab.
      *
      */
-    gamepad.inputMapperUtils.background.openNewTab = function (that, value, background) {
-        if (value > that.options.cutoffValue) {
-            var actionData = { actionName: "openNewTab", active: !background };
+    gamepad.inputMapperUtils.background.openNewTab = function (value, background, oldInputValue, homepageURL) {
+        if (value < oldInputValue) {
+            var actionData = {
+                actionName: "openNewTab",
+                active: !background,
+                homepageURL: homepageURL
+            };
             chrome.runtime.sendMessage(actionData);
         }
     };
@@ -37,12 +42,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * Sends message to the background script to close the currently opened tab.
      *
-     * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} oldInputValue - The previous value of the gamepad input.
      *
      */
-    gamepad.inputMapperUtils.background.closeCurrentTab = function (that, value) {
-        if (value > that.options.cutoffValue) {
+    gamepad.inputMapperUtils.background.closeCurrentTab = function (value, oldInputValue) {
+        if (value < oldInputValue) {
             var actionData = { actionName: "closeCurrentTab" };
             chrome.runtime.sendMessage(actionData);
         }

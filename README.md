@@ -55,3 +55,6 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 
 6. Click on the `Load unpacked` button on the top left of the same window and navigate into the `dist` directory to
    open it. This will load the extension into your Chromium-based browser.
+
+_**Note**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
+override the default new tab page. However, it can be configured to open any other website instead of Google._

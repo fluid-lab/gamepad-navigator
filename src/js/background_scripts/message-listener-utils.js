@@ -22,9 +22,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Open a new tab.
      *
      * @param {Boolean} active - Whether the new tab should be focused when created.
+     * @param {String} homepageURL - The URL for the new tab.
      *
      */
-    gamepad.messageListenerUtils.openNewTab = function (active) {
-        chrome.tabs.create({ active: active });
+    gamepad.messageListenerUtils.openNewTab = function (active, homepageURL) {
+        chrome.tabs.create({ active: active, url: homepageURL });
     };
 })(fluid);

@@ -30,11 +30,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             closeCurrentTab: {
                 funcName: "gamepad.inputMapperUtils.background.closeCurrentTab",
-                args: ["{that}", "{arguments}.0"]
+                args: ["{arguments}.0", "{arguments}.4"]
             },
             openNewTab: {
                 funcName: "gamepad.inputMapperUtils.background.openNewTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.3"]
+                args: ["{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
             }
         }
     });

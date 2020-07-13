@@ -29,7 +29,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         defaultAction: "click",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Face Button.
                     // Circle on PlayStation controller & B on Xbox controller.
@@ -37,7 +37,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         defaultAction: null,
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Face Button.
                     // Square on PlayStation controller & X on Xbox controller.
@@ -45,7 +45,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         defaultAction: "previousPageInHistory",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Face Button.
                     // Triangle on PlayStation controller & Y on Xbox controller.
@@ -53,91 +53,91 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         defaultAction: "nextPageInHistory",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Left Bumper.
                     "4": {
                         defaultAction: "reverseTab",
                         currentAction: null,
                         speedFactor: 2.5,
-                        background: true
+                        background: false
                     },
                     // Right Bumper.
                     "5": {
                         defaultAction: "forwardTab",
                         currentAction: null,
                         speedFactor: 2.5,
-                        background: true
+                        background: false
                     },
                     // Left Trigger.
                     "6": {
                         defaultAction: null,
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Right Trigger.
                     "7": {
                         defaultAction: null,
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Select/Share on PlayStation controller & Back on Xbox controller.
                     "8": {
                         defaultAction: "closeCurrentTab",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Start/Options on PlayStation controller & Start on Xbox controller.
                     "9": {
                         defaultAction: "openNewTab",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Left thumbstick button.
                     "10": {
                         defaultAction: null,
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Right thumbstick button.
                     "11": {
                         defaultAction: null,
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // D-Pad up direction button.
                     "12": {
                         defaultAction: "scrollUp",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // D-Pad down direction button.
                     "13": {
                         defaultAction: "scrollDown",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // D-Pad left direction button.
                     "14": {
                         defaultAction: "scrollLeft",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // D-Pad right direction button.
                     "15": {
                         defaultAction: "scrollRight",
                         currentAction: null,
                         speedFactor: 1,
-                        background: true
+                        background: false
                     },
                     // Badge icon
                     // PS button on PlayStation controller & Xbox logo button.
@@ -176,6 +176,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         invert: false
                     }
                 }
+            },
+            commonConfiguration: {
+                homepageURL: "https://www.google.com/"
             }
         },
         modelListeners: {
@@ -299,10 +302,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         var inputType = change.path[0],
             index = change.path[1],
-            inputValue = change.value;
+            inputValue = change.value,
+            oldInputValue = change.oldValue || 0;
 
         var inputProperties = that.model.map[inputType][index],
-            actionLabel = fluid.get(inputProperties, "currentAction") || fluid.get(inputProperties, "defaultAction");
+            actionLabel = fluid.get(inputProperties, "currentAction") || fluid.get(inputProperties, "defaultAction"),
+            homepageURL = that.model.commonConfiguration.homepageURL;
 
         /**
          * TODO: Modify the action call in such a manner that the action gets triggered
@@ -315,7 +320,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Trigger the action only if a valid function is found.
             if (action) {
-                action(inputValue, inputProperties.speedFactor, inputProperties.invert, inputProperties.background);
+                action(
+                    inputValue,
+                    inputProperties.speedFactor,
+                    inputProperties.invert,
+                    inputProperties.background,
+                    oldInputValue,
+                    homepageURL
+                );
             }
         }
     };
