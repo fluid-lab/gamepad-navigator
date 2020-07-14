@@ -257,12 +257,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}", "{arguments}.0"]
             },
             reverseTab: {
-                funcName: "gamepad.inputMapperUtils.content.reverseTab",
-                args: ["{that}", "{arguments}.0"]
+                funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
+                args: ["{that}", "{arguments}.0", "reverseTab"]
             },
             forwardTab: {
-                funcName: "gamepad.inputMapperUtils.content.forwardTab",
-                args: ["{that}", "{arguments}.0"]
+                funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
+                args: ["{that}", "{arguments}.0", "forwardTab"]
             },
             scrollLeft: {
                 funcName: "gamepad.inputMapperUtils.content.scrollLeft",

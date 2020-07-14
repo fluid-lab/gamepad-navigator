@@ -222,15 +222,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Focus on the next tabbable element.
+     * Change the focus from one tabbable element to another.
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
+     * @param {String} direction - The direction in which the focus should change.
      *
      */
-    gamepad.inputMapperUtils.content.forwardTab = function (that, value) {
+    gamepad.inputMapperUtils.content.buttonTabNavigation = function (that, value, direction) {
         if (value > that.options.cutoffValue) {
-            // Obtain the tabbable DOM elements and sort them.
             var length = that.tabbableElements.length;
 
             // Tab only if at least one tabbable element is available.
@@ -254,55 +254,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     if (activeElementIndex === -1) {
                         activeElementIndex = that.currentTabIndex;
                     }
-                    that.currentTabIndex = (activeElementIndex + 1) % length;
-                    that.tabbableElements[that.currentTabIndex].focus();
-                }
-            }
-        }
-    };
 
-    /**
-     *
-     * Focus on the next tabbable element.
-     *
-     * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
-     *
-     */
-    gamepad.inputMapperUtils.content.reverseTab = function (that, value) {
-        if (value > that.options.cutoffValue) {
-            // Obtain the tabbable DOM elements and sort them.
-            var length = that.tabbableElements.length;
-
-            // Tab only if at least one tabbable element is available.
-            if (length) {
-                /**
-                 * If the body element of the page is focused, shift the focus to the last
-                 * element. Otherwise shift the focus to the previous element.
-                 */
-                var activeElement = document.activeElement;
-                if (activeElement.nodeName === "BODY" || !activeElement) {
-                    that.tabbableElements[length - 1].focus();
-                }
-                else {
-                    var activeElementIndex = that.tabbableElements.indexOf(activeElement);
-
-                    /**
-                     * If the currently active element is not found in the list,
-                     * refer to the stored value of the index.
-                     */
-                    if (activeElementIndex === -1) {
-                        activeElementIndex = that.currentTabIndex;
+                    if (direction === "forwardTab") {
+                        that.currentTabIndex = (activeElementIndex + 1) % length;
                     }
-
-                    /**
-                     * Move to the first element if the last element on the webpage
-                     * is focused.
-                     */
-                    if (activeElementIndex === 0) {
-                        activeElementIndex = length;
+                    else if (direction === "reverseTab") {
+                        /**
+                         * Move to the first element if the last element on the webpage
+                         * is focused.
+                         */
+                        if (activeElementIndex === 0) {
+                            activeElementIndex = length;
+                        }
+                        that.currentTabIndex = activeElementIndex - 1;
                     }
-                    that.currentTabIndex = activeElementIndex - 1;
                     that.tabbableElements[that.currentTabIndex].focus();
                 }
             }
