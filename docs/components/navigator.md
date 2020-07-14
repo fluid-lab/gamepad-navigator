@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 -->
 
-# gamepad.navigator
+# `gamepad.navigator`
 
 This component listens to the `gamepadconnected` and `gamepaddisconnected` events in the browser. When at least one
 gamepad is connected, it reads inputs from them at a particular frequency and stores those input values in the
@@ -18,9 +18,8 @@ component's model data. The component stops reading these inputs when the last g
 
 ## Using this grade
 
-This grade can work without passing any option to it. An instance of the `navigator` does not require any options to be
-passed and can listen to the gamepad events and read the gamepad inputs. To use it, we can create an instance of the
-component or use it as a grade another component:
+You can change the configuration options by either extending the component or by passing your own options. If no
+options are passed, the defaults are used.
 
 ``` javascript
 // Either create an instance of the navigator.
@@ -61,9 +60,9 @@ var navigatorInstanceTwo = my.navigator.grade();
 ```
 
 Though the `windowObject` is a configurable option, it should have all the properties and methods that the navigator
-uses. Otherwise, the navigator won't work and will throw errors. You can also use a mutated `window` object and pass it
-into the component if you want to achieve a different behavior. That'll be less likely to throw errors and is the same
-pattern used in our tests.
+uses. Otherwise, the navigator won't work and will throw errors. You can also use a modified `window` object, such as
+the gamepad mocks used in this package's tests, and pass it into the component if you want to achieve a different
+behavior. That'll be less likely to throw errors.
 
 ## Invokers
 
@@ -72,19 +71,19 @@ pattern used in our tests.
 - `that {Object}` The gamepad navigator component.
 - Returns: Nothing.
 
-It attaches event listeners to the `windowObject` for the `gamepadconnected` and `gamepaddisconnected` events. When
-these events are fired, the navigator fires its native `onGamepadConnected` or `onGamepadDisconnected` events,
-depending upon the former event. These events have listeners attached to it, which start reading the gamepad inputs or
-stop reading it further.
+Attaches event listeners to the `windowObject` for the `gamepadconnected` and `gamepaddisconnected` events. When these
+events are fired, the navigator fires its native `onGamepadConnected` or `onGamepadDisconnected` events, depending upon
+the former event. These events have listeners attached to it, which start reading the gamepad inputs or stop reading it
+further.
 
 ### `{navigator}.onConnected(that)`
 
 - `that {Object}` The gamepad navigator component.
 - Returns: Nothing.
 
-It is the listener for the gamepad navigator component's event `onGamepadConnected`. When it is called, it initiates
-the gamepad polling invoker [`{navigator}.pollGamepads`](#navigatorpollgamepadsthat) to be called at the same frequency
-as specified in the component's configurable option `frequency`. The interval ID is stored in the component's member
+Listens for the gamepad navigator component's event `onGamepadConnected`. When it is called, it initiates the gamepad
+polling invoker [`{navigator}.pollGamepads`](#navigatorpollgamepadsthat) to be called at the same frequency as
+specified in the component's configurable option `frequency`. The interval ID is stored in the component's member
 `connectivityIntervalReference` for reference in other invokers and listeners present in the component.
 
 ### `{navigator}.pollGamepads(that)`
@@ -92,24 +91,22 @@ as specified in the component's configurable option `frequency`. The interval ID
 - `that {Object}` The gamepad navigator component.
 - Returns: Nothing.
 
-It is called in intervals for reading the gamepad inputs and updating the navigator component's model with those
-values. The inputs are read from all the connected gamepads and then combine them to provide the co-pilot mode
-experience.
+Called periodically to read the gamepad inputs and to update the navigator component's model with those values. The
+inputs are read from all the connected gamepads and then combine them to provide the co-pilot mode experience.
 
 ### `{navigator}.onDisconnected(that)`
 
 - `that {Object}` The gamepad navigator component.
 - Returns: Nothing.
 
-It is the listener for the gamepad navigator component's event `onGamepadDisconnected`. When it is called, it stops
-the polling function interval loop and then checks whether any gamepad is still connected. If any gamepad is found
-connected, it will fire the `onGamepadConnected` event so that the navigator continues to read gamepad inputs.
-Otherwise, the navigator will restore the component's model to its initial state (when no gamepad was connected).
+Listens for the gamepad navigator component's event `onGamepadDisconnected`. When it is called, it stops the polling
+function interval loop and then checks whether any gamepad is still connected. If any gamepad is found connected, it
+will fire the `onGamepadConnected` event so that the navigator continues to read gamepad inputs. Otherwise, the
+navigator will restore the component's model to its initial state (when no gamepad was connected).
 
 ### `{navigator}.clearConnectivityInterval(connectivityIntervalReference)`
 
 - `connectivityIntervalReference {Integer}` The ID of the interval reading the gamepad inputs.
 - Returns: Nothing.
 
-It is used as a listener for the navigator component's `onDestroy` event and will clear the polling function interval
-loop when called.
+Listens for the navigator component's `onDestroy` event and will clear the polling function interval loop when called.
