@@ -311,7 +311,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         /**
          * TODO: Modify the action call in such a manner that the action gets triggered
-         * when the inputs are released. (To gain shortpress and longpress actions)
+         * when the inputs are released.
+         * (To gain shortpress and longpress actions)
+         *
+         * Refer:
+         * https://github.com/fluid-lab/gamepad-navigator/pull/21#discussion_r453507050
          */
 
         // Execute the actions only if the action label is available.
