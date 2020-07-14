@@ -71,14 +71,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     },
                     // Left Trigger.
                     "6": {
-                        defaultAction: null,
+                        defaultAction: "scrollLeft",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
                     },
                     // Right Trigger.
                     "7": {
-                        defaultAction: null,
+                        defaultAction: "scrollRight",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
@@ -127,14 +127,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     },
                     // D-Pad left direction button.
                     "14": {
-                        defaultAction: "scrollLeft",
+                        defaultAction: "goToPreviousTab",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
                     },
                     // D-Pad right direction button.
                     "15": {
-                        defaultAction: "scrollRight",
+                        defaultAction: "goToNextTab",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
@@ -221,6 +221,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapper.base.clearIntervalRecords",
                 args: ["{that}.intervalRecords"]
             },
+            // TODO: Investigate, identify, and fix tab navigation issues.
+            tabindexSortFilter: {
+                funcName: "gamepad.inputMapperUtils.content.tabindexSortFilter",
+                args: ["{arguments}.0", "{arguments}.1"]
+            },
             /**
              * TODO: Add tests for links and other elements that involve navigation
              * between pages.
@@ -237,25 +242,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.nextPageInHistory",
                 args: ["{that}", "{arguments}.0"]
             },
-            // TODO: Investigate, identify, and fix tab navigation issues.
-            tabindexSortFilter: {
-                funcName: "gamepad.inputMapperUtils.content.tabindexSortFilter",
-                args: ["{arguments}.0", "{arguments}.1"]
-            },
             reverseTab: {
                 funcName: "gamepad.inputMapperUtils.content.reverseTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             forwardTab: {
                 funcName: "gamepad.inputMapperUtils.content.forwardTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
-            },
-            scrollUp: {
-                funcName: "gamepad.inputMapperUtils.content.scrollUp",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
-            },
-            scrollDown: {
-                funcName: "gamepad.inputMapperUtils.content.scrollDown",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollLeft: {
@@ -266,6 +258,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.scrollRight",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
+            scrollUp: {
+                funcName: "gamepad.inputMapperUtils.content.scrollUp",
+                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+            },
+            scrollDown: {
+                funcName: "gamepad.inputMapperUtils.content.scrollDown",
+                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+            },
             scrollHorizontally: {
                 funcName: "gamepad.inputMapperUtils.content.scrollHorizontally",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
@@ -274,14 +274,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.scrollVertically",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
+            thumbstickHistoryNavigation: {
+                funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"]
+            },
             // TODO: Add tests for when the number of tabbable elements changes.
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
-            },
-            thumbstickHistoryNavigation: {
-                funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
             }
         }
     });

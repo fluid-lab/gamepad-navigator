@@ -19,7 +19,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Open a new tab.
+     * Open a new tab in the current window.
      *
      * @param {Boolean} active - Whether the new tab should be focused when created.
      * @param {String} homepageURL - The URL for the new tab.
@@ -27,5 +27,43 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.messageListenerUtils.openNewTab = function (active, homepageURL) {
         chrome.tabs.create({ active: active, url: homepageURL });
+    };
+
+    /**
+     *
+     * Switch to the next or the previous tab in the current window.
+     *
+     * @param {String} tabDirection - The direction in which the tab focus should change,
+     *
+     */
+    gamepad.messageListenerUtils.switchTab = function (tabDirection) {
+        chrome.tabs.query({ currentWindow: true }, function (tabsArray) {
+            // Switch only if more than one tab is present.
+            if (tabsArray.length > 1) {
+                // Find index of the currently active tab.
+                var activeTabIndex = null;
+                tabsArray.forEach(function (tab, index) {
+                    if (tab.active) {
+                        activeTabIndex = index;
+                    }
+                });
+
+                // Switch browser tab.
+                if (tabDirection === "previousTab") {
+                    /**
+                     * If the first tab is focused then switch to the last tab.
+                     * Otherwise, switch to the previous tab.
+                     */
+                    if (activeTabIndex === 0) {
+                        activeTabIndex = tabsArray.length;
+                    }
+                    chrome.tabs.update(tabsArray[activeTabIndex - 1].id, { active: true });
+                }
+                else if (tabDirection === "nextTab") {
+                    // Switch to the next tab.
+                    chrome.tabs.update(tabsArray[(activeTabIndex + 1) % tabsArray.length].id, { active: true });
+                }
+            }
+        });
     };
 })(fluid);

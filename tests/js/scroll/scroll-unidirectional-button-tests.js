@@ -90,7 +90,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll right using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(15, gamepad.tests.navigator);
+                return gamepad.tests.utils.unidirectional.buttons(7, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page to the left.
@@ -101,7 +101,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The horizontal vertical scroll position should not be changed.", 0, window.scrollX);
 
-            // Update the gamepad to press button 15 for scrolling.
+            // Update the gamepad to press button 7 for scrolling.
             gamepad.tests.navigator.pollGamepads();
 
             // Wait for a few milliseconds for the webpage to scroll.
@@ -117,7 +117,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         jqUnit.asyncTest("Scroll left using button input", function () {
             gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.unidirectional.buttons(14, gamepad.tests.navigator);
+                return gamepad.tests.utils.unidirectional.buttons(6, gamepad.tests.navigator);
             };
 
             // Initialize the webpage, i.e., scroll the page towards the right.
@@ -128,7 +128,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             gamepad.tests.utils.initialScrollTestChecks(gamepad.tests.navigator);
             jqUnit.assertEquals("The horizontal vertical scroll position should not be changed.", 400, window.scrollX);
 
-            // Update the gamepad to press button 14 for scrolling.
+            // Update the gamepad to press button 6 for scrolling.
             gamepad.tests.navigator.pollGamepads();
 
             // Wait for a few milliseconds for the webpage to scroll.
