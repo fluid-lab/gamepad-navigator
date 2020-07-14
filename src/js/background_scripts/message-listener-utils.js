@@ -31,10 +31,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Switch to the previous tab in the available order in the current window.
+     * Switch to the next or the previous tab in the current window.
+     *
+     * @param {String} tabDirection - The direction in which the tab focus should change,
      *
      */
-    gamepad.messageListenerUtils.goToPreviousTab = function () {
+    gamepad.messageListenerUtils.switchTab = function (tabDirection) {
         chrome.tabs.query({ currentWindow: true }, function (tabsArray) {
             // Switch only if more than one tab is present.
             if (tabsArray.length > 1) {
@@ -46,34 +48,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     }
                 });
 
-                // If the first tab is focused then switch to the last tab.
-                if (activeTabIndex === 0) {
-                    activeTabIndex = tabsArray.length;
+                // Switch browser tab.
+                if (tabDirection === "previousTab") {
+                    /**
+                     * If the first tab is focused then switch to the last tab.
+                     * Otherwise, switch to the previous tab.
+                     */
+                    if (activeTabIndex === 0) {
+                        activeTabIndex = tabsArray.length;
+                    }
+                    chrome.tabs.update(tabsArray[activeTabIndex - 1].id, { active: true });
                 }
-                chrome.tabs.update(tabsArray[activeTabIndex - 1].id, { active: true });
-            }
-        });
-    };
-
-    /**
-     *
-     * Switch to the next tab in the available order in the current window.
-     *
-     */
-    gamepad.messageListenerUtils.goToNextTab = function () {
-        chrome.tabs.query({ currentWindow: true }, function (tabsArray) {
-            // Switch only if more than one tab is present.
-            if (tabsArray.length > 1) {
-                // Find index of the currently active tab.
-                var activeTabIndex = null;
-                tabsArray.forEach(function (tab, index) {
-                    if (tab.active) {
-                        activeTabIndex = index;
-                    }
-                });
-
-                // Switch to the next tab.
-                chrome.tabs.update(tabsArray[(activeTabIndex + 1) % tabsArray.length].id, { active: true });
+                else if (tabDirection === "nextTab") {
+                    // Switch to the next tab.
+                    chrome.tabs.update(tabsArray[(activeTabIndex + 1) % tabsArray.length].id, { active: true });
+                }
             }
         });
     };

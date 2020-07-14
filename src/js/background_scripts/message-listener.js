@@ -42,8 +42,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 method: "remove",
                 args: ["{arguments}.0"]
             },
-            goToPreviousTab: "gamepad.messageListenerUtils.goToPreviousTab",
-            goToNextTab: "gamepad.messageListenerUtils.goToNextTab"
+            goToPreviousTab: {
+                funcName: "gamepad.messageListenerUtils.switchTab",
+                args: ["previousTab"]
+            },
+            goToNextTab: {
+                funcName: "gamepad.messageListenerUtils.switchTab",
+                args: ["nextTab"]
+            }
         }
     });
 
