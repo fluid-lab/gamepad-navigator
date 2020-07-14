@@ -4,16 +4,25 @@
     "version": "1.0.0",
     "author": "Divyanshu Mahajan",
     "manifest_version": 2,
-    "permissions": ["storage"],
+    "permissions": ["storage", "tabs"],
     "content_scripts": [{
         "matches": ["<all_urls>"],
         "js": [
             "js/lib/infusion/infusion-all.min.js",
             "js/lib/ally/ally.min.js",
             "js/content_scripts/gamepad-navigator.js",
-            "js/content_scripts/input-mapper-utils.js",
+            "js/content_scripts/input-mapper-content-utils.js",
+            "js/content_scripts/input-mapper-background-utils.js",
             "js/content_scripts/input-mapper-base.js",
-            "js/content_scripts/input-mapper-instance.js"
+            "js/content_scripts/input-mapper.js"
         ]
-    }]
+    }],
+    "background": {
+        "scripts": [
+            "js/lib/infusion/infusion-all.min.js",
+            "js/background_scripts/message-listener-utils.js",
+            "js/background_scripts/message-listener.js",
+            "js/background_scripts/message-listener-instance.js"
+        ]
+    }
 }

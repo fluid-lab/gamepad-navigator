@@ -15,7 +15,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 (function (fluid, $) {
     "use strict";
 
-    fluid.registerNamespace("gamepad.inputMapperUtils");
+    fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
     /**
      *
@@ -27,7 +27,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Boolean} invert - Whether the scroll should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.scrollHorizontally = function (that, value, speedFactor, invert) {
+    gamepad.inputMapperUtils.content.scrollHorizontally = function (that, value, speedFactor, invert) {
         // Get the updated input value according to the configuration.
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
@@ -54,7 +54,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollLeft = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollLeft = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -83,7 +83,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollRight = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollRight = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -113,7 +113,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Boolean} invert - Whether the scroll should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.scrollVertically = function (that, value, speedFactor, invert) {
+    gamepad.inputMapperUtils.content.scrollVertically = function (that, value, speedFactor, invert) {
         // Get the updated input value according to the configuration.
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
@@ -140,7 +140,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollUp = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollUp = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -169,7 +169,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.scrollDown = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollDown = function (that, value, speedFactor) {
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -199,7 +199,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Boolean} invert - Whether the tabbing should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.thumbstickTabbing = function (that, value, speedFactor, invert) {
+    gamepad.inputMapperUtils.content.thumbstickTabbing = function (that, value, speedFactor, invert) {
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
         if (value > 0) {
@@ -225,7 +225,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.forwardTab = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.forwardTab = function (that, value, speedFactor) {
         // Stop tabbing for the previous input value.
         clearInterval(that.intervalRecords.forwardTab);
 
@@ -274,7 +274,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
      *
      */
-    gamepad.inputMapperUtils.reverseTab = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.reverseTab = function (that, value, speedFactor) {
         // Stop tabbing for the previous input value.
         clearInterval(that.intervalRecords.reverseTab);
 
@@ -325,7 +325,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @return {Integer} - The value which will decide the order of the two elements.
      *
      */
-    gamepad.inputMapperUtils.tabindexSortFilter = function (elementOne, elementTwo) {
+    gamepad.inputMapperUtils.content.tabindexSortFilter = function (elementOne, elementTwo) {
         var tabindexOne = parseInt(elementOne.getAttribute("tabindex")),
             tabindexTwo = parseInt(elementTwo.getAttribute("tabindex"));
 
@@ -357,7 +357,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} value - The value of the gamepad input.
      *
      */
-    gamepad.inputMapperUtils.click = function (value) {
+    gamepad.inputMapperUtils.content.click = function (value) {
         if (value > 0) {
             /**
              * If SELECT element is currently focused, toggle its state. Otherwise perform
@@ -419,7 +419,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *                           order.
      *
      */
-    gamepad.inputMapperUtils.thumbstickHistoryNavigation = function (that, value, invert) {
+    gamepad.inputMapperUtils.content.thumbstickHistoryNavigation = function (that, value, invert) {
         // Get the updated input value according to the configuration.
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
@@ -439,7 +439,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} value - The value of the gamepad input.
      *
      */
-    gamepad.inputMapperUtils.previousPageInHistory = function (that, value) {
+    gamepad.inputMapperUtils.content.previousPageInHistory = function (that, value) {
         if (value > that.options.cutoffValue) {
             var activeElementIndex = null;
 
@@ -472,7 +472,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Integer} value - The value of the gamepad input.
      *
      */
-    gamepad.inputMapperUtils.nextPageInHistory = function (that, value) {
+    gamepad.inputMapperUtils.content.nextPageInHistory = function (that, value) {
         if (value > that.options.cutoffValue) {
             var activeElementIndex = null;
 

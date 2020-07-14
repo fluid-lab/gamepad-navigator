@@ -15,7 +15,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     var gamepad = fluid.registerNamespace("gamepad");
     fluid.registerNamespace("gamepad.inputMapper.base");
-    fluid.registerNamespace("gamepad.inputMapperUtils");
+    fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
     fluid.defaults("gamepad.inputMapper.base", {
         gradeNames: ["gamepad.navigator"],
@@ -28,100 +28,116 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     "0": {
                         defaultAction: "click",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Face Button.
                     // Circle on PlayStation controller & B on Xbox controller.
                     "1": {
                         defaultAction: null,
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Face Button.
                     // Square on PlayStation controller & X on Xbox controller.
                     "2": {
                         defaultAction: "previousPageInHistory",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Face Button.
                     // Triangle on PlayStation controller & Y on Xbox controller.
                     "3": {
                         defaultAction: "nextPageInHistory",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Left Bumper.
                     "4": {
                         defaultAction: "reverseTab",
                         currentAction: null,
-                        speedFactor: 2.5
+                        speedFactor: 2.5,
+                        background: false
                     },
                     // Right Bumper.
                     "5": {
                         defaultAction: "forwardTab",
                         currentAction: null,
-                        speedFactor: 2.5
+                        speedFactor: 2.5,
+                        background: false
                     },
                     // Left Trigger.
                     "6": {
                         defaultAction: null,
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Right Trigger.
                     "7": {
                         defaultAction: null,
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Select/Share on PlayStation controller & Back on Xbox controller.
                     "8": {
-                        defaultAction: null,
+                        defaultAction: "closeCurrentTab",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Start/Options on PlayStation controller & Start on Xbox controller.
                     "9": {
-                        defaultAction: null,
+                        defaultAction: "openNewTab",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Left thumbstick button.
                     "10": {
                         defaultAction: null,
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Right thumbstick button.
                     "11": {
                         defaultAction: null,
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // D-Pad up direction button.
                     "12": {
                         defaultAction: "scrollUp",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // D-Pad down direction button.
                     "13": {
                         defaultAction: "scrollDown",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // D-Pad left direction button.
                     "14": {
                         defaultAction: "scrollLeft",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // D-Pad right direction button.
                     "15": {
                         defaultAction: "scrollRight",
                         currentAction: null,
-                        speedFactor: 1
+                        speedFactor: 1,
+                        background: false
                     },
                     // Badge icon
                     // PS button on PlayStation controller & Xbox logo button.
@@ -160,6 +176,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         invert: false
                     }
                 }
+            },
+            commonConfiguration: {
+                homepageURL: "https://www.google.com/"
             }
         },
         modelListeners: {
@@ -207,61 +226,61 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * between pages.
              */
             click: {
-                funcName: "gamepad.inputMapperUtils.click",
+                funcName: "gamepad.inputMapperUtils.content.click",
                 args: ["{arguments}.0"]
             },
             previousPageInHistory: {
-                funcName: "gamepad.inputMapperUtils.previousPageInHistory",
+                funcName: "gamepad.inputMapperUtils.content.previousPageInHistory",
                 args: ["{that}", "{arguments}.0"]
             },
             nextPageInHistory: {
-                funcName: "gamepad.inputMapperUtils.nextPageInHistory",
+                funcName: "gamepad.inputMapperUtils.content.nextPageInHistory",
                 args: ["{that}", "{arguments}.0"]
             },
             // TODO: Investigate, identify, and fix tab navigation issues.
             tabindexSortFilter: {
-                funcName: "gamepad.inputMapperUtils.tabindexSortFilter",
+                funcName: "gamepad.inputMapperUtils.content.tabindexSortFilter",
                 args: ["{arguments}.0", "{arguments}.1"]
             },
             reverseTab: {
-                funcName: "gamepad.inputMapperUtils.reverseTab",
+                funcName: "gamepad.inputMapperUtils.content.reverseTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             forwardTab: {
-                funcName: "gamepad.inputMapperUtils.forwardTab",
+                funcName: "gamepad.inputMapperUtils.content.forwardTab",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollUp: {
-                funcName: "gamepad.inputMapperUtils.scrollUp",
+                funcName: "gamepad.inputMapperUtils.content.scrollUp",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollDown: {
-                funcName: "gamepad.inputMapperUtils.scrollDown",
+                funcName: "gamepad.inputMapperUtils.content.scrollDown",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollLeft: {
-                funcName: "gamepad.inputMapperUtils.scrollLeft",
+                funcName: "gamepad.inputMapperUtils.content.scrollLeft",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollRight: {
-                funcName: "gamepad.inputMapperUtils.scrollRight",
+                funcName: "gamepad.inputMapperUtils.content.scrollRight",
                 args: ["{that}", "{arguments}.0", "{arguments}.1"]
             },
             scrollHorizontally: {
-                funcName: "gamepad.inputMapperUtils.scrollHorizontally",
+                funcName: "gamepad.inputMapperUtils.content.scrollHorizontally",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             scrollVertically: {
-                funcName: "gamepad.inputMapperUtils.scrollVertically",
+                funcName: "gamepad.inputMapperUtils.content.scrollVertically",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             // TODO: Add tests for when the number of tabbable elements changes.
             thumbstickTabbing: {
-                funcName: "gamepad.inputMapperUtils.thumbstickTabbing",
+                funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             thumbstickHistoryNavigation: {
-                funcName: "gamepad.inputMapperUtils.thumbstickHistoryNavigation",
+                funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"]
             }
         }
@@ -283,10 +302,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         var inputType = change.path[0],
             index = change.path[1],
-            inputValue = change.value;
+            inputValue = change.value,
+            oldInputValue = change.oldValue || 0;
 
         var inputProperties = that.model.map[inputType][index],
-            actionLabel = fluid.get(inputProperties, "currentAction") || fluid.get(inputProperties, "defaultAction");
+            actionLabel = fluid.get(inputProperties, "currentAction") || fluid.get(inputProperties, "defaultAction"),
+            homepageURL = that.model.commonConfiguration.homepageURL;
+
+        /**
+         * TODO: Modify the action call in such a manner that the action gets triggered
+         * when the inputs are released.
+         * (To gain shortpress and longpress actions)
+         *
+         * Refer:
+         * https://github.com/fluid-lab/gamepad-navigator/pull/21#discussion_r453507050
+         */
 
         // Execute the actions only if the action label is available.
         if (actionLabel) {
@@ -294,13 +324,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Trigger the action only if a valid function is found.
             if (action) {
-                // Take into account the third parameter "invert" for actions linked to axes input only.
-                if (inputType === "axes") {
-                    action(inputValue, inputProperties.speedFactor, inputProperties.invert);
-                }
-                else {
-                    action(inputValue, inputProperties.speedFactor);
-                }
+                action(
+                    inputValue,
+                    inputProperties.speedFactor,
+                    inputProperties.invert,
+                    inputProperties.background,
+                    oldInputValue,
+                    homepageURL
+                );
             }
         }
     };
