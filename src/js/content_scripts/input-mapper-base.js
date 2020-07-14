@@ -10,6 +10,8 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
+/* global ally */
+
 (function (fluid) {
     "use strict";
 
@@ -193,6 +195,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
         listeners: {
             "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
+            "onCreate.trackDOM": "{that}.trackDOM",
+            "onDestroy.stopTrackingDOM": "{that}.stopTrackingDOM",
             /**
              * TODO: Adjust the gamepaddisconnected event so that the other gamepad's
              * navigation doesn't break.
@@ -208,7 +212,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 forwardTab: null,
                 reverseTab: null
             },
-            currentTabIndex: 0
+            currentTabIndex: 0,
+            tabbableElements: null,
+            mutationObserverInstance: null
         },
         cutoffValue: 0.20,
         scrollInputMultiplier: 50,
@@ -221,9 +227,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapper.base.clearIntervalRecords",
                 args: ["{that}.intervalRecords"]
             },
+            trackDOM: {
+                funcName: "gamepad.inputMapper.base.trackDOM",
+                args: ["{that}"]
+            },
+            stopTrackingDOM: {
+                "this": "{that}.mutationObserverInstance",
+                method: "disconnect"
+            },
             // TODO: Investigate, identify, and fix tab navigation issues.
             tabindexSortFilter: {
-                funcName: "gamepad.inputMapperUtils.content.tabindexSortFilter",
+                funcName: "gamepad.inputMapper.base.tabindexSortFilter",
                 args: ["{arguments}.0", "{arguments}.1"]
             },
             /**
@@ -244,11 +258,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             reverseTab: {
                 funcName: "gamepad.inputMapperUtils.content.reverseTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0"]
             },
             forwardTab: {
                 funcName: "gamepad.inputMapperUtils.content.forwardTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0"]
             },
             scrollLeft: {
                 funcName: "gamepad.inputMapperUtils.content.scrollLeft",
@@ -348,5 +362,73 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         fluid.each(records, function (record) {
             clearInterval(record);
         });
+    };
+
+    /**
+     *
+     * A listener to track DOM elements and update the list when the DOM is updated.
+     *
+     * @param {Object} that - The inputMapper component.
+     *
+     */
+    gamepad.inputMapper.base.trackDOM = function (that) {
+        var body = document.querySelector("body"),
+            MutationObserver = that.options.windowObject.MutationObserver;
+
+        // Record the tabbable elements when the component is created.
+        that.tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
+
+        // Create an instance of the mutation observer.
+        that.mutationObserverInstance = new MutationObserver(function () {
+            // Record the tabbable elements when the DOM mutates.
+            that.tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
+        });
+
+        // Specify the mutations to be observed.
+        var observerConfiguration = {
+            childList: true,
+            attributes: true,
+            characterData: true,
+            subtree: true,
+            attributeOldValue: true,
+            characterDataOldValue: true
+        };
+
+        // Start observing the DOM mutations.
+        that.mutationObserverInstance.observe(body, observerConfiguration);
+    };
+
+    /**
+     *
+     * Filter for sorting the elements; to be used inside JavaScript's sort() method.
+     *
+     * @param {Object} elementOne - The DOM element.
+     * @param {Object} elementTwo - The DOM element.
+     * @return {Integer} - The value which will decide the order of the two elements.
+     *
+     */
+    gamepad.inputMapper.base.tabindexSortFilter = function (elementOne, elementTwo) {
+        var tabindexOne = parseInt(elementOne.getAttribute("tabindex")),
+            tabindexTwo = parseInt(elementTwo.getAttribute("tabindex"));
+
+        /**
+         * If both elements have tabindex greater than 0, arrange them in ascending order
+         * of the tabindex. Otherwise if only one of the elements have tabindex greater
+         * than 0, place it before the other element. And in case, no element has a
+         * tabindex attribute or both of them posses tabindex value equal to 0, keep them
+         * in the same order.
+         */
+        if (tabindexOne > 0 && tabindexTwo > 0) {
+            return tabindexOne - tabindexTwo;
+        }
+        else if (tabindexOne > 0) {
+            return -1;
+        }
+        else if (tabindexTwo > 0) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     };
 })(fluid);
