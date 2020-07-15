@@ -45,7 +45,7 @@ module.exports = function (grunt) {
                     banner: "<!--\n<%= usebanner.options.licenseBanner %>-->\n"
                 },
                 files: {
-                    src: ["./*.md", "tests/**/*.md", "docs/*.md"]
+                    src: ["./*.md", "tests/**/*.md", "docs/**/*.md"]
                 }
             }
         },
