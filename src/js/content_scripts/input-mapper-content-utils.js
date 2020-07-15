@@ -202,151 +202,75 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapperUtils.content.thumbstickTabbing = function (that, value, speedFactor, invert) {
         var inversionFactor = invert ? -1 : 1;
         value = value * inversionFactor;
+        clearInterval(that.intervalRecords.forwardTab);
+        clearInterval(that.intervalRecords.reverseTab);
         if (value > 0) {
-            clearInterval(that.intervalRecords.reverseTab);
-            that.forwardTab(value, speedFactor);
+            that.intervalRecords.forwardTab = setInterval(
+                that.forwardTab,
+                that.options.frequency * speedFactor,
+                value
+            );
         }
         else if (value < 0) {
-            clearInterval(that.intervalRecords.forwardTab);
-            that.reverseTab(-1 * value, speedFactor);
-        }
-        else {
-            clearInterval(that.intervalRecords.forwardTab);
-            clearInterval(that.intervalRecords.reverseTab);
+            that.intervalRecords.reverseTab = setInterval(
+                that.reverseTab,
+                that.options.frequency * speedFactor,
+                -1 * value
+            );
         }
     };
 
     /**
      *
-     * Focus on the next tabbable element.
+     * Change the focus from one tabbable element to another.
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
-     * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
+     * @param {String} direction - The direction in which the focus should change.
      *
      */
-    gamepad.inputMapperUtils.content.forwardTab = function (that, value, speedFactor) {
-        // Stop tabbing for the previous input value.
-        clearInterval(that.intervalRecords.forwardTab);
-
+    gamepad.inputMapperUtils.content.buttonTabNavigation = function (that, value, direction) {
         if (value > that.options.cutoffValue) {
-            that.intervalRecords.forwardTab = setInterval(function () {
-                // Obtain the tabbable DOM elements and sort them.
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter),
-                    length = tabbableElements.length;
+            var length = that.tabbableElements.length;
 
-                // Tab only if at least one tabbable element is available.
-                if (length) {
+            // Tab only if at least one tabbable element is available.
+            if (length) {
+                /**
+                 * If the body element of the page is focused or if no element is
+                 * currently focused, shift the focus to the first element. Otherwise
+                 * shift the focus to the next element.
+                 */
+                var activeElement = document.activeElement;
+                if (activeElement.nodeName === "BODY" || !activeElement) {
+                    that.tabbableElements[0].focus();
+                }
+                else {
+                    var activeElementIndex = that.tabbableElements.indexOf(activeElement);
+
                     /**
-                     * If the body element of the page is focused or if no element is
-                     * currently focused, shift the focus to the first element. Otherwise
-                     * shift the focus to the next element.
+                     * If the currently focused element is not found in the list, refer to
+                     * the stored value of the index.
                      */
-                    if (document.activeElement === document.querySelector("body") || !document.activeElement) {
-                        tabbableElements[0].focus();
+                    if (activeElementIndex === -1) {
+                        activeElementIndex = that.currentTabIndex;
                     }
-                    else {
-                        var activeElementIndex = tabbableElements.indexOf(document.activeElement);
 
-                        /**
-                         * If the currently focused element is not found in the list, refer to
-                         * the stored value of the index.
-                         */
-                        if (activeElementIndex === -1) {
-                            activeElementIndex = that.currentTabIndex;
-                        }
-                        tabbableElements[(activeElementIndex + 1) % length].focus();
-
-                        // Store the index of the currently focused element.
+                    if (direction === "forwardTab") {
                         that.currentTabIndex = (activeElementIndex + 1) % length;
                     }
-                }
-            }, that.options.frequency * speedFactor);
-        }
-    };
-
-    /**
-     *
-     * Focus on the next tabbable element.
-     *
-     * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
-     * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
-     *
-     */
-    gamepad.inputMapperUtils.content.reverseTab = function (that, value, speedFactor) {
-        // Stop tabbing for the previous input value.
-        clearInterval(that.intervalRecords.reverseTab);
-
-        if (value > that.options.cutoffValue) {
-            that.intervalRecords.reverseTab = setInterval(function () {
-                // Obtain the tabbable DOM elements and sort them.
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter),
-                    length = tabbableElements.length;
-
-                // Tab only if at least one tabbable element is available.
-                if (length) {
-                    /**
-                     * If the body element of the page is focused, shift the focus to the last
-                     * element. Otherwise shift the focus to the previous element.
-                     */
-                    if (document.activeElement === document.querySelector("body") || !document.activeElement) {
-                        tabbableElements[length - 1].focus();
-                    }
-                    else {
-                        var activeElementIndex = tabbableElements.indexOf(document.activeElement);
-
+                    else if (direction === "reverseTab") {
                         /**
-                         * If the currently active element is not found in the list,
-                         * refer to the stored value of the index.
+                         * Move to the first element if the last element on the webpage
+                         * is focused.
                          */
-                        if (activeElementIndex === -1) {
-                            activeElementIndex = that.currentTabIndex;
-                        }
-                        else if (activeElementIndex === 0) {
+                        if (activeElementIndex === 0) {
                             activeElementIndex = length;
                         }
-                        tabbableElements[activeElementIndex - 1].focus();
-
-                        // Store the index of the currently focused element.
                         that.currentTabIndex = activeElementIndex - 1;
                     }
+                    that.tabbableElements[that.currentTabIndex].focus();
                 }
-            }, that.options.frequency * speedFactor);
-        }
-    };
-
-    /**
-     *
-     * Filter for sorting the elements; to be used inside JavaScript's sort() method.
-     *
-     * @param {Object} elementOne - The DOM element.
-     * @param {Object} elementTwo - The DOM element.
-     * @return {Integer} - The value which will decide the order of the two elements.
-     *
-     */
-    gamepad.inputMapperUtils.content.tabindexSortFilter = function (elementOne, elementTwo) {
-        var tabindexOne = parseInt(elementOne.getAttribute("tabindex")),
-            tabindexTwo = parseInt(elementTwo.getAttribute("tabindex"));
-
-        /**
-         * If both elements have tabindex greater than 0, arrange them in ascending order
-         * of the tabindex. Otherwise if only one of the elements have tabindex greater
-         * than 0, place it before the other element. And in case, no element has a
-         * tabindex attribute or both of them posses tabindex value equal to 0, keep them
-         * in the same order.
-         */
-        if (tabindexOne > 0 && tabindexTwo > 0) {
-            return tabindexOne - tabindexTwo;
-        }
-        else if (tabindexOne > 0) {
-            return -1;
-        }
-        else if (tabindexTwo > 0) {
-            return 1;
-        }
-        else {
-            return 0;
+            }
         }
     };
 
