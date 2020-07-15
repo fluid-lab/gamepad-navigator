@@ -43,6 +43,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             openNewTab: {
                 funcName: "gamepad.inputMapperUtils.background.openNewTab",
                 args: ["{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
+            },
+            openNewWindow: {
+                funcName: "gamepad.inputMapperUtils.background.openNewWindow",
+                args: ["{that}", "{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
+            },
+            closeCurrentWindow: {
+                funcName: "gamepad.inputMapperUtils.background.closeCurrentWindow",
+                args: ["{arguments}.0", "{arguments}.4"]
             }
         }
     });
@@ -80,6 +88,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
-    // Create an instance of the component.
-    gamepad.inputMapper();
+    // Create an instance of the inputMapper when a new page is opened.
+    gamepad.inputMapperInstance = null;
+    gamepad.inputMapperInstance = gamepad.inputMapper();
+
+    /**
+     * Restore or destroy the instance of the inputMapper when the visibility of current
+     * window/tab is changed.
+     */
+    document.addEventListener("visibilitychange", function () {
+        var isDestroyed = fluid.isDestroyed(gamepad.inputMapperInstance);
+        if (document.visibilityState === "visible" && isDestroyed) {
+            /**
+             * Create an instance of the inputMapper when the tab/window is focused
+             * again and start reading gamepad inputs (if any gamepad is connected).
+             */
+            gamepad.inputMapperInstance = gamepad.inputMapper();
+            gamepad.inputMapperInstance.events.onGamepadConnected.fire();
+        }
+        else if (document.visibilityState === "hidden" && !isDestroyed) {
+            /**
+             * Destroy the instance of the inputMapper in the current tab when another
+             * window/tab is focused or opened.
+             */
+            gamepad.inputMapperInstance.destroy();
+        }
+    });
 })(fluid, jQuery);

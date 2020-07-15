@@ -91,4 +91,41 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             chrome.runtime.sendMessage(actionData);
         }
     };
+
+    /**
+     *
+     * Sends message to the background script to open a new window.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Boolean} background - Whether the new window should open in background.
+     * @param {Integer} oldInputValue - The previous value of the gamepad input.
+     * @param {String} homepageURL - The URL for the new window.
+     *
+     */
+    gamepad.inputMapperUtils.background.openNewWindow = function (that, value, background, oldInputValue, homepageURL) {
+        if (value < oldInputValue) {
+            var actionData = {
+                actionName: "openNewWindow",
+                active: !background,
+                homepageURL: homepageURL
+            };
+            chrome.runtime.sendMessage(actionData);
+        }
+    };
+
+    /**
+     *
+     * Sends message to the background script to close the currently opened window.
+     *
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} oldInputValue - The previous value of the gamepad input.
+     *
+     */
+    gamepad.inputMapperUtils.background.closeCurrentWindow = function (value, oldInputValue) {
+        if (value < oldInputValue) {
+            var actionData = { actionName: "closeCurrentWindow" };
+            chrome.runtime.sendMessage(actionData);
+        }
+    };
 })(fluid);
