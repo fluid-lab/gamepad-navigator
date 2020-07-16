@@ -77,6 +77,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.messageListenerUtils.openNewWindow = function (active, homepageURL) {
         chrome.windows.getAll(function (windowsArray) {
+
+            /**
+             * TODO: Remove the minimization part when the issue #34 is fixed, i.e., when
+             * only the current window will read gamepad inputs.
+             */
+
             /**
              * Minimize the current window to avoid gamepad action execution in multiple
              * windows (if new window is not to be opened in background). Also minimize

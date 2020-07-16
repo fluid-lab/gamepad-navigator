@@ -29,28 +29,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
             },
             goToPreviousTab: {
-                funcName: "gamepad.inputMapperUtils.background.goToPreviousTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToPreviousTab", "{arguments}.0", "{arguments}.4"]
             },
             goToNextTab: {
-                funcName: "gamepad.inputMapperUtils.background.goToNextTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToNextTab", "{arguments}.0", "{arguments}.4"]
             },
             closeCurrentTab: {
-                funcName: "gamepad.inputMapperUtils.background.closeCurrentTab",
-                args: ["{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "closeCurrentTab", "{arguments}.0", "{arguments}.4"]
             },
             openNewTab: {
-                funcName: "gamepad.inputMapperUtils.background.openNewTab",
-                args: ["{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "openNewTab", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
             },
             openNewWindow: {
-                funcName: "gamepad.inputMapperUtils.background.openNewWindow",
-                args: ["{that}", "{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "openNewWindow", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
             },
             closeCurrentWindow: {
-                funcName: "gamepad.inputMapperUtils.background.closeCurrentWindow",
-                args: ["{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "closeCurrentWindow", "{arguments}.0", "{arguments}.4"]
             }
         }
     });
