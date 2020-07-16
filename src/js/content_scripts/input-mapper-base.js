@@ -115,14 +115,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     },
                     // D-Pad up direction button.
                     "12": {
-                        defaultAction: "scrollUp",
+                        defaultAction: "goToPreviousWindow",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
                     },
                     // D-Pad down direction button.
                     "13": {
-                        defaultAction: "scrollDown",
+                        defaultAction: "goToNextWindow",
                         currentAction: null,
                         speedFactor: 1,
                         background: false

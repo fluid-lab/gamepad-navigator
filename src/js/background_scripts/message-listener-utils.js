@@ -76,41 +76,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.openNewWindow = function (active, homepageURL) {
-        chrome.windows.getAll(function (windowsArray) {
-
-            /**
-             * TODO: Remove the minimization part when the issue #34 is fixed, i.e., when
-             * only the current window will read gamepad inputs.
-             */
-
-            /**
-             * Minimize the current window to avoid gamepad action execution in multiple
-             * windows (if new window is not to be opened in background). Also minimize
-             * all other windows previously opened before connecting the gamepad.
-             */
-            chrome.windows.getCurrent(function (currentWindow) {
-                windowsArray.forEach(function (window) {
-                    var windowUpdate = { state: "minimized" };
-
-                    /**
-                     * Skip minimization of current window if the new window is to be
-                     * opened in the background.
-                     */
-                    if (window === currentWindow && !active) {
-                        return;
-                    }
-
-                    // Minimize the window.
-                    chrome.windows.update(window.id, windowUpdate);
-                });
-            });
-
-            // Open a new window (in active mode or background).
-            chrome.windows.create({
-                focused: active,
-                url: homepageURL,
-                state: "maximized"
-            });
+        chrome.windows.create({
+            focused: active,
+            url: homepageURL,
+            state: "maximized"
         });
     };
 
@@ -121,32 +90,49 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.messageListenerUtils.closeCurrentWindow = function () {
         chrome.windows.getCurrent(function (currentWindow) {
-            chrome.windows.getAll(function (windowsArray) {
-                // Remove the currently active window object from the windows array.
-                windowsArray = windowsArray.filter(function (window) {
-                    return window.id !== currentWindow.id;
+            chrome.windows.remove(currentWindow.id);
+        });
+    };
+
+    /**
+     *
+     * Switch to the next or the previous window in the current window.
+     *
+     * @param {String} windowDirection - The direction in which the window focus should change,
+     *
+     */
+    gamepad.messageListenerUtils.switchWindow = function (windowDirection) {
+        chrome.windows.getAll(function (windowsArray) {
+            // Switch only if more than one window is present.
+            if (windowsArray.length > 1) {
+                // Find index of the currently active window.
+                var focusedWindowIndex = null;
+                windowsArray.forEach(function (window, index) {
+                    if (window.focused) {
+                        focusedWindowIndex = index;
+                    }
                 });
 
-                /**
-                 * Minimize all windows other than the current window before connecting
-                 * the gamepad.
-                 */
-                windowsArray.forEach(function (window) {
-                    var windowUpdate = { state: "minimized" };
-                    chrome.windows.update(window.id, windowUpdate);
-                });
-
-                // Close the current window.
-                chrome.windows.remove(currentWindow.id);
-
-                // Activate / maximize the last active window.
-                if (windowsArray.length) {
-                    chrome.windows.update(windowsArray[windowsArray.length - 1].id, {
-                        state: "maximized",
+                // Switch browser window.
+                if (windowDirection === "previousWindow") {
+                    /**
+                     * If the first window is focused then switch to the last window.
+                     * Otherwise, switch to the previous window.
+                     */
+                    if (focusedWindowIndex === 0) {
+                        focusedWindowIndex = windowsArray.length;
+                    }
+                    chrome.windows.update(windowsArray[focusedWindowIndex - 1].id, {
                         focused: true
                     });
                 }
-            });
+                else if (windowDirection === "nextWindow") {
+                    // Switch to the next window.
+                    chrome.windows.update(windowsArray[(focusedWindowIndex + 1) % windowsArray.length].id, {
+                        focused: true
+                    });
+                }
+            }
         });
     };
 })(fluid);
