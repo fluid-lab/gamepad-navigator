@@ -101,14 +101,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     },
                     // Left thumbstick button.
                     "10": {
-                        defaultAction: null,
+                        defaultAction: "closeCurrentWindow",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
                     },
                     // Right thumbstick button.
                     "11": {
-                        defaultAction: null,
+                        defaultAction: "openNewWindow",
                         currentAction: null,
                         speedFactor: 1,
                         background: false

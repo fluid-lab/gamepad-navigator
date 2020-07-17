@@ -29,20 +29,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
             },
             goToPreviousTab: {
-                funcName: "gamepad.inputMapperUtils.background.goToPreviousTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToPreviousTab", "{arguments}.0", "{arguments}.4"]
             },
             goToNextTab: {
-                funcName: "gamepad.inputMapperUtils.background.goToNextTab",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToNextTab", "{arguments}.0", "{arguments}.4"]
             },
             closeCurrentTab: {
-                funcName: "gamepad.inputMapperUtils.background.closeCurrentTab",
-                args: ["{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "closeCurrentTab", "{arguments}.0", "{arguments}.4"]
             },
             openNewTab: {
-                funcName: "gamepad.inputMapperUtils.background.openNewTab",
-                args: ["{arguments}.0", "{arguments}.3", "{arguments}.4", "{arguments}.5"]
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "openNewTab", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
+            },
+            openNewWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "openNewWindow", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
+            },
+            closeCurrentWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "closeCurrentWindow", "{arguments}.0", "{arguments}.4"]
             }
         }
     });
@@ -80,6 +88,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
-    // Create an instance of the component.
-    gamepad.inputMapper();
+    // Create an instance of the inputMapper when a new page is opened.
+    gamepad.inputMapperInstance = null;
+    gamepad.inputMapperInstance = gamepad.inputMapper();
+
+    /**
+     * Restore or destroy the instance of the inputMapper when the visibility of current
+     * window/tab is changed.
+     */
+    document.addEventListener("visibilitychange", function () {
+        var isDestroyed = fluid.isDestroyed(gamepad.inputMapperInstance);
+        if (document.visibilityState === "visible" && isDestroyed) {
+            /**
+             * Create an instance of the inputMapper when the tab/window is focused
+             * again and start reading gamepad inputs (if any gamepad is connected).
+             */
+            gamepad.inputMapperInstance = gamepad.inputMapper();
+            gamepad.inputMapperInstance.events.onGamepadConnected.fire();
+        }
+        else if (document.visibilityState === "hidden" && !isDestroyed) {
+            /**
+             * Destroy the instance of the inputMapper in the current tab when another
+             * window/tab is focused or opened.
+             */
+            gamepad.inputMapperInstance.destroy();
+        }
+    });
 })(fluid, jQuery);
