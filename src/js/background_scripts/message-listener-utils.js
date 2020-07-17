@@ -107,9 +107,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             if (windowsArray.length > 1) {
                 // Find index of the currently active window.
                 var focusedWindowIndex = null;
-                windowsArray.forEach(function (window, index) {
+                fluid.find(windowsArray, function (window, index) {
                     if (window.focused) {
                         focusedWindowIndex = index;
+                        return true;
                     }
                 });
 
