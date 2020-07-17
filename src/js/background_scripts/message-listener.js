@@ -54,7 +54,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.messageListenerUtils.openNewWindow",
                 args: ["{arguments}.2", "{arguments}.3"]
             },
-            closeCurrentWindow: "gamepad.messageListenerUtils.closeCurrentWindow"
+            closeCurrentWindow: "gamepad.messageListenerUtils.closeCurrentWindow",
+            goToPreviousWindow: {
+                funcName: "gamepad.messageListenerUtils.switchWindow",
+                args: ["previousWindow"]
+            },
+            goToNextWindow: {
+                funcName: "gamepad.messageListenerUtils.switchWindow",
+                args: ["nextWindow"]
+            }
         }
     });
 

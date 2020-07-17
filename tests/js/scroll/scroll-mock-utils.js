@@ -30,7 +30,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.tests.nonBidirectionalOneaxesTestsMapper", {
         gradeNames: ["gamepad.inputMapper.base"],
         windowObject: gamepad.tests.windowObject,
-        members: { count: 2 }
+        members: { count: 2 },
+        model: {
+            map: {
+                buttons: {
+                    // D-Pad up direction button.
+                    "12": { currentAction: "scrollUp" },
+                    // D-Pad down direction button.
+                    "13": { currentAction: "scrollDown" }
+                }
+            }
+        }
     });
 
     /**

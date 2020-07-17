@@ -51,6 +51,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             closeCurrentWindow: {
                 funcName: "gamepad.inputMapperUtils.background.sendMessage",
                 args: ["{that}", "closeCurrentWindow", "{arguments}.0", "{arguments}.4"]
+            },
+            goToPreviousWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToPreviousWindow", "{arguments}.0", "{arguments}.4"]
+            },
+            goToNextWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "goToNextWindow", "{arguments}.0", "{arguments}.4"]
             }
         }
     });
@@ -88,30 +96,77 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
-    // Create an instance of the inputMapper when a new page is opened.
-    gamepad.inputMapperInstance = null;
-    gamepad.inputMapperInstance = gamepad.inputMapper();
+    /**
+     *
+     * Tracks the page/window visibility state and calls the inputMapper instance manager
+     * accordingly.
+     *
+     * @param {Function} inputMapperManager - The function that handles the instance of
+     *                                        the inputMapper component.
+     *
+     */
+    gamepad.visibilityChangeTracker = (function (windowObject) {
+        // Assume that the page isn't focused initially.
+        var inView = false;
+        return function (inputMapperManager) {
+            // Track changes to the focus/visibility of the window object.
+            windowObject.onfocus = windowObject.onblur = windowObject.onpageshow = windowObject.onpagehide = function (event) {
+                /**
+                 * Call the inputMapper instance manager according to the visibility
+                 * status of the page/window and update the inView value.
+                 */
+                if (event.type === "focus" || event.type === "pageshow") {
+                    /**
+                     * Call the inputMapper instance manager with the "visible" status if
+                     * the page/window is focused back after switching or when page loads
+                     * (using inView to verify).
+                     */
+                    if (!inView) {
+                        inputMapperManager("visible");
+                        inView = true;
+                    }
+                }
+                else if (inView) {
+                    /**
+                     * Otherwise, call the inputMapper instance manager with the "hidden"
+                     * status when the focus/visibility of current window/tab is moved to
+                     * some other window/tab.
+                     */
+                    inputMapperManager("hidden");
+                    inView = false;
+                }
+            };
+        };
+    })(window);
 
     /**
-     * Restore or destroy the instance of the inputMapper when the visibility of current
-     * window/tab is changed.
+     *
+     * Manages the inputMapper instance according to the visibility status of the
+     * tab/window.
+     *
+     * @param {String} visibilityStatus - The visibility status of the tab/window.
+     *
      */
-    document.addEventListener("visibilitychange", function () {
-        var isDestroyed = fluid.isDestroyed(gamepad.inputMapperInstance);
-        if (document.visibilityState === "visible" && isDestroyed) {
-            /**
-             * Create an instance of the inputMapper when the tab/window is focused
-             * again and start reading gamepad inputs (if any gamepad is connected).
-             */
-            gamepad.inputMapperInstance = gamepad.inputMapper();
-            gamepad.inputMapperInstance.events.onGamepadConnected.fire();
-        }
-        else if (document.visibilityState === "hidden" && !isDestroyed) {
-            /**
-             * Destroy the instance of the inputMapper in the current tab when another
-             * window/tab is focused or opened.
-             */
-            gamepad.inputMapperInstance.destroy();
-        }
-    });
+    gamepad.inputMapperManager = (function () {
+        var inputMapperInstance = null;
+        return function (visibilityStatus) {
+            if (visibilityStatus === "visible") {
+                /**
+                 * Create an instance of the inputMapper when the tab/window is focused
+                 * again and start reading gamepad inputs (if any gamepad is connected).
+                 */
+                inputMapperInstance = gamepad.inputMapper();
+                inputMapperInstance.events.onGamepadConnected.fire();
+            }
+            else if (visibilityStatus === "hidden" && inputMapperInstance !== null) {
+                /**
+                 * Destroy the instance of the inputMapper in the current tab when another
+                 * window/tab is focused or opened.
+                 */
+                inputMapperInstance.destroy();
+            }
+        };
+    })();
+
+    gamepad.visibilityChangeTracker(gamepad.inputMapperManager);
 })(fluid, jQuery);
