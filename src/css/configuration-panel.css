@@ -1,0 +1,133 @@
+:root {
+    --width: 600px;
+}
+
+.gamepad-controls {
+    width: var(--width);
+}
+
+h1 {
+    margin-bottom: 0;
+    margin-top: 0;
+    grid-column: 1/3;
+}
+
+.configuration-menu {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(20, var(--width));
+    width: var(--width);
+    overflow-x: scroll;
+    margin-bottom: 10px;
+}
+
+.menu-item {
+    padding: 0 35px;
+    height: 170px;
+    width: calc(var(--width) - 70px);
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 2fr 1fr 2fr 1fr;
+}
+
+.input-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+label {
+    margin-top: 3px;
+    font-size: 1.1rem;
+}
+
+select, input {
+    margin: 10px 20px 10px 0;
+    padding: 10px 5px;
+    width: 90%;
+    border: 2px solid;
+    font-size: 1rem;
+}
+
+select:focus, input:focus {
+    outline-color: darkorange;
+}
+
+.speed-factor {
+    grid-row: 3/4;
+    background-color: #ddd;
+}
+
+.speed-factor, .speed-factor-label {
+    grid-column: 2/3;
+}
+
+.speed-factor-label {
+    grid-row: 2/3;
+}
+
+.checkbox-label {
+    grid-column: 1/2;
+    grid-row: 4/5;
+    margin: 10px 0 10px 25px;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.3);
+    grid-column: 1/2;
+    grid-row: 4/5;
+    align-self: center;
+    justify-self: start;
+    width: auto;
+    margin-right: 37px;
+    margin-left: 2px;
+}
+
+.configuration-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.progress-bar {
+    height: 10px;
+    width: 100%;
+    background-color: #f1f1f1;
+}
+
+.progress-indicator {
+    height: 100%;
+    width: 0%;
+    background-color: yellowgreen;
+}
+
+.buttons-container {
+    width: var(--width);
+    padding: 15px 10px;
+    display: flex;
+    justify-content: space-evenly;
+    box-sizing: border-box;
+}
+
+.button {
+    color: white;
+    font-weight: 550;
+    font-size: 1.1rem;
+    height: 50px;
+    width: 250px;
+}
+
+.button:nth-child(1) {
+    background-color: #c31501;
+}
+
+.button:focus:nth-child(1), .button:hover:nth-child(1) {
+    background-color: #e51501;
+    outline-width: 5px ;
+}
+
+.button:nth-child(2) {
+    background-color: yellowgreen;
+}
+
+.button:focus:nth-child(2), .button:hover:nth-child(2) {
+    background-color: #aee909;
+}
