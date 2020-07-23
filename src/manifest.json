@@ -11,6 +11,7 @@
             "js/lib/infusion/infusion-all.min.js",
             "js/lib/ally/ally.min.js",
             "js/content_scripts/gamepad-navigator.js",
+            "js/shared/configuration-maps.js",
             "js/content_scripts/input-mapper-content-utils.js",
             "js/content_scripts/input-mapper-background-utils.js",
             "js/content_scripts/input-mapper-base.js",

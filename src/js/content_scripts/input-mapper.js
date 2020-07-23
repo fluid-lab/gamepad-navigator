@@ -150,13 +150,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapperManager = (function () {
         var inputMapperInstance = null;
         return function (visibilityStatus) {
+            /**
+             * Create an instance of the inputMapper when the tab/window is focused
+             * again and start reading gamepad inputs (if any gamepad is connected).
+             */
             if (visibilityStatus === "visible") {
-                /**
-                 * Create an instance of the inputMapper when the tab/window is focused
-                 * again and start reading gamepad inputs (if any gamepad is connected).
-                 */
-                inputMapperInstance = gamepad.inputMapper();
-                inputMapperInstance.events.onGamepadConnected.fire();
+                // Obtain the saved configuration of the gamepad.
+                chrome.storage.local.get(["gamepadConfiguration"], function (gamepadConfigurationWrapper) {
+                    var gamepadConfiguration = gamepadConfigurationWrapper.gamepadConfiguration;
+                    inputMapperInstance = gamepad.inputMapper({
+                        model: { map: gamepadConfiguration }
+                    });
+                    inputMapperInstance.events.onGamepadConnected.fire();
+                });
             }
             else if (visibilityStatus === "hidden" && inputMapperInstance !== null) {
                 /**
