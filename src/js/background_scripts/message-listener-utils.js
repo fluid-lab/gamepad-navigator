@@ -76,11 +76,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.openNewWindow = function (active, homepageURL) {
-        var windowConfig = { url: homepageURL };
+        var windowConfig = {
+            url: homepageURL,
+            focused: active
+        };
         if (active) {
-            windowConfig.focused = active;
-        }
-        else {
             windowConfig.state = "maximized";
         }
         chrome.windows.create(windowConfig);
