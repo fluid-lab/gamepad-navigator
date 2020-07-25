@@ -32,7 +32,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             discardButton: "#discard-changes"
         },
         listeners: {
-            "onCreate.loadConfigurationPanel": "{that}.createPanel",
+            "onCreate.loadConfigurationPanel": "{that}.createMenu",
             "onCreate.handleSwitching": "{that}.handleSwitching"
         },
         description: {
@@ -112,8 +112,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             ]
         },
         invokers: {
-            createPanel: {
-                funcName: "gamepad.configurationPanel.createPanel",
+            createMenu: {
+                funcName: "gamepad.configurationPanel.createMenu",
                 args: ["{that}", "{that}.dom.configurationMenu"]
             },
             createInputActionDropdown: {
@@ -181,8 +181,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.configurationPanel.buttonListeners.saveChanges",
                 args: ["{that}"]
             },
-            toggleSaveAndDiscardButton: {
-                funcName: "gamepad.configurationPanel.buttonListeners.toggleSaveAndDiscardButton",
+            toggleSaveAndDiscardButtons: {
+                funcName: "gamepad.configurationPanel.buttonListeners.toggleSaveAndDiscardButtons",
                 args: ["{that}", "{that}.dom.saveChangesButton", "{that}.dom.discardButton"]
             }
         }
@@ -190,13 +190,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Create a configuration panel on the Chrome extension's popup window.
+     * Create a configuration menu on the Chrome extension's popup window.
      *
      * @param {Object} that - The configurationPanel component.
      * @param {Array} configurationMenu - The jQuery selector of the configuration menu.
      *
      */
-    gamepad.configurationPanel.createPanel = function (that, configurationMenu) {
+    gamepad.configurationPanel.createMenu = function (that, configurationMenu) {
+        // Clear all the content inside the configuration menu.
         configurationMenu = configurationMenu[0];
         configurationMenu.innerHTML = "";
 
@@ -204,51 +205,45 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Create the configuration menu for each input and inject it inside the
          * configuration panel.
          */
-        chrome.storage.local.get(["gamepadConfiguration"], function (storedConfigurationWrapper) {
+        chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
             var totalGamepadInputs = 20,
-                storedGamepadConfiguration = fluid.get(storedConfigurationWrapper, "gamepadConfiguration");
+                storedConfig = fluid.get(configWrapper, "gamepadConfiguration");
 
             for (var inputCounter = 0; inputCounter < totalGamepadInputs; inputCounter++) {
                 // Compute input label and index of input.
                 var inputIndex = inputCounter % 16,
-                    isAxes = inputCounter / 16 >= 1;
+                    isAxes = inputCounter / 16 >= 1,
+                    inputType = isAxes ? "axes" : "buttons";
 
                 // Create a container for the particular input's configuration options.
                 var inputMenuItem = document.createElement("div");
 
                 // Set properties/attributes of the container element.
-                var inputIdentifier = (isAxes ? "axes-" : "button-") + inputIndex;
+                var inputIdentifier = inputType + "-" + inputIndex;
                 inputMenuItem.classList.add("menu-item", inputIdentifier);
 
                 // Set attributes and text of the input description.
                 var inputDescription = document.createElement("h1");
-                inputDescription.innerHTML = that.options.description[isAxes ? "axes" : "buttons"][inputIndex];
+                inputDescription.innerHTML = that.options.description[inputType][inputIndex];
                 inputMenuItem.appendChild(inputDescription);
+
+                var isStored = storedConfig ? true : false,
+                    gamepadConfig = isStored ? storedConfig : that.model.map;
 
                 /**
                  * Obtain and use the default input data for setting initial values on
                  * the panel, if the stored gamepad configuration data is unavailable.
                  */
-                var actionValue = null,
-                    speedFactor = null,
-                    checkboxValue = null,
-                    inputConfig = null;
-                if (!storedGamepadConfiguration) {
-                    inputConfig = that.model.map[isAxes ? "axes" : "buttons"][inputIndex];
-                    actionValue = inputConfig.defaultAction;
-                }
-                else {
-                    inputConfig = storedGamepadConfiguration[isAxes ? "axes" : "buttons"][inputIndex];
-                    actionValue = fluid.get(inputConfig, "currentAction");
-                }
-                speedFactor = fluid.get(inputConfig, "speedFactor");
-                checkboxValue = fluid.get(inputConfig, isAxes ? "invert" : "background");
+                var inputConfig = gamepadConfig[inputType][inputIndex],
+                    actionValue = inputConfig[isStored ? "currentAction" : "defaultAction"],
+                    speedFactor = fluid.get(inputConfig, "speedFactor"),
+                    checkboxValue = fluid.get(inputConfig, isAxes ? "invert" : "background");
 
                 // Create the configuration option inputs for the current input.
                 that.createInputActionDropdown(
                     inputIdentifier,
                     inputMenuItem,
-                    isAxes,
+                    inputType,
                     actionValue
                 );
                 that.createSpeedFactorOption(inputIdentifier, inputMenuItem, speedFactor);
@@ -290,9 +285,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var configurationOptions = document.querySelectorAll("select, .speed-factor, .checkbox");
         fluid.each(configurationOptions, function (configurationOption) {
             if (fluid.isDOMNode(configurationOption)) {
-                configurationOption.addEventListener("input", function () {
-                    that.toggleSaveAndDiscardButton();
-                });
+                configurationOption.addEventListener("input", that.toggleSaveAndDiscardButtons);
             }
         });
 

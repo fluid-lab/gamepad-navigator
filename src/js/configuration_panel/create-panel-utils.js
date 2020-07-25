@@ -26,12 +26,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {String} inputIdentifier - The String containing input type with its index.
      *                                   For example, "button-0".
      * @param {Object} configMenu - The configuration menu (container) for a given input.
-     * @param {Boolean} isAxes - Whether the current input is "axes".
+     * @param {Boolean} inputType - The type of the gamepad input, i.e., "axes" or "buttons".
      * @param {Object} currentValue - The current value of the input action dropdown for
      *                                a given input.
      *
      */
-    gamepad.configurationPanel.createPanelUtils.createInputActionDropdown = function (that, inputIdentifier, configMenu, isAxes, currentValue) {
+    gamepad.configurationPanel.createPanelUtils.createInputActionDropdown = function (that, inputIdentifier, configMenu, inputType, currentValue) {
         // Create a label for the input action dropdown and set its inner text.
         var actionLabel = document.createElement("label");
         actionLabel.innerHTML = "Action:";
@@ -47,9 +47,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var inputSelectMenu = document.createElement("select");
 
         // Set the value of the dropdown to the action currently selected.
-        var actionsList = that.options.message[isAxes ? "axes" : "buttons"];
+        var actionsList = that.options.message[inputType];
         fluid.each(actionsList, function (actionLabel, actionValue) {
-
             // Create an option for the action and set its value and label.
             var option = document.createElement("option");
             option.setAttribute("value", actionValue);
