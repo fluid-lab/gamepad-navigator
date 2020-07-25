@@ -124,13 +124,16 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
+.button:focus, .button:hover {
+    outline-width: 5px;
+}
+
 .button:nth-child(1) {
     background-color: #c31501;
 }
 
 .button:focus:nth-child(1), .button:hover:nth-child(1) {
     background-color: #e51501;
-    outline-width: 5px ;
 }
 
 .button:nth-child(2) {
@@ -139,7 +142,6 @@ input[type="checkbox"] {
 
 .button:focus:nth-child(2), .button:hover:nth-child(2) {
     background-color: #4169EF;
-    outline-width: 5px ;
 }
 
 .button:nth-child(3) {
@@ -148,7 +150,6 @@ input[type="checkbox"] {
 
 .button:focus:nth-child(3), .button:hover:nth-child(3) {
     background-color: #aee909;
-    outline-width: 5px ;
 }
 
 .button:disabled:nth-child(3),
@@ -204,6 +205,5 @@ input[type="checkbox"] {
 
     .button:focus:nth-child(3), .button:hover:nth-child(3) {
         background-color: #9ACD5A;
-        outline-width: 5px ;
     }
 }

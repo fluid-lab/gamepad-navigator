@@ -64,7 +64,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     inputIndex = index % 16,
                     actionData = that.model.map[isAxes ? "axes" : "buttons"][inputIndex];
 
-                // Set the default value of the action dropdown.
+                // Set the default option of the action dropdown.
                 fluid.find(configurationMenu.querySelector("select").options, function (actionOption, actionIndex) {
                     if (actionOption.value === actionData.defaultAction) {
                         configurationMenu.querySelector("select").selectedIndex = actionIndex;
@@ -75,7 +75,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // Set the default value of the speed factor input.
                 configurationMenu.querySelector(".speed-factor").value = actionData.speedFactor;
 
-                // Set the default value of the checkbox input.
+                // Mark the checkbox if it's checked by default.
                 configurationMenu.querySelector(".checkbox").checked = actionData[isAxes ? "invert" : "background"];
 
                 // Display/hide other configuration options as per the value of dropdown.
@@ -121,7 +121,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 if (!speedFactorElement.hasAttribute("disabled")) {
                     var speedFactorValue = parseFloat(speedFactorElement.value);
 
-                    // Reduce the value to 2.5 if it's more than that.
+                    // Reduce the speed factor value to 2.5 if it's more than that.
                     inputConfiguration.speedFactor = Math.min(2.5, speedFactorValue);
                 }
 
@@ -135,36 +135,37 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     inputConfiguration[thirdConfigurationOption] = checkboxValueElement.checked;
                 }
 
-                // Save the input in the gamepadConfiguration object.
+                // Save the input's configuration in the gamepadConfiguration object.
                 gamepadConfiguration[isAxes ? "axes" : "buttons"][inputIndex] = inputConfiguration;
             }
         });
 
-        // Write the new gamepadConfiguration in Chrome's localStorage.
+        // Remove the old configuration from Chrome's localStorage.
         chrome.storage.local.remove(["gamepadConfiguration"], function () {
+            // Write the new gamepadConfiguration in localStorage.
             chrome.storage.local.set({ gamepadConfiguration: gamepadConfiguration }, that.toggleSaveButtonState);
         });
     };
 
     /**
      *
-     * Save the new configuration from the configuration panel when triggered.
+     * Toggle the "Save Changes" button when the input configuration is changed.
      *
      * @param {Object} that - The configurationPanel component.
      * @param {Object} saveChangesButton - The "Save Changes" button on the panel.
      *
      */
     gamepad.configurationPanel.buttonListeners.toggleSaveButton = function (that, saveChangesButton) {
-        saveChangesButton = saveChangesButton[0];
         chrome.storage.local.get(["gamepadConfiguration"], function (gamepadConfigurationWrapper) {
             // Get the list of all dropdowns in the configuration panel.
             var configurationMenus = document.querySelectorAll(".menu-item");
+            saveChangesButton = saveChangesButton[0];
 
             /**
              * Iterate through each input's configuration menu and compare whether any
              * configuration option has changed.
              */
-            fluid.find(configurationMenus, function (configurationMenu, index) {
+            var isChanged = fluid.find(configurationMenus, function (configurationMenu, index) {
                 if (fluid.isDOMNode(configurationMenu)) {
                     var isAxes = index / 16 >= 1,
                         inputIndex = index % 16,
@@ -180,13 +181,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                      */
                     var actionDropdown = configurationMenu.querySelector("select"),
                         currentDropdownValue = actionDropdown.value,
-                        initialDropdownValue = initialInputData[isStoredData ? "currentAction" : "defaultAction"];
+                        initialDropdownValue = initialInputData[isStoredData ? "currentAction" : "defaultAction"] || "null";
                     if (currentDropdownValue !== initialDropdownValue) {
                         saveChangesButton.removeAttribute("disabled");
                         return true;
-                    }
-                    else {
-                        document.querySelector("#save-changes").setAttribute("disabled", "");
                     }
 
                     /**
@@ -200,9 +198,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         if (initialSpeedFactorValue !== currentSpeedFactorValue) {
                             saveChangesButton.removeAttribute("disabled");
                             return true;
-                        }
-                        else {
-                            saveChangesButton.setAttribute("disabled", "");
                         }
                     }
 
@@ -218,12 +213,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                             saveChangesButton.removeAttribute("disabled");
                             return true;
                         }
-                        else {
-                            saveChangesButton.setAttribute("disabled", "");
-                        }
                     }
                 }
             });
+
+            // Disable the button if no change is detected.
+            if (!isChanged) {
+                saveChangesButton.setAttribute("disabled", "");
+            }
         });
     };
 })(fluid);
