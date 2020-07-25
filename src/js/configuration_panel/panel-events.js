@@ -34,7 +34,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Scroll the remaining width after the scrolling has stopped.
             scrollTimer = setTimeout(function () {
-                var width = 600,
+                var width = 525,
                     scrolledBy = configurationMenu[0].scrollLeft;
                 configurationMenu[0].scrollBy((width - (scrolledBy % width)) % width, 0);
             }, 25);

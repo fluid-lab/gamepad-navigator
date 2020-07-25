@@ -8,7 +8,7 @@
 }
 
 :root {
-    --width: 600px;
+    --width: 525px;
 }
 
 .gamepad-controls {
@@ -41,7 +41,7 @@ h1 {
     width: calc(var(--width) - 30px);
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 3fr 2fr;
+    grid-template-columns: 5fr 2fr;
     grid-template-rows: 5fr 2fr 3fr 4fr;
 }
 
@@ -52,7 +52,7 @@ h1 {
 
 label {
     margin-top: 3px;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
 }
 
 select, input {
@@ -63,7 +63,7 @@ select, input {
 }
 
 input {
-    width: 94%;
+    width: 90%;
 }
 
 select {
@@ -90,7 +90,7 @@ select:focus, input:focus {
 }
 
 .checkbox-label {
-    grid-column: 1/2;
+    grid-column: 1/3;
     grid-row: 4/5;
     margin: 9px 0 10px 25px;
 }
@@ -108,9 +108,11 @@ input[type="checkbox"] {
 
 .buttons-container {
     width: var(--width);
-    padding: 5px 18px 15px;
-    display: flex;
-    justify-content: space-between;
+    padding: 5px 15px 15px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     box-sizing: border-box;
 }
 
@@ -124,13 +126,16 @@ input[type="checkbox"] {
     cursor: pointer;
 }
 
+.button:focus, .button:hover {
+    outline-width: 5px;
+}
+
 .button:nth-child(1) {
-    background-color: #c31501;
+    background-color: #dc9f33;
 }
 
 .button:focus:nth-child(1), .button:hover:nth-child(1) {
-    background-color: #e51501;
-    outline-width: 5px ;
+    background-color: #ffa402;
 }
 
 .button:nth-child(2) {
@@ -139,21 +144,27 @@ input[type="checkbox"] {
 
 .button:focus:nth-child(2), .button:hover:nth-child(2) {
     background-color: #4169EF;
-    outline-width: 5px ;
 }
 
 .button:nth-child(3) {
-    background-color: yellowgreen;
+    background-color: #c31501;
 }
 
 .button:focus:nth-child(3), .button:hover:nth-child(3) {
-    background-color: #aee909;
-    outline-width: 5px ;
+    background-color: #e51501;
 }
 
-.button:disabled:nth-child(3),
-.button:disabled:focus:nth-child(3),
-.button:disabled:hover:nth-child(3) {
+.button:nth-child(4) {
+    background-color: yellowgreen;
+}
+
+.button:focus:nth-child(4), .button:hover:nth-child(4) {
+    background-color: #aee909;
+}
+
+.button:disabled,
+.button:disabled:focus,
+.button:disabled:hover {
     background-color: silver;
     cursor: unset;
 }
@@ -198,12 +209,11 @@ input[type="checkbox"] {
         background-color: #1169B6;
     }
 
-    .button:nth-child(3) {
+    .button:nth-child(4) {
         background-color: #AEE976;
     }
 
-    .button:focus:nth-child(3), .button:hover:nth-child(3) {
+    .button:focus:nth-child(4), .button:hover:nth-child(4) {
         background-color: #9ACD5A;
-        outline-width: 5px ;
     }
 }

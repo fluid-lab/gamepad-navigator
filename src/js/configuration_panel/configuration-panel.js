@@ -28,7 +28,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             buttonsContainer: ".buttons-container",
             setAllToNoneButton: "#set-to-none",
             restoreDefaultsButton: "#set-to-default",
-            saveChangesButton: "#save-changes"
+            saveChangesButton: "#save-changes",
+            discardButton: "#discard-changes"
         },
         listeners: {
             "onCreate.loadConfigurationPanel": "{that}.createPanel",
@@ -144,7 +145,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     "{that}",
                     "{that}.dom.setAllToNoneButton",
                     "{that}.dom.restoreDefaultsButton",
-                    "{that}.dom.saveChangesButton"
+                    "{that}.dom.saveChangesButton",
+                    "{that}.dom.discardButton"
                 ]
             },
             handleSwitching: {
@@ -171,13 +173,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.configurationPanel.buttonListeners.setToDefault",
                 args: ["{that}"]
             },
+            discardChangesListener: {
+                funcName: "gamepad.configurationPanel.buttonListeners.discardChanges",
+                args: ["{that}"]
+            },
             saveChangesListener: {
                 funcName: "gamepad.configurationPanel.buttonListeners.saveChanges",
                 args: ["{that}"]
             },
-            toggleSaveButtonState: {
-                funcName: "gamepad.configurationPanel.buttonListeners.toggleSaveButton",
-                args: ["{that}", "{that}.dom.saveChangesButton"]
+            toggleSaveAndDiscardButton: {
+                funcName: "gamepad.configurationPanel.buttonListeners.toggleSaveAndDiscardButton",
+                args: ["{that}", "{that}.dom.saveChangesButton", "{that}.dom.discardButton"]
             }
         }
     });
@@ -276,15 +282,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} setAllToNoneButton - The "Set All to None" button on the panel.
      * @param {Object} restoreDefaultsButton - The "Restore Default Controls" button on the panel.
      * @param {Object} saveChangesButton - The "Save Changes" button on the panel.
+     * @param {Object} discardButton - The "Discard Changes" button on the panel.
      *
      */
-    gamepad.configurationPanel.attachListeners = function (that, setAllToNoneButton, restoreDefaultsButton, saveChangesButton) {
+    gamepad.configurationPanel.attachListeners = function (that, setAllToNoneButton, restoreDefaultsButton, saveChangesButton, discardButton) {
         // Attach listener to all configuration options to toggle "Save Changes" button.
         var configurationOptions = document.querySelectorAll("select, .speed-factor, .checkbox");
         fluid.each(configurationOptions, function (configurationOption) {
             if (fluid.isDOMNode(configurationOption)) {
                 configurationOption.addEventListener("input", function () {
-                    that.toggleSaveButtonState();
+                    that.toggleSaveAndDiscardButton();
                 });
             }
         });
@@ -293,6 +300,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         setAllToNoneButton.click(that.setAllToNoneListener);
         restoreDefaultsButton.click(that.setToDefaultListener);
         saveChangesButton.click(that.saveChangesListener);
+        discardButton.click(that.discardChangesListener);
     };
 
     window.onload = function () {
