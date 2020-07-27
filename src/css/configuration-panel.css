@@ -193,14 +193,6 @@ select:focus, input:focus {
         border: none;
     }
 
-    .button:nth-child(1) {
-        background-color: #C31535;
-    }
-
-    .button:focus:nth-child(1), .button:hover:nth-child(1) {
-        background-color: #E5152D;
-    }
-
     .button:nth-child(2) {
         background-color: #1169A1;
     }
@@ -209,11 +201,28 @@ select:focus, input:focus {
         background-color: #1169B6;
     }
 
+    .button:nth-child(3) {
+        background-color: #C31535;
+    }
+
+    .button:focus:nth-child(3), .button:hover:nth-child(3) {
+        background-color: #E5152D;
+    }
+
     .button:nth-child(4) {
-        background-color: #AEE976;
+        background-color: #9ACD5A;
     }
 
     .button:focus:nth-child(4), .button:hover:nth-child(4) {
-        background-color: #9ACD5A;
+        background-color: #AEE976;
+    }
+
+    .button:disabled:nth-child(3),
+    .button:disabled:focus:nth-child(3),
+    .button:disabled:hover:nth-child(3),
+    .button:disabled:nth-child(4),
+    .button:disabled:focus:nth-child(4),
+    .button:disabled:hover:nth-child(4) {
+        background-color: silver;
     }
 }
