@@ -148,12 +148,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Save the new gamepad configuration from the configuration panel when triggered.
+     * Store the gamepad configuration from the configuration panel when triggered.
      *
      * @param {Object} that - The configurationPanel component.
+     * @param {String} configurationName - The name with which the configuration should be saved.
      *
      */
-    gamepad.configurationPanel.buttonListeners.saveChanges = function (that) {
+    gamepad.configurationPanel.buttonListeners.storeChanges = function (that, configurationName) {
         // Get all the input configuration menus.
         var configurationMenus = document.querySelectorAll(".menu-item"),
             gamepadConfiguration = {
@@ -200,8 +201,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
 
         // Remove the old configuration from Chrome's localStorage.
-        chrome.storage.local.remove(["gamepadConfiguration"], function () {
-            chrome.storage.local.set({ gamepadConfiguration: gamepadConfiguration }, that.toggleSaveAndDiscardButtons);
+        chrome.storage.local.remove([configurationName], function () {
+            var configurationWrapper = {};
+            configurationWrapper[configurationName] = gamepadConfiguration;
+
+            // Save the new configuration.
+            chrome.storage.local.set(configurationWrapper, function () {
+                /**
+                 * Toggle (disable) the buttons if the data is stored as
+                 * "gamepadConfiguration" and not the unsaved changes.
+                 */
+                if (configurationName === "gamepadConfiguration") {
+                    that.toggleSaveAndDiscardButtons();
+                }
+            });
         });
     };
 
@@ -246,6 +259,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     if (currentDropdownValue !== initialDropdownValue) {
                         saveChangesButton.removeAttribute("disabled");
                         discardButton.removeAttribute("disabled");
+
+                        /**
+                         * Store the unsaved changes to avoid loss of configuration if
+                         * the panel is closed temporarily.
+                         */
+                        that.storeUnsavedChanges();
                         return true;
                     }
 
@@ -260,6 +279,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         if (initialSpeedFactorValue !== currentSpeedFactorValue) {
                             saveChangesButton.removeAttribute("disabled");
                             discardButton.removeAttribute("disabled");
+
+                            /**
+                             * Store the unsaved changes to avoid loss of configuration if
+                             * the panel is closed temporarily.
+                             */
+                            that.storeUnsavedChanges();
                             return true;
                         }
                     }
@@ -275,19 +300,25 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         if (wasCheckboxChecked !== isCheckboxChecked) {
                             saveChangesButton.removeAttribute("disabled");
                             discardButton.removeAttribute("disabled");
+
+                            /**
+                             * Store the unsaved changes to avoid loss of configuration if
+                             * the panel is closed temporarily.
+                             */
+                            that.storeUnsavedChanges();
                             return true;
                         }
                     }
                 }
             });
 
-            /**
-             * Disable the "Save Changes" and "Discard Changes" buttons if no change is
-             * detected.
-             */
             if (!isChanged) {
-                saveChangesButton.setAttribute("disabled", "");
-                discardButton.setAttribute("disabled", "");
+                // Remove the unsaved changes stored in the Chrome's storage.
+                chrome.storage.local.remove(["unsavedConfiguration"], function () {
+                    // Disable the "Save Changes" and "Discard Changes" buttons.
+                    saveChangesButton.setAttribute("disabled", "");
+                    discardButton.setAttribute("disabled", "");
+                });
             }
         });
     };

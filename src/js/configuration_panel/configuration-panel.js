@@ -114,7 +114,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         invokers: {
             createMenu: {
                 funcName: "gamepad.configurationPanel.createMenu",
-                args: ["{that}", "{that}.dom.configurationMenu"]
+                args: [
+                    "{that}",
+                    "{that}.dom.configurationMenu",
+                    "{that}.dom.saveChangesButton",
+                    "{that}.dom.discardButton"
+                ]
             },
             createInputActionDropdown: {
                 funcName: "gamepad.configurationPanel.createPanelUtils.createInputActionDropdown",
@@ -178,12 +183,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}"]
             },
             saveChangesListener: {
-                funcName: "gamepad.configurationPanel.buttonListeners.saveChanges",
-                args: ["{that}"]
+                funcName: "gamepad.configurationPanel.buttonListeners.storeChanges",
+                args: ["{that}", "gamepadConfiguration"]
             },
             toggleSaveAndDiscardButtons: {
                 funcName: "gamepad.configurationPanel.buttonListeners.toggleSaveAndDiscardButtons",
                 args: ["{that}", "{that}.dom.saveChangesButton", "{that}.dom.discardButton"]
+            },
+            storeUnsavedChanges: {
+                funcName: "gamepad.configurationPanel.buttonListeners.storeChanges",
+                args: ["{that}", "unsavedConfiguration"]
             }
         }
     });
@@ -194,9 +203,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} that - The configurationPanel component.
      * @param {Array} configurationMenu - The jQuery selector of the configuration menu.
+     * @param {Object} saveChangesButton - The "Save Changes" button on the panel.
+     * @param {Object} discardButton - The "Discard Changes" button on the panel.
      *
      */
-    gamepad.configurationPanel.createMenu = function (that, configurationMenu) {
+    gamepad.configurationPanel.createMenu = function (that, configurationMenu, saveChangesButton, discardButton) {
         // Clear all the content inside the configuration menu.
         configurationMenu = configurationMenu[0];
         configurationMenu.innerHTML = "";
@@ -205,9 +216,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Create the configuration menu for each input and inject it inside the
          * configuration panel.
          */
-        chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
+        chrome.storage.local.get(["gamepadConfiguration", "unsavedConfiguration"], function (configWrapper) {
             var totalGamepadInputs = 20,
-                storedConfig = fluid.get(configWrapper, "gamepadConfiguration");
+                isUnsaved = configWrapper.unsavedConfiguration ? true : false,
+                storedConfig = fluid.get(configWrapper, isUnsaved ? "unsavedConfiguration" : "gamepadConfiguration");
 
             for (var inputCounter = 0; inputCounter < totalGamepadInputs; inputCounter++) {
                 // Compute input label and index of input.
@@ -265,6 +277,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 that.modifyDropdownMenu();
                 that.listenDropdownChanges();
                 that.attachListeners();
+
+                /**
+                 * Enable the "Discard Changes" button and "Save Changes" button if the
+                 * configuration is unsaved.
+                 */
+                if (isUnsaved) {
+                    discardButton[0].removeAttribute("disabled");
+                    saveChangesButton[0].removeAttribute("disabled");
+                }
             }
         });
     };
