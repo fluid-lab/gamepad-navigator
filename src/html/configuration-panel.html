@@ -1,0 +1,38 @@
+<!--
+Copyright (c) 2020 The Gamepad Navigator Authors
+See the AUTHORS.md file at the top-level directory of this distribution and at
+https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+
+Licensed under the BSD 3-Clause License. You may not use this file except in
+compliance with this License.
+
+You may obtain a copy of the BSD 3-Clause License at
+https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Configuration panel stylesheet -->
+        <link rel="stylesheet" href="../css/configuration-panel.css">
+
+        <!-- Infusion and other javascript files -->
+        <script type="text/javascript" src="../js/lib/infusion/infusion-all.min.js"></script>
+        <script type="text/javascript" src="../js/shared/configuration-maps.js"></script>
+        <script type="text/javascript" src="../js/configuration_panel/button-listeners.js"></script>
+        <script type="text/javascript" src="../js/configuration_panel/panel-events.js"></script>
+        <script type="text/javascript" src="../js/configuration_panel/create-panel-utils.js"></script>
+        <script type="text/javascript" src="../js/configuration_panel/configuration-panel.js"></script>
+    </head>
+    <body>
+        <div class="configuration-dashboard">
+            <img class="gamepad-controls" src="../images/gamepad.svg">
+            <div class="configuration-menu">Loading...</div>
+            <div class="buttons-container">
+                <button class="button" id="set-to-none">Set All to None</button>
+                <button class="button" id="set-to-default">Restore Default Controls</button>
+                <button class="button" id="save-changes" disabled>Save Changes</button>
+            </div>
+        </div>
+    </body>
+</html>

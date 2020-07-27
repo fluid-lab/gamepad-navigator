@@ -21,7 +21,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.inputMapper", {
         gradeNames: ["gamepad.inputMapper.base"],
         listeners: {
-            "onCreate.restoreFocus": "{that}.restoreFocus"
+            "onCreate.restoreFocus": "{that}.restoreFocus",
+            "onCreate.updateControls": "{that}.updateControls"
         },
         invokers: {
             restoreFocus: {
@@ -59,6 +60,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             goToNextWindow: {
                 funcName: "gamepad.inputMapperUtils.background.sendMessage",
                 args: ["{that}", "goToNextWindow", "{arguments}.0", "{arguments}.4"]
+            },
+            updateControls: {
+                funcName: "gamepad.inputMapper.updateControls",
+                args: ["{that}"]
             }
         }
     });
@@ -149,12 +154,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.inputMapperManager = (function () {
         var inputMapperInstance = null;
+
         return function (visibilityStatus) {
+            /**
+             * Create an instance of the inputMapper when the tab/window is focused
+             * again and start reading gamepad inputs (if any gamepad is connected).
+             */
             if (visibilityStatus === "visible") {
-                /**
-                 * Create an instance of the inputMapper when the tab/window is focused
-                 * again and start reading gamepad inputs (if any gamepad is connected).
-                 */
+                // Obtain the saved configuration of the gamepad.
                 inputMapperInstance = gamepad.inputMapper();
                 inputMapperInstance.events.onGamepadConnected.fire();
             }
@@ -167,6 +174,24 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         };
     })();
+
+    /**
+     *
+     * Update the gamepad configuration if a custom configuration is available.
+     *
+     * @param {Object} that - The inputMapper component.
+     *
+     */
+    gamepad.inputMapper.updateControls = function (that) {
+        chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
+            var gamepadConfig = configWrapper.gamepadConfiguration;
+
+            // Update the gamepad configuration only if it's available.
+            if (gamepadConfig) {
+                that.applier.change("map", gamepadConfig);
+            }
+        });
+    };
 
     gamepad.visibilityChangeTracker(gamepad.inputMapperManager);
 })(fluid, jQuery);
