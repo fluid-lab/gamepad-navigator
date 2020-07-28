@@ -62,6 +62,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             goToNextWindow: {
                 funcName: "gamepad.messageListenerUtils.switchWindow",
                 args: ["nextWindow"]
+            },
+            zoomIn: {
+                funcName: "gamepad.messageListenerUtils.setZoom",
+                args: ["zoomIn"]
+            },
+            zoomOut: {
+                funcName: "gamepad.messageListenerUtils.setZoom",
+                args: ["zoomOut"]
             }
         }
     });

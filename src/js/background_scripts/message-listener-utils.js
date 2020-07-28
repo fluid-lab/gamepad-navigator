@@ -139,4 +139,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         });
     };
+
+    /**
+     *
+     * Change the zoom value of the current browser tab.
+     *
+     * @param {String} zoomType - Determines if the page should be zoomed in or out.
+     *
+     */
+    gamepad.messageListenerUtils.setZoom = function (zoomType) {
+        chrome.tabs.query({ currentWindow: true, active: true }, function (currentTab) {
+            // Obtain the zoom value of the current tab.
+            chrome.tabs.getZoom(currentTab.id, function (currentZoomFactor) {
+                // Compute the new zoom value according to the zoom type.
+                var newZoomFactor = null;
+                if (zoomType === "zoomIn") {
+                    newZoomFactor = currentZoomFactor + 0.1;
+                }
+                else if (zoomType === "zoomOut") {
+                    newZoomFactor = currentZoomFactor - 0.1;
+                }
+
+                // Set the new zoom value.
+                chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+            });
+        });
+    };
 })(fluid);

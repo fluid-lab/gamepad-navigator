@@ -85,14 +85,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 closeCurrentWindow: "Close current browser window",
                 openNewWindow: "Open a new browser window",
                 goToPreviousWindow: "Switch to the previous browser window",
-                goToNextWindow: "Switch to the next browser window"
+                goToNextWindow: "Switch to the next browser window",
+                zoomIn: "Zoom-in on the current tab",
+                zoomOut: "Zoom-out on the current tab"
             },
             axes: {
                 null: "None",
                 scrollHorizontally: "Scroll horizontally",
                 scrollVertically: "Scroll vertically",
                 thumbstickHistoryNavigation: "History navigation",
-                thumbstickTabbing: "Focus on the previous/next element"
+                thumbstickTabbing: "Focus on the previous/next element",
+                thumbstickZoom: "Zoom in or out on the current tab"
             }
         },
         // Describes the actions that use a particular configuration option.
@@ -113,7 +116,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 "scrollHorizontally",
                 "scrollVertically",
                 "thumbstickHistoryNavigation",
-                "thumbstickTabbing"
+                "thumbstickTabbing",
+                "thumbstickZoom"
             ]
         },
         invokers: {
