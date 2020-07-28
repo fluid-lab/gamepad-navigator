@@ -15,6 +15,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 (function (fluid) {
     "use strict";
 
+    /**
+     * TODO: Associate component model data with configuration input elements. Refer:
+     * https://github.com/fluid-lab/gamepad-navigator/issues/41
+     */
+
     fluid.registerNamespace("gamepad.configMaps");
     fluid.registerNamespace("gamepad.configurationPanel");
     fluid.registerNamespace("gamepad.configurationPanel.createPanelUtils");

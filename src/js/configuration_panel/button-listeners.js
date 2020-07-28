@@ -18,6 +18,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.registerNamespace("gamepad.configurationPanel.buttonListeners");
 
     /**
+     * TODO: Migrate to Fluid View Components, if needed. Refer:
+     * https://github.com/fluid-lab/gamepad-navigator/issues/40
+     */
+
+    /**
      *
      * Set all the input action dropdown menus' value to none.
      *
