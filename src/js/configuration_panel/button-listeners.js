@@ -18,6 +18,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.registerNamespace("gamepad.configurationPanel.buttonListeners");
 
     /**
+     * TODO: Migrate to Fluid View Components, if needed. Refer:
+     * https://github.com/fluid-lab/gamepad-navigator/issues/40
+     */
+
+    /**
      *
      * Set all the input action dropdown menus' value to none.
      *
@@ -40,7 +45,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
 
         // Toggle the "Save Changes" button.
-        that.toggleSaveButtonState();
+        that.toggleSaveAndDiscardButtons();
     };
 
     /**
@@ -84,17 +89,77 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
 
         // Toggle the "Save Changes" button.
-        that.toggleSaveButtonState();
+        that.toggleSaveAndDiscardButtons();
     };
 
     /**
      *
-     * Save the new gamepad configuration from the configuration panel when triggered.
+     * Discards the unsaved changes and restores the last saved changes.
      *
      * @param {Object} that - The configurationPanel component.
      *
      */
-    gamepad.configurationPanel.buttonListeners.saveChanges = function (that) {
+    gamepad.configurationPanel.buttonListeners.discardChanges = function (that) {
+        // Get all the input configuration menus.
+        var configurationMenus = document.querySelectorAll(".menu-item");
+
+        // Write the new gamepadConfiguration in Chrome's localStorage.
+        chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
+            var isStoredData = configWrapper.gamepadConfiguration ? true : false,
+                gamepadConfiguration = configWrapper.gamepadConfiguration || that.model.map;
+
+            // Set the values of all configuration options as being used currently.
+            fluid.each(configurationMenus, function (configurationMenu, menuIndex) {
+                if (fluid.isDOMNode(configurationMenu)) {
+                    var inputIndex = menuIndex % 16,
+                        isAxes = menuIndex / 16 >= 1;
+
+                    // Obtain the configuration for the current input.
+                    var inputConfiguration = gamepadConfiguration[isAxes ? "axes" : "buttons"][inputIndex];
+
+                    // Set the value of the dropdown action for the current input.
+                    var actionValue = inputConfiguration[isStoredData ? "currentAction" : "defaultAction"],
+                        actionDropdown = configurationMenu.querySelector("select");
+                    fluid.find(actionDropdown.options, function (actionOption, actionIndex) {
+                        if (actionOption.value === actionValue) {
+                            actionDropdown.selectedIndex = actionIndex;
+                            return true;
+                        }
+                    });
+
+                    // Display/hide other configuration options as per the value of dropdown.
+                    that.changeConfigMenuOptions(actionDropdown);
+
+                    // Set the value of the speed factor for the current input.
+                    var speedFactorElement = configurationMenu.querySelector(".speed-factor");
+                    if (!speedFactorElement.hasAttribute("disabled")) {
+                        var speedFactorValue = inputConfiguration.speedFactor;
+                        speedFactorElement.value = speedFactorValue;
+                    }
+
+                    // Set the checkbox for the current input.
+                    var checkboxElement = configurationMenu.querySelector(".speed-factor");
+                    if (!checkboxElement.hasAttribute("disabled")) {
+                        var isChecked = inputConfiguration[isAxes ? "invert" : "background"];
+                        checkboxElement.checked = isChecked;
+                    }
+                }
+            });
+
+            // Disable the "Discard Changes" and "Save Changes" button.
+            that.toggleSaveAndDiscardButtons();
+        });
+    };
+
+    /**
+     *
+     * Store the gamepad configuration from the configuration panel when triggered.
+     *
+     * @param {Object} that - The configurationPanel component.
+     * @param {String} configurationName - The name with which the configuration should be saved.
+     *
+     */
+    gamepad.configurationPanel.buttonListeners.storeChanges = function (that, configurationName) {
         // Get all the input configuration menus.
         var configurationMenus = document.querySelectorAll(".menu-item"),
             gamepadConfiguration = {
@@ -141,25 +206,39 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
 
         // Remove the old configuration from Chrome's localStorage.
-        chrome.storage.local.remove(["gamepadConfiguration"], function () {
-            // Write the new gamepadConfiguration in localStorage.
-            chrome.storage.local.set({ gamepadConfiguration: gamepadConfiguration }, that.toggleSaveButtonState);
+        chrome.storage.local.remove([configurationName], function () {
+            var configurationWrapper = {};
+            configurationWrapper[configurationName] = gamepadConfiguration;
+
+            // Save the new configuration.
+            chrome.storage.local.set(configurationWrapper, function () {
+                /**
+                 * Toggle (disable) the buttons if the data is stored as
+                 * "gamepadConfiguration" and not the unsaved changes.
+                 */
+                if (configurationName === "gamepadConfiguration") {
+                    that.toggleSaveAndDiscardButtons();
+                }
+            });
         });
     };
 
     /**
      *
-     * Toggle the "Save Changes" button when the input configuration is changed.
+     * Toggle the "Save Changes" and "Discard Changes" buttons when the input
+     * configuration is changed.
      *
      * @param {Object} that - The configurationPanel component.
      * @param {Object} saveChangesButton - The "Save Changes" button on the panel.
+     * @param {Object} discardButton - The "Discard Changes" button on the panel.
      *
      */
-    gamepad.configurationPanel.buttonListeners.toggleSaveButton = function (that, saveChangesButton) {
+    gamepad.configurationPanel.buttonListeners.toggleSaveAndDiscardButtons = function (that, saveChangesButton, discardButton) {
+        saveChangesButton = saveChangesButton[0];
+        discardButton = discardButton[0];
         chrome.storage.local.get(["gamepadConfiguration"], function (gamepadConfigurationWrapper) {
             // Get the list of all dropdowns in the configuration panel.
             var configurationMenus = document.querySelectorAll(".menu-item");
-            saveChangesButton = saveChangesButton[0];
 
             /**
              * Iterate through each input's configuration menu and compare whether any
@@ -176,20 +255,27 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         initialInputData = initialConfiguration[isAxes ? "axes" : "buttons"][inputIndex];
 
                     /**
-                     * Enable the "Save Changes" button if dropdown option is changed.
-                     * Otherwise, disable the button.
+                     * Enable the "Save Changes" and "Discard Changes" buttons if
+                     * dropdown option is changed.
                      */
                     var actionDropdown = configurationMenu.querySelector("select"),
                         currentDropdownValue = actionDropdown.value,
                         initialDropdownValue = initialInputData[isStoredData ? "currentAction" : "defaultAction"] || "null";
                     if (currentDropdownValue !== initialDropdownValue) {
                         saveChangesButton.removeAttribute("disabled");
+                        discardButton.removeAttribute("disabled");
+
+                        /**
+                         * Store the unsaved changes to avoid loss of configuration if
+                         * the panel is closed temporarily.
+                         */
+                        that.storeUnsavedChanges();
                         return true;
                     }
 
                     /**
-                     * Enable the "Save Changes" button if the value of speedFactor is
-                     * changed. Otherwise, disable the button.
+                     * Enable the "Save Changes" and "Discard Changes" buttons if the
+                     * value of speedFactor is changed.
                      */
                     var speedFactorElement = configurationMenu.querySelector(".speed-factor");
                     if (!speedFactorElement.hasAttribute("disabled")) {
@@ -197,13 +283,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                             currentSpeedFactorValue = parseFloat(speedFactorElement.value);
                         if (initialSpeedFactorValue !== currentSpeedFactorValue) {
                             saveChangesButton.removeAttribute("disabled");
+                            discardButton.removeAttribute("disabled");
+
+                            /**
+                             * Store the unsaved changes to avoid loss of configuration if
+                             * the panel is closed temporarily.
+                             */
+                            that.storeUnsavedChanges();
                             return true;
                         }
                     }
 
                     /**
-                     * Enable the "Save Changes" button if the value of third
-                     * configuraton option is changed. Otherwise, disable the button.
+                     * Enable the "Save Changes" and "Discard Changes" buttons if the
+                     * value of third configuraton option is changed.
                      */
                     var checkboxElement = configurationMenu.querySelector(".checkbox");
                     if (!checkboxElement.hasAttribute("disabled")) {
@@ -211,15 +304,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                             isCheckboxChecked = checkboxElement.checked;
                         if (wasCheckboxChecked !== isCheckboxChecked) {
                             saveChangesButton.removeAttribute("disabled");
+                            discardButton.removeAttribute("disabled");
+
+                            /**
+                             * Store the unsaved changes to avoid loss of configuration if
+                             * the panel is closed temporarily.
+                             */
+                            that.storeUnsavedChanges();
                             return true;
                         }
                     }
                 }
             });
 
-            // Disable the button if no change is detected.
             if (!isChanged) {
-                saveChangesButton.setAttribute("disabled", "");
+                // Remove the unsaved changes stored in the Chrome's storage.
+                chrome.storage.local.remove(["unsavedConfiguration"], function () {
+                    // Disable the "Save Changes" and "Discard Changes" buttons.
+                    saveChangesButton.setAttribute("disabled", "");
+                    discardButton.setAttribute("disabled", "");
+                });
             }
         });
     };
