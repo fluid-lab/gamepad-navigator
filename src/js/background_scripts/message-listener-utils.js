@@ -165,4 +165,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             });
         });
     };
+
+    /**
+     *
+     * Change the size of the current browser window.
+     *
+     * @param {String} windowState - Value of the new state of the browser window.
+     *                               For example, "maximized", "minimized", etc.
+     *
+     */
+    gamepad.messageListenerUtils.changeWindowSize = function (windowState) {
+        chrome.windows.getCurrent(function (currentWindow) {
+            // Update the browser's window size.
+            chrome.windows.update(currentWindow.id, { state: windowState });
+        });
+    };
 })(fluid);

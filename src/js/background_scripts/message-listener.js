@@ -70,6 +70,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             zoomOut: {
                 funcName: "gamepad.messageListenerUtils.setZoom",
                 args: ["zoomOut"]
+            },
+            maximizeWindow: {
+                funcName: "gamepad.messageListenerUtils.changeWindowSize",
+                args: ["maximized"]
+            },
+            restoreWindowSize: {
+                funcName: "gamepad.messageListenerUtils.changeWindowSize",
+                args: ["normal"]
             }
         }
     });

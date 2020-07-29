@@ -76,6 +76,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             thumbstickZoom: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"]
+            },
+            maximizeWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "maximizeWindow", "{arguments}.0", "{arguments}.4"]
+            },
+            restoreWindowSize: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "restoreWindowSize", "{arguments}.0", "{arguments}.4"]
+            },
+            thumbstickWindowSize: {
+                funcName: "gamepad.inputMapperUtils.background.thumbstickWindowSize",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"]
             }
         }
     });
