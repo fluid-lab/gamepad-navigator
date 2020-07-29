@@ -49,7 +49,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 leftScroll: null,
                 rightScroll: null,
                 forwardTab: null,
-                reverseTab: null
+                reverseTab: null,
+                zoomIn: null,
+                zoomOut: null
             },
             currentTabIndex: 0,
             tabbableElements: null,

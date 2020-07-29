@@ -49,4 +49,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             chrome.runtime.sendMessage(actionData);
         }
     };
+
+    /**
+     *
+     * Sends message to the background script to zoom in/out on the webpage using
+     * thumbsticks.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Boolean} invert - Whether the zooming should be in opposite order.
+     *
+     */
+    gamepad.inputMapperUtils.background.thumbstickZoom = function (that, value, invert) {
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1;
+        value = value * inversionFactor;
+        var zoomType = value > 0 ? "zoomOut" : "zoomIn",
+            actionData = { actionName: zoomType };
+        value = value * (value > 0 ? 1 : -1);
+
+        // Call the zoom changing invokers according to the input values.
+        clearInterval(that.intervalRecords.zoomIn);
+        clearInterval(that.intervalRecords.zoomOut);
+        if (value > that.options.cutoffValue) {
+            that.intervalRecords[zoomType] = setInterval(chrome.runtime.sendMessage, that.options.frequency, actionData);
+        }
+    };
 })(fluid);

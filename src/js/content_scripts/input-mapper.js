@@ -29,6 +29,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapper.restoreFocus",
                 args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
             },
+            updateControls: {
+                funcName: "gamepad.inputMapper.updateControls",
+                args: ["{that}"]
+            },
             goToPreviousTab: {
                 funcName: "gamepad.inputMapperUtils.background.sendMessage",
                 args: ["{that}", "goToPreviousTab", "{arguments}.0", "{arguments}.4"]
@@ -61,9 +65,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.background.sendMessage",
                 args: ["{that}", "goToNextWindow", "{arguments}.0", "{arguments}.4"]
             },
-            updateControls: {
-                funcName: "gamepad.inputMapper.updateControls",
-                args: ["{that}"]
+            zoomIn: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "zoomIn", "{arguments}.0", "{arguments}.4"]
+            },
+            zoomOut: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "zoomOut", "{arguments}.0", "{arguments}.4"]
+            },
+            thumbstickZoom: {
+                funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"]
             }
         }
     });
