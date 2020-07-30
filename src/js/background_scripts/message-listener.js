@@ -23,6 +23,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         listeners: {
             onCreate: "{that}.addListener"
         },
+        members: {
+            windowProperties: {}
+        },
         invokers: {
             addListener: {
                 "this": "chrome.runtime.onMessage",
@@ -70,6 +73,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             zoomOut: {
                 funcName: "gamepad.messageListenerUtils.setZoom",
                 args: ["zoomOut"]
+            },
+            maximizeWindow: {
+                funcName: "gamepad.messageListenerUtils.changeWindowSize",
+                args: ["{that}", "maximized"]
+            },
+            restoreWindowSize: {
+                funcName: "gamepad.messageListenerUtils.changeWindowSize",
+                args: ["{that}", "normal"]
             }
         }
     });

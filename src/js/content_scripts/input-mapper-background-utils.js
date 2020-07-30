@@ -75,4 +75,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             that.intervalRecords[zoomType] = setInterval(chrome.runtime.sendMessage, that.options.frequency, actionData);
         }
     };
+
+    /**
+     *
+     * Sends message to the background script to change the current window size using
+     * thumbsticks.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Boolean} invert - Whether the zooming should be in opposite order.
+     *
+     */
+    gamepad.inputMapperUtils.background.thumbstickWindowSize = function (that, value, invert) {
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1,
+            windowSizeActionLabel = null;
+        value = value * inversionFactor;
+        if (value > 0) {
+            windowSizeActionLabel = "maximizeWindow";
+        }
+        else {
+            windowSizeActionLabel = "restoreWindowSize";
+            value = value * -1;
+        }
+
+        // Call the window size changing invokers according to the input value.
+        if (value > that.options.cutoffValue) {
+            chrome.runtime.sendMessage({ actionName: windowSizeActionLabel });
+        }
+    };
 })(fluid);

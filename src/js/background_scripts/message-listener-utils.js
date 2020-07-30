@@ -165,4 +165,72 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             });
         });
     };
+
+    /**
+     *
+     * Change the size of the current browser window.
+     *
+     * @param {Object} that - The messageListener component.
+     * @param {String} windowState - Value of the new state of the browser window.
+     *                               For example, "maximized", "minimized", etc.
+     *
+     */
+    gamepad.messageListenerUtils.changeWindowSize = function (that, windowState) {
+        chrome.windows.getCurrent(function (currentWindow) {
+            chrome.windows.update(currentWindow.id, { state: windowState }, function () {
+                /**
+                 * Set the dimensions of the window if the "maximized" state doesn't work
+                 * (Fallback Method).
+                 */
+                chrome.windows.getCurrent(function (windowPostUpdate) {
+                    that.windowProperties[windowPostUpdate.id] = that.windowProperties[windowPostUpdate.id] || { isMaximized: null };
+
+                    // Value of "state" on OS X is "fullscreen" if window is maximized.
+                    if (that.windowProperties[windowPostUpdate.id].isMaximized === null) {
+                        that.windowProperties[windowPostUpdate.id].isMaximized = windowPostUpdate.state === "fullscreen";
+                    }
+                    var isMaximized = that.windowProperties[windowPostUpdate.id].isMaximized;
+
+                    /**
+                     * Second check is for cases when the window is not maximized during
+                     * the first update.
+                     */
+                    if (windowState === "maximized" && windowPostUpdate.state !== "maximized" && !isMaximized) {
+                        // Preserve configuration before maximizing.
+                        that.windowProperties[windowPostUpdate.id] = {
+                            width: windowPostUpdate.width,
+                            height: windowPostUpdate.height,
+                            left: windowPostUpdate.left,
+                            top: windowPostUpdate.top
+                        };
+
+                        // Update window with the new properties.
+                        chrome.windows.update(windowPostUpdate.id, {
+                            width: screen.width,
+                            height: screen.height,
+                            left: 0,
+                            top: 0
+                        });
+
+                        // Update the isMaximized member variable.
+                        that.windowProperties[windowPostUpdate.id].isMaximized = true;
+                    }
+                    else if (windowPostUpdate.state === "normal" && windowState === "normal" && isMaximized) {
+                        var previousProperties = that.windowProperties[windowPostUpdate.id];
+
+                        // Update window with the new properties.
+                        chrome.windows.update(windowPostUpdate.id, {
+                            width: fluid.get(previousProperties, "width") || Math.round(3 * screen.width / 5),
+                            height: fluid.get(previousProperties, "height") || Math.round(4 * screen.height / 5),
+                            left: fluid.get(previousProperties, "left") || Math.round(screen.width / 15),
+                            top: fluid.get(previousProperties, "top") || Math.round(screen.height / 15)
+                        });
+
+                        // Update the isMaximized member variable.
+                        that.windowProperties[windowPostUpdate.id].isMaximized = false;
+                    }
+                });
+            });
+        });
+    };
 })(fluid);
