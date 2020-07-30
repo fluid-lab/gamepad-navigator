@@ -176,8 +176,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.messageListenerUtils.changeWindowSize = function (windowState) {
         chrome.windows.getCurrent(function (currentWindow) {
-            // Update the browser's window size.
-            chrome.windows.update(currentWindow.id, { state: windowState });
+            /**
+             * Set the dimensions of the window if the "maximized" state doesn't work
+             * (Fallback Method).
+             */
+            chrome.windows.update(currentWindow.id, { state: windowState }, function () {
+                chrome.windows.getCurrent(function (window) {
+                    if (windowState === "maximized" && windowState !== window.state) {
+                        chrome.windows.update(window.id, {
+                            width: screen.width,
+                            height: screen.height,
+                            left: 0,
+                            top: 0
+                        });
+                    }
+                    else if (window.state === "normal") {
+                        chrome.windows.update(window.id, {
+                            width: Math.round(3 * screen.width / 5),
+                            height: Math.round(4 * screen.height / 5),
+                            left: Math.round(screen.width / 15),
+                            top: Math.round(screen.height / 15)
+                        });
+                    }
+                });
+            });
         });
     };
 })(fluid);
