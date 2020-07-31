@@ -88,6 +88,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             thumbstickWindowSize: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickWindowSize",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"]
+            },
+            reopenTabOrWindow: {
+                funcName: "gamepad.inputMapperUtils.background.sendMessage",
+                args: ["{that}", "reopenTabOrWindow", "{arguments}.0", "{arguments}.4"]
             }
         }
     });
