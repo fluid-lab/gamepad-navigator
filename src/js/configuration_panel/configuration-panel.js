@@ -90,7 +90,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 zoomOut: "Zoom-out on the active web page",
                 maximizeWindow: "Maximize the current browser window",
                 restoreWindowSize: "Restore the size of current browser window",
-                reopenTabOrWindow: "Re-open the closed tab or window"
+                reopenTabOrWindow: "Re-open the last closed tab or window"
             },
             axes: {
                 null: "None",
