@@ -81,6 +81,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             restoreWindowSize: {
                 funcName: "gamepad.messageListenerUtils.changeWindowSize",
                 args: ["{that}", "normal"]
+            },
+            reopenTabOrWindow: {
+                "this": "chrome.sessions",
+                method: "restore",
+                args: []
             }
         }
     });
