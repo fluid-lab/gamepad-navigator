@@ -8,17 +8,26 @@
 }
 
 :root {
-    --width: 525px;
+    --width: 465px;
 }
 
 .gamepad-controls {
     width: var(--width);
+    height: 228px;
+    background-image: url("../images/gamepad.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
-h1 {
-    margin-bottom: 0;
-    margin-top: 0;
-    grid-column: 1/3;
+.input-list-label {
+    margin-left: 15px;
+    margin-bottom: 15px;
+}
+
+.input-list {
+    width: 93.5%;
+    margin: 10px 15px 0;
 }
 
 .configuration-menu {
@@ -37,17 +46,17 @@ h1 {
 
 .menu-item {
     padding: 0 15px;
-    height: 170px;
+    height: 125px;
     width: calc(var(--width) - 30px);
     display: grid;
     grid-auto-flow: column;
-    grid-template-columns: 5fr 2fr;
-    grid-template-rows: 5fr 2fr 3fr 4fr;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr 3fr 2fr;
 }
 
-.input-title {
-    font-size: 1.2rem;
-    font-weight: 600;
+.action-label {
+    grid-row: 2/3;
+    grid-column: 1/2;
 }
 
 label {
@@ -92,7 +101,8 @@ select:focus, input:focus {
 .checkbox-label {
     grid-column: 1/3;
     grid-row: 4/5;
-    margin: 9px 0 10px 25px;
+    margin-top: 4px;
+    margin-left: 25px;
 }
 
 .checkbox {
@@ -102,8 +112,11 @@ select:focus, input:focus {
     align-self: center;
     justify-self: start;
     width: auto;
-    margin-right: 37px;
-    margin-left: 2px;
+    margin: 2px 37px 0 2px;
+}
+
+select, .speed-factor, .checkbox {
+    cursor: pointer;
 }
 
 .buttons-container {
@@ -176,45 +189,54 @@ select:focus, input:focus {
 /* Dark Mode Stylesheet */
 @media (prefers-color-scheme: dark) {
     body {
-        color: #fff;
-        background-color: #333030;
+        color: #e96c4c;
+        background-color: #141e24;
     }
 
-    img {
-        filter: grayscale(20%);
+    .gamepad-controls {
+        background-image: url("../images/gamepad-dark.svg");
     }
 
     select, .speed-factor, .checkbox {
-        background-color: #9f9f9f;
+        background-color: #1B697B;
         color: white;
+        border-color: #1B697B;
     }
 
     .button {
         border: none;
     }
 
+    .button:nth-child(1) {
+        background-color: #EAAD3F;
+    }
+
+    .button:focus:nth-child(1), .button:hover:nth-child(1) {
+        background-color: #FFB235;
+    }
+
     .button:nth-child(2) {
-        background-color: #1169A1;
+        background-color: #2D7BAE;
     }
 
     .button:focus:nth-child(2), .button:hover:nth-child(2) {
-        background-color: #1169B6;
+        background-color: #2A7FCA;
     }
 
     .button:nth-child(3) {
-        background-color: #C31535;
+        background-color: #E96C65;
     }
 
     .button:focus:nth-child(3), .button:hover:nth-child(3) {
-        background-color: #E5152D;
+        background-color: #FF5D54;
     }
 
     .button:nth-child(4) {
-        background-color: #9ACD5A;
+        background-color: #A0CC68;
     }
-
+    
     .button:focus:nth-child(4), .button:hover:nth-child(4) {
-        background-color: #AEE976;
+        background-color: #97CF52;
     }
 
     .button:disabled:nth-child(3),
