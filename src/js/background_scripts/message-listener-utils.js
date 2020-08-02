@@ -208,7 +208,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         chrome.windows.update(windowPostUpdate.id, {
                             width: screen.width,
                             height: screen.height,
-                            left: 0,
+                            left: screen.availLeft,
                             top: 0
                         });
 
@@ -222,7 +222,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         chrome.windows.update(windowPostUpdate.id, {
                             width: fluid.get(previousProperties, "width") || Math.round(3 * screen.width / 5),
                             height: fluid.get(previousProperties, "height") || Math.round(4 * screen.height / 5),
-                            left: fluid.get(previousProperties, "left") || Math.round(screen.width / 15),
+                            left: fluid.get(previousProperties, "left") || (screen.availLeft + Math.round(screen.width / 15)),
                             top: fluid.get(previousProperties, "top") || Math.round(screen.height / 15)
                         });
 
