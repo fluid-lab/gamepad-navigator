@@ -29,6 +29,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.configurationPanel", {
         gradeNames: ["gamepad.configMaps", "fluid.viewComponent"],
         selectors: {
+            inputList: ".input-list",
             configurationMenu: ".configuration-menu",
             buttonsContainer: ".buttons-container",
             setAllToNoneButton: "#set-to-none",
@@ -38,7 +39,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
         listeners: {
             "onCreate.loadConfigurationPanel": "{that}.createMenu",
-            "onCreate.handleSwitching": "{that}.handleSwitching"
+            "onCreate.handleSwitching": {
+                funcName: "{that}.handleSwitching",
+                after: "loadConfigurationPanel"
+            }
         },
         description: {
             buttons: {
@@ -130,6 +134,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.configurationPanel.createMenu",
                 args: [
                     "{that}",
+                    "{that}.dom.inputList",
                     "{that}.dom.configurationMenu",
                     "{that}.dom.saveChangesButton",
                     "{that}.dom.discardButton"
@@ -169,15 +174,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 ]
             },
             handleSwitching: {
-                funcName: "gamepad.configurationPanel.handleEvents.switching",
-                args: ["{that}.dom.configurationMenu"]
+                funcName: "gamepad.configurationPanel.handleEvents.switchMenu",
+                args: ["{that}.dom.inputList", "{that}.dom.configurationMenu"]
             },
-            modifyDropdownMenu: {
-                funcName: "gamepad.configurationPanel.handleEvents.modifyDropdownMenu",
+            modifyActionDropdownMenu: {
+                funcName: "gamepad.configurationPanel.handleEvents.modifyActionDropdownMenu",
                 args: ["{that}"]
             },
-            listenDropdownChanges: {
-                funcName: "gamepad.configurationPanel.handleEvents.listenDropdownChanges",
+            listenActionDropdownChanges: {
+                funcName: "gamepad.configurationPanel.handleEvents.listenActionDropdownChanges",
                 args: ["{that}"]
             },
             changeConfigMenuOptions: {
@@ -216,12 +221,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Create a configuration menu on the Chrome extension's popup window.
      *
      * @param {Object} that - The configurationPanel component.
+     * @param {Array} inputList - The jQuery selector of the input list.
      * @param {Array} configurationMenu - The jQuery selector of the configuration menu.
      * @param {Object} saveChangesButton - The "Save Changes" button on the panel.
      * @param {Object} discardButton - The "Discard Changes" button on the panel.
      *
      */
-    gamepad.configurationPanel.createMenu = function (that, configurationMenu, saveChangesButton, discardButton) {
+    gamepad.configurationPanel.createMenu = function (that, inputList, configurationMenu, saveChangesButton, discardButton) {
         // Clear all the content inside the configuration menu.
         configurationMenu = configurationMenu[0];
         configurationMenu.innerHTML = "";
@@ -241,17 +247,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     isAxes = inputCounter / 16 >= 1,
                     inputType = isAxes ? "axes" : "buttons";
 
+                // Set attributes and text of the input name dropdown.
+                var inputOption = document.createElement("option");
+                inputOption.innerHTML = that.options.description[inputType][inputIndex];
+                inputOption.value = inputType + "-" + inputIndex;
+                inputList[0].appendChild(inputOption);
+
                 // Create a container for the particular input's configuration options.
                 var inputMenuItem = document.createElement("div");
 
                 // Set properties/attributes of the container element.
                 var inputIdentifier = inputType + "-" + inputIndex;
                 inputMenuItem.classList.add("menu-item", inputIdentifier);
-
-                // Set attributes and text of the input description.
-                var inputDescription = document.createElement("h1");
-                inputDescription.innerHTML = that.options.description[inputType][inputIndex];
-                inputMenuItem.appendChild(inputDescription);
+                inputMenuItem.style.display = "none";
 
                 var isStored = storedConfig ? true : false,
                     gamepadConfig = isStored ? storedConfig : that.model.map;
@@ -284,15 +292,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 configurationMenu.appendChild(inputMenuItem);
 
                 /**
-                 * Modify the configuration panel according to the values of the
-                 * configuration options and attach listeners to the configuration
-                 * options and buttons.
-                 */
-                that.modifyDropdownMenu();
-                that.listenDropdownChanges();
-                that.attachListeners();
-
-                /**
                  * Enable the "Discard Changes" button and "Save Changes" button if the
                  * configuration is unsaved.
                  */
@@ -301,6 +300,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     saveChangesButton[0].removeAttribute("disabled");
                 }
             }
+
+            /**
+             * Modify the configuration panel according to the values of the
+             * configuration options and attach listeners to the configuration
+             * options and buttons.
+             */
+            that.modifyActionDropdownMenu();
+            that.listenActionDropdownChanges();
+            that.attachListeners();
         });
     };
 

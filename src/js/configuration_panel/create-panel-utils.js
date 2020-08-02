@@ -38,7 +38,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Set the attributes and class names of the input action label.
         actionLabel.setAttribute("for", inputIdentifier + "-action");
-        actionLabel.classList.add(inputIdentifier + "-child");
+        actionLabel.classList.add("action-label", inputIdentifier + "-child");
 
         // Inject the input action label into configuration menu (of the given input).
         configMenu.appendChild(actionLabel);
@@ -65,7 +65,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Set other attributes and class names of the input action dropdown menu.
         inputSelectMenu.setAttribute("name", inputIdentifier + "-action");
-        inputSelectMenu.classList.add(inputIdentifier + "-child");
+        inputSelectMenu.classList.add("action-dropdown", inputIdentifier + "-child");
 
         // Inject the dropdown menu into configuration menu (of the given input).
         configMenu.appendChild(inputSelectMenu);
