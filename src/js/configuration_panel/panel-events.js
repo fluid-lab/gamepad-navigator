@@ -66,7 +66,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         fluid.each(inputMenusArray, function (inputMenu) {
             if (fluid.isDOMNode(inputMenu)) {
-                that.changeConfigMenuOptions(inputMenu.querySelector("select"));
+                that.changeConfigMenuOptions(inputMenu.querySelector(".action-dropdown"));
             }
         });
     };

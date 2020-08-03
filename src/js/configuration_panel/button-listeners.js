@@ -31,16 +31,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.configurationPanel.buttonListeners.setAllToNone = function (that) {
         // Get the list of all dropdowns in the configuration panel.
-        var dropdownMenusArray = document.querySelectorAll("select");
+        var actionDropdownMenus = document.querySelectorAll(".action-dropdown");
 
         // Set all dropdown values to none.
-        fluid.each(dropdownMenusArray, function (dropdownMenu) {
-            if (fluid.isDOMNode(dropdownMenu)) {
+        fluid.each(actionDropdownMenus, function (actionDropdown) {
+            if (fluid.isDOMNode(actionDropdown)) {
                 // Set selected option to none.
-                dropdownMenu.selectedIndex = 0;
+                actionDropdown.selectedIndex = 0;
 
                 // Hide all other input menu configuration options.
-                that.changeConfigMenuOptions(dropdownMenu);
+                that.changeConfigMenuOptions(actionDropdown);
             }
         });
 
@@ -70,9 +70,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     actionData = that.model.map[isAxes ? "axes" : "buttons"][inputIndex];
 
                 // Set the default option of the action dropdown.
-                fluid.find(configurationMenu.querySelector("select").options, function (actionOption, actionIndex) {
+                fluid.find(configurationMenu.querySelector(".action-dropdown").options, function (actionOption, actionIndex) {
                     if (actionOption.value === actionData.defaultAction) {
-                        configurationMenu.querySelector("select").selectedIndex = actionIndex;
+                        configurationMenu.querySelector(".action-dropdown").selectedIndex = actionIndex;
                         return true;
                     }
                 });
@@ -84,7 +84,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 configurationMenu.querySelector(".checkbox").checked = actionData[isAxes ? "invert" : "background"];
 
                 // Display/hide other configuration options as per the value of dropdown.
-                that.changeConfigMenuOptions(configurationMenu.querySelector("select"));
+                that.changeConfigMenuOptions(configurationMenu.querySelector(".action-dropdown"));
             }
         });
 
@@ -119,7 +119,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
                     // Set the value of the dropdown action for the current input.
                     var actionValue = inputConfiguration[isStoredData ? "currentAction" : "defaultAction"],
-                        actionDropdown = configurationMenu.querySelector("select");
+                        actionDropdown = configurationMenu.querySelector(".action-dropdown");
                     fluid.find(actionDropdown.options, function (actionOption, actionIndex) {
                         if (actionOption.value === actionValue) {
                             actionDropdown.selectedIndex = actionIndex;
@@ -175,7 +175,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     inputConfiguration = {};
 
                 // Obtain and store the selected action for the current input.
-                var currentAction = fluid.get(configurationMenu.querySelector("select"), "value");
+                var currentAction = fluid.get(configurationMenu.querySelector(".action-dropdown"), "value");
                 inputConfiguration.currentAction = currentAction;
 
                 /**
@@ -258,7 +258,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                      * Enable the "Save Changes" and "Discard Changes" buttons if
                      * dropdown option is changed.
                      */
-                    var actionDropdown = configurationMenu.querySelector("select"),
+                    var actionDropdown = configurationMenu.querySelector(".action-dropdown"),
                         currentDropdownValue = actionDropdown.value,
                         initialDropdownValue = initialInputData[isStoredData ? "currentAction" : "defaultAction"] || "null";
                     if (currentDropdownValue !== initialDropdownValue) {

@@ -325,7 +325,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.configurationPanel.attachListeners = function (that, setAllToNoneButton, restoreDefaultsButton, saveChangesButton, discardButton) {
         // Attach listener to all configuration options to toggle "Save Changes" button.
-        var configurationOptions = document.querySelectorAll("select, .speed-factor, .checkbox");
+        var configurationOptions = document.querySelectorAll(".action-dropdown, .speed-factor, .checkbox");
         fluid.each(configurationOptions, function (configurationOption) {
             if (fluid.isDOMNode(configurationOption)) {
                 configurationOption.addEventListener("input", that.toggleSaveAndDiscardButtons);
