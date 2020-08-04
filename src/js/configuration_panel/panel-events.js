@@ -94,6 +94,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     /**
+     * TODO: Make another sub-component managing the mapping for one control, its
+     * visibility, and settings and relay them into the parent component.
+     * Refer:
+     * https://github.com/fluid-lab/gamepad-navigator/issues/40
+     */
+
+    /**
      *
      * Displays only the relevant configuration options for the given dropdown according
      * to the chosen action (value of the dropdown).
@@ -118,19 +125,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * increase the input width.
          */
         if (that.options.actions.speedFactorOption.includes(selectedAction)) {
-            currentInputMenuItems[2].style.display = "unset";
-            currentInputMenuItems[3].style.display = "unset";
+            currentInputMenuItems[2].classList.remove("hidden");
+            currentInputMenuItems[3].classList.remove("hidden");
 
             // Disable the speed factor input box.
             currentInputMenuItems[3].removeAttribute("disabled");
 
             // Reduce the width of the action dropdown.
-            dropdownMenu.style.width = "96.5%";
-            dropdownMenu.style.gridColumn = "1/2";
+            dropdownMenu.classList.add("reduced");
         }
         else {
-            currentInputMenuItems[2].style.display = "none";
-            currentInputMenuItems[3].style.display = "none";
+            currentInputMenuItems[2].classList.add("hidden");
+            currentInputMenuItems[3].classList.add("hidden");
 
             // Reset the speed factor input box value.
             currentInputMenuItems[3].value = "1";
@@ -139,8 +145,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             currentInputMenuItems[3].setAttribute("disabled", "");
 
             // Increase the width of the action dropdown.
-            dropdownMenu.style.width = "100%";
-            dropdownMenu.style.gridColumn = "1/3";
+            dropdownMenu.classList.remove("reduced");
         }
 
         /**
@@ -148,15 +153,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * background or is invertible. Otherwise, hide the checkboxes and their labels.
          */
         if (that.options.actions.backgroundOption.includes(selectedAction) || that.options.actions.invertOption.includes(selectedAction)) {
-            currentInputMenuItems[4].style.display = "unset";
-            currentInputMenuItems[5].style.display = "unset";
+            currentInputMenuItems[4].classList.remove("hidden");
+            currentInputMenuItems[5].classList.remove("hidden");
 
             // Disable the checkbox.
             currentInputMenuItems[5].removeAttribute("disabled");
         }
         else {
-            currentInputMenuItems[4].style.display = "none";
-            currentInputMenuItems[5].style.display = "none";
+            currentInputMenuItems[4].classList.add("hidden");
+            currentInputMenuItems[5].classList.add("hidden");
 
             // Reset the checkbox, i.e., uncheck it.
             currentInputMenuItems[5].checked = false;

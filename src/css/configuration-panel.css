@@ -182,7 +182,12 @@ select, .speed-factor, .checkbox {
     cursor: unset;
 }
 
-.speed-factor, .speed-factor-label, .checkbox-label, .checkbox {
+.reduced {
+    width: 96.5%;
+    grid-column: 1/2;
+}
+
+.hidden {
     display: none;
 }
 
