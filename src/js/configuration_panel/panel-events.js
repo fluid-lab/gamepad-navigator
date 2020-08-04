@@ -103,6 +103,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.configurationPanel.handleEvents.changeConfigMenuOptions = function (that, dropdownMenu) {
+        /**
+         * TODO: Use viewComponent infrastructure instead of the class selectors.
+         * Refer:
+         * https://github.com/fluid-lab/gamepad-navigator/issues/40
+         */
         var selectedAction = $(dropdownMenu).val(),
             dropdownClassName = dropdownMenu.classList[1],
             currentInputMenuItems = document.getElementsByClassName(dropdownClassName);
