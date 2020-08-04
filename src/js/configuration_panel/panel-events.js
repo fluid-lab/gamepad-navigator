@@ -19,25 +19,32 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Handles switching between the next/previous configuration menus while tabbing.
+     * Handles switching between the various inputs' configuration menu.
      *
+     * @param {Object} inputList - The jQuery selector of the input name menu.
      * @param {Array} configurationMenu - The jQuery selector of the configuration menu.
      *
      */
-    gamepad.configurationPanel.handleEvents.switching = function (configurationMenu) {
-        var scrollTimer = null;
-        configurationMenu.scroll(function () {
-            // Clear the timeout if the scrolling hasn't stopped while tabbing.
-            if (scrollTimer !== null) {
-                clearTimeout(scrollTimer);
-            }
+    gamepad.configurationPanel.handleEvents.switchMenu = function (inputList, configurationMenu) {
+        inputList = inputList[0];
+        configurationMenu = configurationMenu[0];
 
-            // Scroll the remaining width after the scrolling has stopped.
-            scrollTimer = setTimeout(function () {
-                var width = 525,
-                    scrolledBy = configurationMenu[0].scrollLeft;
-                configurationMenu[0].scrollBy((width - (scrolledBy % width)) % width, 0);
-            }, 25);
+        // Attach listener to the input dropdown.
+        inputList.addEventListener("change", function (event) {
+            var inputMenuClassName = event.target.value,
+                inputMenus = configurationMenu.querySelectorAll(".menu-item");
+
+            // Hide the currently visible configuration menus.
+            fluid.find(inputMenus, function (inputMenu) {
+                if (fluid.isDOMNode(inputMenu) && inputMenu.style.display !== "none") {
+                    inputMenu.style.display = "none";
+                    return true;
+                }
+            });
+
+            // Display the input configuration menu according to the selected option.
+            var currentInputMenu = configurationMenu.getElementsByClassName(inputMenuClassName)[0];
+            currentInputMenu.style.display = "grid";
         });
     };
 
@@ -49,7 +56,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} that - The configurationPanel component.
      *
      */
-    gamepad.configurationPanel.handleEvents.modifyDropdownMenu = function (that) {
+    gamepad.configurationPanel.handleEvents.modifyActionDropdownMenu = function (that) {
         // Get the list of all configuration menus on the configuration panel.
         var inputMenusArray = document.querySelectorAll(".menu-item");
 
@@ -59,7 +66,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          */
         fluid.each(inputMenusArray, function (inputMenu) {
             if (fluid.isDOMNode(inputMenu)) {
-                that.changeConfigMenuOptions(inputMenu.querySelector("select"));
+                that.changeConfigMenuOptions(inputMenu.querySelector(".action-dropdown"));
             }
         });
     };
@@ -72,9 +79,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Object} that - The configurationPanel component.
      *
      */
-    gamepad.configurationPanel.handleEvents.listenDropdownChanges = function (that) {
+    gamepad.configurationPanel.handleEvents.listenActionDropdownChanges = function (that) {
         // Get the list of all dropdowns in the configuration panel.
-        var actionDropdowns = document.querySelectorAll("select");
+        var actionDropdowns = document.querySelectorAll(".action-dropdown");
 
         // Attach change listener to all dropdown menus.
         fluid.each(actionDropdowns, function (actionDropdown) {
@@ -87,6 +94,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     /**
+     * TODO: Make another sub-component managing the mapping for one control, its
+     * visibility, and settings and relay them into the parent component.
+     * Refer:
+     * https://github.com/fluid-lab/gamepad-navigator/issues/40
+     */
+
+    /**
      *
      * Displays only the relevant configuration options for the given dropdown according
      * to the chosen action (value of the dropdown).
@@ -96,8 +110,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.configurationPanel.handleEvents.changeConfigMenuOptions = function (that, dropdownMenu) {
+        /**
+         * TODO: Use viewComponent infrastructure instead of the class selectors.
+         * Refer:
+         * https://github.com/fluid-lab/gamepad-navigator/issues/40
+         */
         var selectedAction = $(dropdownMenu).val(),
-            dropdownClassName = dropdownMenu.classList[0],
+            dropdownClassName = dropdownMenu.classList[1],
             currentInputMenuItems = document.getElementsByClassName(dropdownClassName);
 
         /**
@@ -106,19 +125,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * increase the input width.
          */
         if (that.options.actions.speedFactorOption.includes(selectedAction)) {
-            currentInputMenuItems[2].style.display = "unset";
-            currentInputMenuItems[3].style.display = "unset";
+            currentInputMenuItems[2].classList.remove("hidden");
+            currentInputMenuItems[3].classList.remove("hidden");
 
             // Disable the speed factor input box.
             currentInputMenuItems[3].removeAttribute("disabled");
 
             // Reduce the width of the action dropdown.
-            dropdownMenu.style.width = "94%";
-            dropdownMenu.style.gridColumn = "1/2";
+            dropdownMenu.classList.add("reduced");
         }
         else {
-            currentInputMenuItems[2].style.display = "none";
-            currentInputMenuItems[3].style.display = "none";
+            currentInputMenuItems[2].classList.add("hidden");
+            currentInputMenuItems[3].classList.add("hidden");
 
             // Reset the speed factor input box value.
             currentInputMenuItems[3].value = "1";
@@ -127,8 +145,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             currentInputMenuItems[3].setAttribute("disabled", "");
 
             // Increase the width of the action dropdown.
-            dropdownMenu.style.width = "100%";
-            dropdownMenu.style.gridColumn = "1/3";
+            dropdownMenu.classList.remove("reduced");
         }
 
         /**
@@ -136,15 +153,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * background or is invertible. Otherwise, hide the checkboxes and their labels.
          */
         if (that.options.actions.backgroundOption.includes(selectedAction) || that.options.actions.invertOption.includes(selectedAction)) {
-            currentInputMenuItems[4].style.display = "unset";
-            currentInputMenuItems[5].style.display = "unset";
+            currentInputMenuItems[4].classList.remove("hidden");
+            currentInputMenuItems[5].classList.remove("hidden");
 
             // Disable the checkbox.
             currentInputMenuItems[5].removeAttribute("disabled");
         }
         else {
-            currentInputMenuItems[4].style.display = "none";
-            currentInputMenuItems[5].style.display = "none";
+            currentInputMenuItems[4].classList.add("hidden");
+            currentInputMenuItems[5].classList.add("hidden");
 
             // Reset the checkbox, i.e., uncheck it.
             currentInputMenuItems[5].checked = false;
