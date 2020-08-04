@@ -8,14 +8,10 @@
         "storage",
         "tabs",
         "sessions",
-        "chrome://*/*",
         "tabs"
     ],
     "content_scripts": [{
-        "matches": [
-            "<all_urls>",
-            "chrome://*/*"
-        ],
+        "matches": ["<all_urls>"],
         "js": [
             "js/lib/infusion/infusion-all.min.js",
             "js/lib/ally/ally.min.js",

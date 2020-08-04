@@ -45,6 +45,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 actionData.homepageURL = homepageURL;
             }
 
+            // Set the left pixel if the action is about changing "window size".
+            if (actionName === "maximizeWindow" || actionName === "restoreWindowSize") {
+                actionData.left = screen.availLeft;
+            }
+
             // Send the message to the background script with the action details.
             chrome.runtime.sendMessage(actionData);
         }
@@ -101,7 +106,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Call the window size changing invokers according to the input value.
         if (value > that.options.cutoffValue) {
-            chrome.runtime.sendMessage({ actionName: windowSizeActionLabel });
+            chrome.runtime.sendMessage({
+                actionName: windowSizeActionLabel,
+                left: screen.availLeft
+            });
         }
     };
 })(fluid);

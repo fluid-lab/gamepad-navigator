@@ -76,11 +76,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             maximizeWindow: {
                 funcName: "gamepad.messageListenerUtils.changeWindowSize",
-                args: ["{that}", "maximized"]
+                args: ["{that}", "maximized", "{arguments}.4"]
             },
             restoreWindowSize: {
                 funcName: "gamepad.messageListenerUtils.changeWindowSize",
-                args: ["{that}", "normal"]
+                args: ["{that}", "normal", "{arguments}.4"]
             },
             reopenTabOrWindow: {
                 "this": "chrome.sessions",
@@ -108,9 +108,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             if (action) {
                 var invert = fluid.get(actionData, "invert"),
                     active = fluid.get(actionData, "active"),
+                    left = fluid.get(actionData, "left"),
                     homepageURL = fluid.get(actionData, "homepageURL");
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                    action(tabs[0].id, invert, active, homepageURL);
+                    action(tabs[0].id, invert, active, homepageURL, left);
                 });
             }
         }
