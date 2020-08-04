@@ -28,7 +28,7 @@ var navigatorInstanceOne = gamepad.navigator();
 // Otherwise create a custom component using the navigator grade.
 fluid.defaults("my.navigator.grade", {
     gradeNames: ["gamepad.navigator"]
-};
+});
 var navigatorInstanceTwo = my.navigator.grade();
 ```
 
@@ -55,7 +55,7 @@ fluid.defaults("my.navigator.grade", {
     gradeNames: ["gamepad.navigator"],
     windowObject: myCustomWindowObject,
     frequency: 100
-};
+});
 var navigatorInstanceTwo = my.navigator.grade();
 ```
 
