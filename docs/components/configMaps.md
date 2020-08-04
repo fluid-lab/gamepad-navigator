@@ -12,7 +12,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 # `gamepad.configMaps`
 
-// TODO: Add links referencing the "mix in" components' documentation.
+<!--
+TODO: Add links referencing the "mix in" components' documentation. 
+
+TODO: Add documentation for supported actions.
+Refer:
+https://github.com/fluid-lab/gamepad-navigator/issues/50
+-->
 
 This grade provides the configuration maps for the gamepad. It is used in the `gamepad.configurationPanel` and
 `gamepad.inputMapper.base` grades that provide the actual functionality according to the configuration.
