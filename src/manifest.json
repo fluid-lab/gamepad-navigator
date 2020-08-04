@@ -7,7 +7,8 @@
     "permissions": [
         "storage",
         "tabs",
-        "sessions"
+        "sessions",
+        "tabs"
     ],
     "content_scripts": [{
         "matches": ["<all_urls>"],
