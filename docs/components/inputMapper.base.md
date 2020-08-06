@@ -107,7 +107,7 @@ Listens for the changes in gamepad's input values stored as `inputMapper.base` c
 if the component provides it. Each of these invokers accepts the following arguments:
 
 - `inputValue`: Current value of the gamepad input.
-- `speedFactor`: Times by which the speed of given (continuous) action should be increased.
+- `speedFactor`: A scaling factor for the polling frequency, which affects the given (continuous) action's speed.
 - `invert`: Whether direction of the given action should be in the opposite order (for thumbsticks).
 - `background`: Whether a new tab or window should open in background.
 - `oldInputValue`: Previous value of the gamepad input before its state is changed.
@@ -157,8 +157,8 @@ changes to the DOM. Called by the `inputMapper.base` component when it is destro
 - `value {Number}` Current value of the gamepad input.
 - Returns: Nothing.
 
-Performs a **click** on the focused element when the gamepad button or trigger is pressed. However, a click on a
-`select` form element is simulated by changing its size.
+Performs a click on the focused element when the gamepad button or trigger is pressed. However, a click on a `select`
+form element is simulated by changing its size.
 
 ### `{inputMapper.base}.previousPageInHistory(value)`
 
@@ -166,8 +166,8 @@ Performs a **click** on the focused element when the gamepad button or trigger i
 - Returns: Nothing.
 
 Navigates to the previous page in history when the gamepad button or trigger is pressed. Uses the
-[`History API`](https://developer.mozilla.org/en-US/docs/Web/API/History_API) for the core functionality. The **focused
-element** of current web page is saved using [`chrome.storage`](https://developer.chrome.com/extensions/storage) before
+[History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API) for the core functionality. The focused
+element of current web page is saved using [`chrome.storage`](https://developer.chrome.com/extensions/storage) before
 the operation is performed. The saved element is used to restore focus when the user navigates back to the same page.
 
 ### `{inputMapper.base}.nextPageInHistory(value)`
@@ -176,8 +176,8 @@ the operation is performed. The saved element is used to restore focus when the 
 - Returns: Nothing.
 
 Navigates to the next page in history when the gamepad button or trigger is pressed. Uses the
-[`History API`](https://developer.mozilla.org/en-US/docs/Web/API/History_API) for the core functionality. The **focused
-element** of current web page is saved using [`chrome.storage`](https://developer.chrome.com/extensions/storage) before
+[History API](https://developer.mozilla.org/en-US/docs/Web/API/History_API) for the core functionality. The focused
+element of current web page is saved using [`chrome.storage`](https://developer.chrome.com/extensions/storage) before
 the operation is performed. The saved element is used to restore focus when the user navigates back to the same page.
 
 ### `{inputMapper.base}.thumbstickHistoryNavigation(value, invert)`
@@ -213,7 +213,7 @@ member variable.
 ### `{inputMapper.base}.thumbstickTabbing(value, speedFactor, invert)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of tab navigation should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the tab navigation speed (see below).
 - `invert {Boolean}` Whether the thumbstick tab navigation should be in opposite order (see below).
 - Returns: Nothing.
 
@@ -221,62 +221,72 @@ Changes the focus from the currently focused element to the previous or next tab
 Works only in **continuous** mode. Calls the [`{inputMapper.base}.reverseTab`](#inputmapperbasereversetabvalue) and
 [`{inputMapper.base}.forwardTab`](#inputmapperbaseforwardtabvalue) invokers according to the direction the thumbstick is
 pressed. For example, left on the horizontal axis and upward on the vertical axis of a thumbstick shifts the focus to
-previous DOM element. Pressing the thumbstick in opposite direction shifts the focus to the next DOM element.
+previous DOM element. Pressing the thumbstick in opposite direction shifts the focus to the next DOM element. The
+default polling frequency is 50 ms. Setting the `speedFactor` to less than 1 will slow down the tab navigation, setting
+it to more than 1 will speed up the tab navigation.
 
 ### `{inputMapper.base}.scrollLeft(value, speedFactor)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of left scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - Returns: Nothing.
 
-Scrolls the web page left using gamepad buttons and triggers.
+Scrolls the web page left using gamepad buttons and triggers. The default polling frequency is 50 ms. Setting the
+`speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1 will speed up the scrolling.
 
 ### `{inputMapper.base}.scrollRight(value, speedFactor)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of right scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - Returns: Nothing.
 
-Scrolls the web page right using gamepad buttons and triggers.
+Scrolls the web page right using gamepad buttons and triggers. The default polling frequency is 50 ms. Setting the
+`speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1 will speed up the scrolling.
 
 ### `{inputMapper.base}.scrollUp(value, speedFactor)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of upward scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - Returns: Nothing.
 
-Scrolls the web page upward using gamepad buttons and triggers.
+Scrolls the web page upward using gamepad buttons and triggers. The default polling frequency is 50 ms. Setting the
+`speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1 will speed up the scrolling.
 
 ### `{inputMapper.base}.scrollDown(value, speedFactor)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of downward scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - Returns: Nothing.
 
-Scrolls the web page downward using gamepad buttons and triggers.
+Scrolls the web page downward using gamepad buttons and triggers. The default polling frequency is 50 ms. Setting the
+`speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1 will speed up the scrolling.
 
 ### `{inputMapper.base}.scrollHorizontally(value, speedFactor, invert)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of horizontal scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - `invert {Boolean}` Whether the horizontal scrolling should be in opposite order (see below).
 - Returns: Nothing.
 
-Scrolls the web page in left and right direction using gamepad thumbsticks. Calls the
+Scrolls the web page left and right using gamepad thumbsticks. Calls the
 [`{inputMapper.base}.scrollLeft`](#inputmapperbasescrollleftvalue-speedfactor) and
 [`{inputMapper.base}.scrollRight`](#inputmapperbasescrollrightvalue-speedfactor) invokers according to the direction the
 thumbstick is pressed. For example, left on the horizontal axis and upward on the vertical axis of a thumbstick scrolls
-the web page left. Pressing the thumbstick in opposite direction scrolls the web page right.
+the web page left. Pressing the thumbstick in opposite direction scrolls the web page right. The default polling
+frequency is 50 ms. Setting the `speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1
+will speed up the scrolling.
 
 ### `{inputMapper.base}.scrollVertically(value, speedFactor, invert)`
 
 - `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Times by which the speed of vertical scrolling should be increased.
+- `speedFactor {Number}` A scaling factor for the polling frequency, which affects the scrolling speed (see below).
 - `invert {Boolean}` Whether the vertical scrolling should be in opposite order (see below).
 - Returns: Nothing.
 
-Scrolls the web page in upward and downward direction using gamepad thumbsticks. Calls the
+Scrolls the web page upward and downward using gamepad thumbsticks. Calls the
 [`{inputMapper.base}.scrollUp`](#inputmapperbasescrollupvalue-speedfactor) and
 [`{inputMapper.base}.scrollDown`](#inputmapperbasescrolldownvalue-speedfactor) invokers according to the direction the
 thumbstick is pressed. For example, left on the horizontal axis and upward on the vertical axis of a thumbstick scrolls
-the web page upward. Pressing the thumbstick in opposite direction scrolls the web page downward.
+the web page upward. Pressing the thumbstick in opposite direction scrolls the web page downward. The default polling
+frequency is 50 ms. Setting the `speedFactor` to less than 1 will slow down the scrolling, setting it to more than 1
+will speed up the scrolling.
