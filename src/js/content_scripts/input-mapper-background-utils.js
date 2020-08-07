@@ -21,6 +21,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     // TODO: Add browser tab navigation for thumbsticks.
 
     /**
+     * TODO: Save the DOM element focus before switching tabs so that it can be restored
+     * when the user navigates back to the same tab.
+     */
+
+    /**
      *
      * Sends message to the background script to perform the given action.
      *

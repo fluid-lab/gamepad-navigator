@@ -43,6 +43,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             "onGamepadDisconnected.clearIntervalRecords": "{that}.clearIntervalRecords"
         },
         members: {
+            /**
+             * TODO: Move the member variables used for the inter-navigation web page
+             * features to the "inputMapper" component.
+             */
             intervalRecords: {
                 upwardScroll: null,
                 downwardScroll: null,
@@ -140,6 +144,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         }
     });
+
+    /**
+     * TODO: Replace the "inputMapper" with "inputMapper.base" in the JSDoc comments for
+     * the invokers of "inputMapper.base" component.
+     */
 
     /**
      *

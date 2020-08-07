@@ -17,6 +17,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
+    // TODO: Fix argument type in JSDoc comments, especially "value" and "speedFactor".
+
+    /**
+     * TODO: Fix the "speedFactor" usage in invokers to reduce the given interval loop
+     * frequency.
+     */
+
     /**
      *
      * Scroll horizontally across the webpage.
@@ -331,8 +338,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    // TODO: Add tests for history navigation.
-
     /**
      *
      * Navigate to the previous/next page in history using thumbsticks.
@@ -354,6 +359,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             that.previousPageInHistory(-1 * value);
         }
     };
+
+    /**
+     * TODO: Use a common function definition for the "previousPageInHistory" and
+     * "nextPageInHistory" methods.
+     */
 
     /**
      *
