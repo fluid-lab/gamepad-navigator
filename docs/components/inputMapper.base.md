@@ -22,14 +22,10 @@ for **inter-web page navigation** features)
 
 ## Using this grade
 
-For the actions to work, you need to use the `gamepad.inputMapperUtils.content` namespace unless the `gamepad` namespace
-is used. Otherwise, the component will throw errors. The configuration options can be changed by either extending the
-component or by passing your own options. If no options are passed, the defaults are used.
+The configuration options can be changed by either extending the component or by passing your own options. If no
+options are passed, the defaults are used.
 
 ``` javascript
-fluid.registerNamespace("gamepad.inputMapper.base");
-fluid.registerNamespace("gamepad.inputMapperUtils.content");
-
 // Either create an instance of the inputMapper.base component.
 var inputMapperBaseInstanceOne = gamepad.inputMapper.base();
 
@@ -52,9 +48,6 @@ The following component configuration options are supported:
 These options can be provided to the component in the following ways:
 
 ``` javascript
-fluid.registerNamespace("gamepad.inputMapper.base");
-fluid.registerNamespace("gamepad.inputMapperUtils.content");
-
 // Either pass options inside the object as an argument while creating an instance of inputMapper.base component.
 var inputMapperBaseInstanceOne = gamepad.inputMapper.base({
     cutoffValue: 0.15,
@@ -76,9 +69,6 @@ to the [Component Options](configMaps.md#component-options) section in the [`con
 documentation.
 
 ``` javascript
-fluid.registerNamespace("gamepad.inputMapper.base");
-fluid.registerNamespace("gamepad.inputMapperUtils.content");
-
 var inputMapperBaseInstance = gamepad.inputMapper.base({
     cutoffValue: 0.35,
     scrollInputMultiplier: 60,
