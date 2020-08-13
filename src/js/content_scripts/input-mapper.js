@@ -198,6 +198,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * again and start reading gamepad inputs (if any gamepad is connected).
              */
             if (visibilityStatus === "visible") {
+                /**
+                 * TODO: Refactor the approach to use a dynamic component instead of
+                 * creating components dynamically.
+                 */
+
                 // Pass the configuration options to the inputMapper component.
                 inputMapperInstance = gamepad.inputMapper(configurationOptions);
                 inputMapperInstance.events.onGamepadConnected.fire();

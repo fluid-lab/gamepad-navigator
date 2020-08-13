@@ -68,7 +68,8 @@ or after the web page is reloaded due to refreshing or history navigation.
 
 - Returns: Nothing.
 
-Updates the gamepad configuration saved by the user.
+Listens to the `onCreate` event of the `inputMapper` component and updates the `map` model variable with the custom
+gamepad configuration data (saved using the configuration panel).
 
 ## Navigation Invokers
 
@@ -201,7 +202,7 @@ browser window using buttons and triggers.
 - `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order (see below).
 - Returns: Nothing.
 
-Sends a message to the `messageListener` component present in the background script to change the size of current
+Sends a message to the `messageListener` component present in the background script to change the size of the current
 browser window according to the direction the thumbstick is pressed. For example, left on the horizontal axis and upward
 on the vertical axis of a thumbstick should restore the current browser window size. Pressing the thumbstick in opposite
 direction should maximize the current browser window.
