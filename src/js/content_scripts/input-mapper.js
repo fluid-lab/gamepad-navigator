@@ -98,7 +98,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Restore the previously focused element on the webpage after history navigation.
+     * Restore the previously focused element on the web page after history navigation or
+     * switching tabs/windows.
      *
      * @param {Object} windowObject - The inputMapper component's windowObject option.
      * @param {Function} tabindexSortFilter - The filter to be used for sorting elements
@@ -136,12 +137,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Function} inputMapperManager - The function that handles the instance of
      *                                        the inputMapper component.
+     * @param {Object} configurationOptions - The configuration options for the
+     *                                        inputMapper component.
      *
      */
     gamepad.visibilityChangeTracker = (function (windowObject) {
         // Assume that the page isn't focused initially.
         var inView = false;
-        return function (inputMapperManager) {
+        return function (inputMapperManager, configurationOptions) {
+            configurationOptions = configurationOptions || {};
+
             // Track changes to the focus/visibility of the window object.
             windowObject.onfocus = windowObject.onblur = windowObject.onpageshow = windowObject.onpagehide = function (event) {
                 /**
@@ -155,7 +160,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                      * (using inView to verify).
                      */
                     if (!inView) {
-                        inputMapperManager("visible");
+                        inputMapperManager("visible", configurationOptions);
                         inView = true;
                     }
                 }
@@ -178,19 +183,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * tab/window.
      *
      * @param {String} visibilityStatus - The visibility status of the tab/window.
+     * @param {Object} configurationOptions - The configuration options for the
+     *                                        inputMapper component.
      *
      */
     gamepad.inputMapperManager = (function () {
         var inputMapperInstance = null;
 
-        return function (visibilityStatus) {
+        return function (visibilityStatus, configurationOptions) {
+            configurationOptions = configurationOptions || {};
+
             /**
              * Create an instance of the inputMapper when the tab/window is focused
              * again and start reading gamepad inputs (if any gamepad is connected).
              */
             if (visibilityStatus === "visible") {
-                // Obtain the saved configuration of the gamepad.
-                inputMapperInstance = gamepad.inputMapper();
+                // Pass the configuration options to the inputMapper component.
+                inputMapperInstance = gamepad.inputMapper(configurationOptions);
                 inputMapperInstance.events.onGamepadConnected.fire();
             }
             else if (visibilityStatus === "hidden" && inputMapperInstance !== null) {
