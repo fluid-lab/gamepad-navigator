@@ -40,13 +40,14 @@ This component does not provide any configuration options.
 
 - Returns: Nothing.
 
-Listens to the messages received from the [`inputMapper`](inputMapper.md) component in the content scripts and triggers
+Listens to the messages received from the [`inputMapper`](inputMapper.md) component in the content scripts by using
+[`chrome.runtime.onMessage.addListener`](https://developer.chrome.com/extensions/runtime#event-onMessage) and triggers
 the [actionExecutor](#messagelisteneractionexecutoractiondata) invoker as a callback function.
 
 ### `{messageListener}.actionExecutor(actionData)`
 
 - `actionData {Object}` The message object received from the [`inputMapper`](inputMapper.md) component in the content
-  scripts.
+  scripts. (see below)
 - Returns: Nothing.
 
 Identifies and triggers the **navigation-producing invokers** according to the `actionData`. The navigation-producing
@@ -55,17 +56,26 @@ invoker is triggered only if the component provides it. Each of these invokers a
 - `tabId`: ID of the currently active tab.
 - `invert`: Whether direction of the given action should be in the opposite order (for thumbsticks).
 - `active`: Whether a new tab or window should be focused when opened.
-- `homepageURL`: URL that a new tab or window should load when opened.
+- `homepageURL`: The URL that a new tab or window should load when opened.
 - `left`: Position of the current browser window from the screen's left edge (in pixels).
 
-The invokers use only those arguments required to perform their specific action.
+The invokers use only those arguments required to perform their specific action. Some of these arguments are extracted
+from the `actionData` object recieved from the content scripts. Below is an example of the `actionData` object.
+
+``` snippet
+{
+  action: "openNewTab",
+  active: true,
+  homepageURL: "https://www.google.com/"
+}
+```
 
 ## Navigation Invokers
 
 ### `{messageListener}.openNewTab(active, homepageURL)`
 
-- `active {Boolean}` Whether a new browser tab should be active when opened.
-- `homepageURL {String}` URL that a new browser tab should load when opened.
+- `active {Boolean}` Whether a new browser tab should be focused when opened.
+- `homepageURL {String}` The URL that a new browser tab should load when opened.
 - Returns: Nothing.
 
 Opens a new tab in the current browser window using the
@@ -84,19 +94,19 @@ Closes the current tab in the active browser window using the
 - Returns: Nothing.
 
 Switches from the current tab to the previous tab in the active browser window. If the active tab is the first tab in
-the list, it will switch to the last tab.
+the list, then the focus will move to the last tab.
 
 ### `{messageListener}.goToNextTab()`
 
 - Returns: Nothing.
 
 Switches from the current tab to the next tab in the active browser window. If the active tab is the last tab in the
-list, it will switch to the first tab.
+list, then the focus will move to the first tab.
 
 ### `{messageListener}.openNewWindow(active, homepageURL)`
 
-- `active {Boolean}` Whether a new browser window should be active when opened.
-- `homepageURL {String}` URL that a new browser window should load when opened.
+- `active {Boolean}` Whether a new browser window should be focused when opened.
+- `homepageURL {String}` The URL that a new browser window should load when opened.
 - Returns: Nothing.
 
 Opens a new browser window using the
@@ -115,14 +125,14 @@ Closes the currently active browser window using the
 - Returns: Nothing.
 
 Switches from the currently active browser window to the previous browser window. If the active window is the first
-window in the list, it will switch to the last window.
+window in the list, then the focus will move to the last window.
 
 ### `{messageListener}.goToNextWindow()`
 
 - Returns: Nothing.
 
 Switches from the currently active browser window to the next browser window. If the active window is the last window in
-the list, it will switch to the first window.
+the list, then the focus will move to the first window.
 
 ### `{messageListener}.zoomIn()`
 
@@ -163,6 +173,5 @@ position and dimensions.
 
 - Returns: Nothing.
 
-Reopens the last closed browser session using the
-[`chrome.sessions.restore`](https://developer.chrome.com/extensions/sessions#method-restore) method. The closed session
-could be a tab or a window.
+Reopens the last closed browser tab or window using the
+[`chrome.sessions.restore`](https://developer.chrome.com/extensions/sessions#method-restore) method.
