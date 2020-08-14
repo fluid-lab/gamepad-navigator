@@ -17,6 +17,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     fluid.registerNamespace("gamepad.configurationPanel.createPanelUtils");
 
+    // TODO: Fix the "inputType" parameter type in the JSDoc comments.
+
     /**
      *
      * Create the input action label and its dropdown and inject both into the
