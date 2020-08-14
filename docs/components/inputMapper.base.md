@@ -12,13 +12,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 # `gamepad.inputMapper.base`
 
-<!-- TODO: Add links to the inputMapper component's documentation -->
-
 This component transforms the gamepad inputs into actions. It is derived from the combination of two grades - the
 [`navigator`](navigator.md) grade, which reads and stores the gamepad inputs in the form of model data, and the
 [`configMaps`](configMaps.md) grade, which provides a configuration map for the gamepad inputs. The navigation features
-available with this component are limited to **intra-web page navigation** features. (Use the `inputMapper` component
-for **inter-web page navigation** features)
+available with this component are limited to **intra-web page navigation** features. (Use the
+[`inputMapper`](inputMapper.md) component for **inter-web page navigation** features)
 
 ## Using this grade
 
