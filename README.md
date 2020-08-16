@@ -58,3 +58,51 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 
 _**Note**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
 override the default new tab page. However, it can be configured to open any other website instead of Google._
+
+## Default Controls
+
+<p align="center">
+   <img src="src/images/gamepad.svg">
+   <i>
+      <p align="center">
+         Image Source: <a href="https://tinyurl.com/y2wvtldg">W3C Gamepad API Documentation</a>
+      </p>
+   </i>
+</p>
+
+Although the gamepad inputs are reconfigurable, the extension provides a default configuration for each gamepad input.
+The default action for each gamepad input is given below.<br>
+(_Please refer to the above diagram for gamepad inputs_)
+
+| Gamepad Input | Default Action | Speed Factor | Invert Action / Open a new tab or window in background |
+| :---: | :--- | :---: | :---: |
+| `Button 0` | Click | - | - |
+| `Button 1` | None | - | - |
+| `Button 2` | History back button | - | - |
+| `Button 3` | History next button | - | - |
+| `Button 4: Left Bumper` | Focus on the previous element | `2.5` | - |
+| `Button 5: Right Bumper` | Focus on the next element | `2.5` | - |
+| `Button 6: Left Trigger` | Scroll left | `1` | - |
+| `Button 7: Right Trigger` | Scroll right | `1` | - |
+| `Button 8` | Close current browser tab | - | - |
+| `Button 9` | Open a new tab | - | `false` |
+| `Button 10: Left Thumbstick Button` | Close current browser window | - | - |
+| `Button 11: Right Thumbstick Button` | Open a new window | - | `false` |
+| `Button 12: D-Pad Up Button` | Switch to the previous browser window | - | - |
+| `Button 13: D-Pad Down Button` | Switch to the next browser window | - | - |
+| `Button 14: D-Pad Left Button` | Switch to the previous browser tab | - | - |
+| `Button 15: D-Pad Right Button` | Switch to the next browser tab | - | - |
+| `Left Thumbstick Horizontal Direction` | Scroll horizontally | `1` | `false` |
+| `Left Thumbstick Vertical Direction` | Scroll vertically | `1` | `false` |
+| `Right Thumbstick Horizontal Direction` | History navigation | - | `false` |
+| `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
+
+## Demo
+
+You can check out the recorded demo to see how the navigator works.
+
+<p align="center">
+   <a href="http://www.youtube.com/watch?v=PmryYYO4qvc">
+      <img src="https://i.imgur.com/JtZvOcu.png" alt="Gamepad Navigator Demo" />
+   </a>
+</p>
