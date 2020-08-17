@@ -12,9 +12,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 # `gamepad.configurationPanel`
 
-This is a `viewComponent` and handles the state and functionality of the configuration panel. It also creates the
-configuration options and stores the custom gamepad configuration for use in the [`inputMapper`](inputMapper.md)
-component.
+This is a [`fluid.viewComponent`](https://tinyurl.com/y4u8xwpd) and creates the configuration options (Action Dropdown,
+Speed Factor Input Box, et cetera) for each gamepad input. This component handles which configuration options should be
+displayed and what list of actions should be available for a given gamepad input. At the same time, the component also
+synchronizes the value of these configuration options with the configuration used by the gamepad and lets you change the
+existing gamepad configuration wither by creating a new gamepad configuration or by switching to the default
+configuration. The new gamepad configuration is saved by the component in the Chrome's storage using the
+[`chrome.storage`](https://developer.chrome.com/extensions/storage) API.
 
 ## Using this grade
 
@@ -103,15 +107,17 @@ var configurationPanelInstanceTwo = my.configurationPanel.grade({
 - Returns: Nothing.
 
 Creates a separate configuration menu for each gamepad input, as mentioned in the `description` option and is triggered
-when the component is created. This invoker calls other invokers to create the configuration options and to listen to
-various interaction-based events and changes on the configuration panel.
+when the component is created. This invoker calls other invokers to create the configuration options (Action dropdown,
+Speed Factor input box, et cetera) and to listen to various interaction-based events and changes to the configuration
+panel.
 
-### `{configurationPanel}.createInputActionDropdown(inputIdentifier, configMenu, inputType, currentValue)`
+### `{configurationPanel}.createInputActionDropdown(inputIdentifier, configMenu, inputType, currentAction)`
 
 - `inputIdentifier {String}` A description of the gamepad input type and its index. For example, "button-0".
-- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input.
+- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input. This will
+  will be modified as we are storing the "Action" dropdown inside it.
 - `inputType {Boolean}` The type of the gamepad input, i.e. "buttons" or "axes".
-- `currentValue {Object}` The value of the currently selected action for the given gamepad input.
+- `currentAction {Object}` The value of the currently selected action for the given gamepad input.
 - Returns: Nothing.
 
 Creates an "Action" label and dropdown for the given gamepad input and then injects these elements into the `configMenu`
@@ -121,7 +127,8 @@ injected, and the value of the "Action" dropdown is set equal to the currently s
 ### `{configurationPanel}.createSpeedFactorOption(inputIdentifier, configMenu, currentValue)`
 
 - `inputIdentifier {String}` A description of the gamepad input type and its index. For example, "button-0".
-- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input.
+- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input. This will
+  will be modified as we are storing the "Speed Factor" input box inside it.
 - `currentValue {Object}` The current "Speed Factor" value for the given gamepad input.
 - Returns: Nothing.
 
@@ -132,7 +139,8 @@ they are injected and the value of the "Speed Factor" input field is set equal t
 ### `{configurationPanel}.createCheckbox(inputIdentifier, configMenu, isAxes, currentValue)`
 
 - `inputIdentifier {String}` A description of the gamepad input type and its index. For example, "button-0".
-- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input.
+- `configMenu {Object}` The DOM Object used for storing the configuration options for a given gamepad input. This will
+  will be modified as we are storing the checkbox inside it.
 - `isAxes {Boolean}` Whether the type of gamepad input is "axes".
 - `currentValue {Object}` The current "Speed Factor" value for the given gamepad input.
 - Returns: Nothing.
@@ -219,6 +227,8 @@ unchanged, then the buttons will be disabled. Otherwise, the buttons are enabled
 
 - Returns: Nothing.
 
-Stores all the unsaved changes in Chrome's storage when the value of any configuration option is changed. These values
-are saved separately without applying the gamepad configuration and are used to prevent loss of unsaved configuration
-due to the panel getting closed accidentally. These values are restored when the panel is reopened.
+Stores all the unsaved changes in Chrome's storage (using
+[`chrome.storage`](https://developer.chrome.com/extensions/storage) API) when the value of any configuration option is
+changed. These values are saved separately without applying the gamepad configuration and are used to prevent loss of
+unsaved configuration due to the panel getting closed accidentally. These values are restored when the panel is
+reopened.
