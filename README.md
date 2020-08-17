@@ -59,6 +59,46 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 _**Note**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
 override the default new tab page. However, it can be configured to open any other website instead of Google._
 
+## Supported Actions
+
+The Gamepad Navigator currently supports the following actions for buttons and triggers:
+
+| Action | Description | Invoker Documentation |
+| :--- | :--- | :--- |
+| **Click** | Perform a click on the focused element when the gamepad button or trigger is pressed. | [click](docs/components/inputMapper.base.md#inputmapperbaseclickvalue) |
+| **Focus on the previous element** | Change the focus from the currently focused element to the previous tabbable element. | [reverseTab](docs/components/inputMapper.base.md#inputmapperbasereversetabvalue) |
+| **Focus on the next element** | Change the focus from the currently focused element to the previous tabbable element. | [forwardTab](docs/components/inputMapper.base.md#inputmapperbaseforwardtabvalue) |
+| **Scroll left** | Scroll the web page left. | [scrollLeft](docs/components/inputMapper.base.md#inputmapperbasescrollleftvalue-speedfactor) |
+| **Scroll right** | Scroll the web page right. | [scrollRight](docs/components/inputMapper.base.md#inputmapperbasescrollrightvalue-speedfactor) |
+| **Scroll up** | Scroll the web page up. | [scrollUp](docs/components/inputMapper.base.md#inputmapperbasescrollupvalue-speedfactor) |
+| **Scroll down** | Scroll the web page down. | [scrollDown](docs/components/inputMapper.base.md#inputmapperbasescrolldownvalue-speedfactor) |
+| **Zoom-in on the active web page** | Zoom in on the current tab in the active browser window. | [zoomIn](docs/components/messageListener.md#messagelistenerzoomin) |
+| **Zoom-out on the active web page** | Zoom out on the current tab in the active browser window. | [zoomOut](docs/components/messageListener.md#messagelistenerzoomout) |
+| **Open a new tab** | Open a new tab in the current browser window. | [openNewTab](docs/components/messageListener.md#messagelisteneropennewtabactive-homepageurl) |
+| **Close current browser tab** | Close the current tab in the active browser window. | [closeCurrentTab](docs/components/messageListener.md#messagelistenerclosecurrenttabtabid) |
+| **Switch to the previous browser tab** | Switch from the current tab to the previous tab in the active browser window. | [goToPreviousTab](docs/components/messageListener.md#messagelistenergotoprevioustab) |
+| **Switch to the next browser tab** | Switch from the current tab to the next tab in the active browser window. | [goToNextTab](docs/components/messageListener.md#messagelistenergotonexttab) |
+| **Open a new browser window** | Opens a new window. | [openNewWindow](docs/components/messageListener.md#messagelisteneropennewwindowactive-homepageurl) |
+| **Close current browser window** | Close the currently active browser window. | [closeCurrentWindow](docs/components/messageListener.md#messagelistenerclosecurrentwindow) |
+| **Switch to the previous browser window** | Switch from the currently active browser window to the previous browser window. | [goToPreviousWindow](docs/components/messageListener.md#messagelistenergotopreviouswindow) |
+| **Switch to the next browser window** | Switch from the currently active browser window to the next browser window. | [goToNextWindow](docs/components/messageListener.md#messagelistenergotonextwindow) |
+| **History back button** | Navigate to the previous page in history. | [previousPageInHistory](docs/components/inputMapper.base.md#inputmapperbasepreviouspageinhistoryvalue) |
+| **History next button** | Navigate to the next page in history. | [nextPageInHistory](docs/components/inputMapper.base.md#inputmapperbasenextpageinhistoryvalue) |
+| **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/components/messageListener.md#messagelistenermaximizewindowleft) |
+| **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/components/messageListener.md#messagelistenerrestorewindowsizeleft) |
+| **Re-open the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/components/messageListener.md#messagelistenerreopentaborwindow) |
+
+In case of thumbsticks, the following actions are supported:
+
+| Action | Description | Invoker Documentation |
+| :--- | :--- | :--- |
+| **Scroll horizontally** | Scroll the web page left and right. | [scrollHorizontally](docs/components/inputMapper.base.md#inputmapperbasescrollhorizontallyvalue-speedfactor-invert) |
+| **Scroll vertically** | Scroll the web page up and down. | [scrollVertically](docs/components/inputMapper.base.md#inputmapperbasescrollverticallyvalue-speedfactor-invert) |
+| **History navigation** | Navigate to the previous and the next page in history. | [thumbstickHistoryNavigation](docs/components/inputMapper.base.md#inputmapperbasethumbstickhistorynavigationvalue-invert) |
+| **Focus on the previous/next element** | Change the focus from the currently focused element to the previous or next tabbable element. | [thumbstickTabbing](docs/components/inputMapper.base.md#inputmapperbasethumbsticktabbingvalue-speedfactor-invert) |
+| **Zoom in or out on the active web page** | Zoom in or out on the current tab in the active browser window. | [thumbstickZoom](docs/components/inputMapper.md#inputmapperthumbstickzoomvalue-invert) |
+| **Maximize/restore the size of current browser window** | Change the size of the current browser window, i.e. maximize or restore. | [thumbstickWindowSize](docs/components/inputMapper.md#inputmapperthumbstickwindowsizevalue-invert) |
+
 ## Default Controls
 
 <p align="center">
@@ -71,11 +111,11 @@ override the default new tab page. However, it can be configured to open any oth
 </p>
 
 Although the gamepad inputs are reconfigurable, the extension provides a default configuration for each gamepad input.
-The default action for each gamepad input is given below.<br>
+The default action for each gamepad input is as follows.<br>
 (_Please refer to the above diagram for gamepad inputs_)
 
 | Gamepad Input | Default Action | Speed Factor | Invert Action / Open a new tab or window in background |
-| :---: | :--- | :---: | :---: |
+| :--- | :--- | :---: | :---: |
 | `Button 0` | Click | - | - |
 | `Button 1` | None | - | - |
 | `Button 2` | History back button | - | - |
