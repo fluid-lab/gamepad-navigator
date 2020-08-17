@@ -27,6 +27,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             windowProperties: {}
         },
         invokers: {
+            // TODO: Rename the addListener invoker and update its documentation.
             addListener: {
                 "this": "chrome.runtime.onMessage",
                 method: "addListener",
