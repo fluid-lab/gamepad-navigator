@@ -12,12 +12,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 # `gamepad.configurationPanel`
 
-This is a [`fluid.viewComponent`](https://tinyurl.com/y4u8xwpd) and creates the configuration options (Action Dropdown,
-Speed Factor Input Box, et cetera) for each gamepad input. This component handles which configuration options should be
+This [`fluid.viewComponent`](https://tinyurl.com/y4u8xwpd) creates the configuration options (Action Dropdown, Speed
+Factor Input Box, et cetera) for each gamepad input. This component handles which configuration options should be
 displayed and what list of actions should be available for a given gamepad input. At the same time, the component also
 synchronizes the value of these configuration options with the configuration used by the gamepad and lets you change the
-existing gamepad configuration wither by creating a new gamepad configuration or by switching to the default
-configuration. The new gamepad configuration is saved by the component in the Chrome's storage using the
+existing gamepad configuration either by creating a new gamepad configuration or by switching to the default
+configuration. The new gamepad configuration is saved by the component using the
 [`chrome.storage`](https://developer.chrome.com/extensions/storage) API.
 
 ## Using this grade
@@ -227,8 +227,6 @@ unchanged, then the buttons will be disabled. Otherwise, the buttons are enabled
 
 - Returns: Nothing.
 
-Stores all the unsaved changes in Chrome's storage (using
-[`chrome.storage`](https://developer.chrome.com/extensions/storage) API) when the value of any configuration option is
-changed. These values are saved separately without applying the gamepad configuration and are used to prevent loss of
-unsaved configuration due to the panel getting closed accidentally. These values are restored when the panel is
-reopened.
+Stores all the unsaved changes using [`chrome.storage`](https://developer.chrome.com/extensions/storage) API when the
+value of any configuration option is changed. The unsaved changes are preserved to prevent losing them when the
+configuration panel is closed. These values are restored when the panel is reopened.
