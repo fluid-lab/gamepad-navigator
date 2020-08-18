@@ -65,7 +65,7 @@ The Gamepad Navigator currently supports the following actions for buttons and t
 
 | Action | Description | Invoker Documentation |
 | :--- | :--- | :--- |
-| **Click** | Perform a click on the focused element when the gamepad button or trigger is pressed. | [click](docs/components/inputMapper.base.md#inputmapperbaseclickvalue) |
+| **Click** | Click on the focused element. | [click](docs/components/inputMapper.base.md#inputmapperbaseclickvalue) |
 | **Focus on the previous element** | Change the focus from the currently focused element to the previous tabbable element. | [reverseTab](docs/components/inputMapper.base.md#inputmapperbasereversetabvalue) |
 | **Focus on the next element** | Change the focus from the currently focused element to the previous tabbable element. | [forwardTab](docs/components/inputMapper.base.md#inputmapperbaseforwardtabvalue) |
 | **Scroll left** | Scroll the web page left. | [scrollLeft](docs/components/inputMapper.base.md#inputmapperbasescrollleftvalue-speedfactor) |
@@ -82,11 +82,11 @@ The Gamepad Navigator currently supports the following actions for buttons and t
 | **Close current browser window** | Close the currently active browser window. | [closeCurrentWindow](docs/components/messageListener.md#messagelistenerclosecurrentwindow) |
 | **Switch to the previous browser window** | Switch from the currently active browser window to the previous browser window. | [goToPreviousWindow](docs/components/messageListener.md#messagelistenergotopreviouswindow) |
 | **Switch to the next browser window** | Switch from the currently active browser window to the next browser window. | [goToNextWindow](docs/components/messageListener.md#messagelistenergotonextwindow) |
-| **History back button** | Navigate to the previous page in history. | [previousPageInHistory](docs/components/inputMapper.base.md#inputmapperbasepreviouspageinhistoryvalue) |
-| **History next button** | Navigate to the next page in history. | [nextPageInHistory](docs/components/inputMapper.base.md#inputmapperbasenextpageinhistoryvalue) |
+| **Back (history)** | Navigate to the previous page in history. | [previousPageInHistory](docs/components/inputMapper.base.md#inputmapperbasepreviouspageinhistoryvalue) |
+| **Next (history)** | Navigate to the next page in history. | [nextPageInHistory](docs/components/inputMapper.base.md#inputmapperbasenextpageinhistoryvalue) |
 | **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/components/messageListener.md#messagelistenermaximizewindowleft) |
 | **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/components/messageListener.md#messagelistenerrestorewindowsizeleft) |
-| **Re-open the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/components/messageListener.md#messagelistenerreopentaborwindow) |
+| **Reopen the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/components/messageListener.md#messagelistenerreopentaborwindow) |
 
 In case of thumbsticks, the following actions are supported:
 
