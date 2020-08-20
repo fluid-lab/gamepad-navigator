@@ -146,3 +146,61 @@ You can check out the recorded demo to see how the navigator works.
       <img src="https://i.imgur.com/JtZvOcu.png" alt="Gamepad Navigator Demo" />
    </a>
 </p>
+
+## Publishing to the Chrome Web Store
+
+1. Prepare the code and the `master` branch.
+   1. Increase the `version` number in the [manifest](src/manifest.json#L6) file and push changes to the `master`
+      branch.
+   2. Ensure that all of the code that should be published has been merged into the `master` branch.
+   3. Ensure that the code in the `master` branch is working as expected.
+      1. Run tests: `npm run test`
+      2. Lint: `grunt lint`
+      3. Manual test build.
+         1. Create a build and load the generated unpacked extension into Chrome.  
+            (Refer to the [Installation](#installation) section for more details)
+         2. Test all of the available configuration options (Action, Speed Factor, et cetera) and ensure that they work
+            on the browser correctly.
+            1. Refresh any browser tabs/windows that were open before installing the extension.
+            2. The actions and the associated configuration options should be tested individually and in combinations
+               to ensure that they are working correctly. For example, testing **Scroll Vertically** separately, then
+               changing its **Speed Factor**, and selecting the **Invert Action** option.
+            3. Test the same action and the associated configuration options with at least one different button,
+               thumbstick, and trigger.
+            4. Multiple web pages should be tested to ensure that everything works correctly.
+
+2. Create the release package.
+   1. Create a release build: `grunt build`
+   2. Create a zip archive of the contents of the `dist` directory. The zip file will be uploaded to the
+      [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
+
+3. Publish to the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions) and create a GitHub
+   release.
+   1. Go to the Developer Dashboard on the Chrome Web Store and log in.
+   2. On the Developer Dashboard, click "Edit" (located on the Gamepad Navigator's right-hand side).
+   3. On the Gamepad Navigator edit page, click "Upload updated package" and upload the zip created in step 2.2 above.
+   4. Update the "Detailed description" field as necessary. Similar information is contained in this README.
+   5. Update the screenshots and videos if necessary. They will need to be the exact size requested.
+   6. Click "Preview Changes".
+      1. Verify that everything appears correct. Pay particular attention to anything that was changed. For example,
+         version number/name, description, screenshots, et cetera.
+   7. If everything appears correct, publish the changes.
+      1. The actual publishing to the Chrome Web Store will take some time and may need to go through a review process.
+   8. Tag the master branch with the release. For example, v1.1.0-beta.
+   9. Create a GitHub release for the tag.
+      1. Go to the [Gamepad Navigator](https://github.com/fluid-lab/gamepad-navigator) GitHub page.
+      2. Click on "Create a new release" under the "Releases" section on the web page's right-hand side.
+      3. For the "Tag Version" and "Release Title", enter the tag name created in step 3.8 (for example, v1.1.0-beta).
+      4. For the description, add a summary of changes and any other relevant information. View prior releases for your
+         reference.
+      5. Attach the build zip file created in step 2.2. Before uploading, make sure the file is named
+         "build_{tag_name}.zip". For example, build_v0.1.0-beta.zip.
+      6. If the release is a beta version, check the "This is a pre-release" option.
+      7. After all the information has been entered correctly, click on the "Publish release" button.
+
+4. Verify the published Gamepad Navigator Chrome extension.
+   1. Ensure that the contents of the Gamepad Navigator on the Chrome Web Store appear correct. Double-check the
+      details like version number/name, descriptions, screenshots, et cetera.
+   2. Install the version from the Chrome Web Store, and run through the manual testing again. (See step 1.2.3 above)
+   3. If everything is working, announce the release where required (for example, the fluid-work mailing list). If
+      there are any issues, fix them and repeat the process.
