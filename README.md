@@ -56,7 +56,7 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 6. Click on the `Load unpacked` button on the top left of the same window and navigate into the `dist` directory to
    open it. This will load the extension into your Chromium-based browser.
 
-_**Note**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
+_**NOTE**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
 override the default new tab page. However, it can be configured to open any other website instead of Google._
 
 ## Supported Actions
@@ -111,7 +111,7 @@ In case of thumbsticks, the following actions are supported:
 </p>
 
 Although the gamepad inputs are reconfigurable, the extension provides a default configuration for each gamepad input.
-The default action for each gamepad input is as follows.<br>
+The default action for each gamepad input is as follows.  
 (_Please refer to the above diagram for gamepad inputs_)
 
 | Gamepad Input | Default Action | Speed Factor | Invert Action / Open a new tab or window in background |
@@ -137,6 +137,8 @@ The default action for each gamepad input is as follows.<br>
 | `Right Thumbstick Horizontal Direction` | History navigation | - | `false` |
 | `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
 
+// TODO: Mention the keyboard shortcut to open the configuration panel.
+
 ## Demo
 
 You can check out the recorded demo to see how the navigator works.
@@ -150,57 +152,68 @@ You can check out the recorded demo to see how the navigator works.
 ## Publishing to the Chrome Web Store
 
 1. Prepare the code and the `master` branch.
-   1. Increase the `version` number in the [manifest](src/manifest.json#L6) file and push changes to the `master`
-      branch.
+   1. Update the `version` number in the [manifest](src/manifest.json#L3) and [package](package.json#L3) files.
+      1. The project follows semantic versioning, i.e. the version is in the format "{MAJOR.MINOR.PATCH}[-dev]". For
+         example, 1.0.15 and 1.1.9-dev.  
+         (Refer to the [semantic versioning](https://semver.org/) standard documentation for more details)
+      2. If the release is a **full release**, use one of the following commands.
+         1. For breaking API changes and new functionalities, update the MAJOR version: `grunt updateVersion`
+         2. For minor API changes and functionality updates, update the MINOR version: `grunt updateVersion:minor`
+         3. For bug fixes with no API or functionality changes, update the PATCH version: `grunt updateVersion:patch`
+      3. For a **dev release**, add the Grunt flag `:dev` to the above commands.
+         1. Dev release with MAJOR version updates: `grunt updateVersion:dev`
+         2. Dev release with MINOR version updates: `grunt updateVersion:minor:dev`
+         3. Dev release with PATCH version updates: `grunt updateVersion:patch:dev`
+      4. Push the changes to the `master` branch.
    2. Ensure that all of the code that should be published has been merged into the `master` branch.
    3. Ensure that the code in the `master` branch is working as expected.
-      1. Run tests: `npm run test`
-      2. Lint: `grunt lint`
+      1. Lint: `grunt lint`
+      2. Run tests: `npm run test`
       3. Manual test build.
          1. Create a build and load the generated unpacked extension into Chrome.  
             (Refer to the [Installation](#installation) section for more details)
          2. Test all of the available configuration options (Action, Speed Factor, et cetera) and ensure that they work
             on the browser correctly.
             1. Refresh any browser tabs/windows that were open before installing the extension.
-            2. The actions and the associated configuration options should be tested individually and in combinations
-               to ensure that they are working correctly. For example, testing **Scroll Vertically** separately, then
-               changing its **Speed Factor**, and selecting the **Invert Action** option.
+            2. The actions and the associated configuration options should be tested individually and in combination to
+               ensure that they are working correctly. For example, testing ***Scroll Vertically*** separately, then
+               changing its ***Speed Factor***, and selecting the ***Invert Action*** option.
             3. Test the same action and the associated configuration options with at least one different button,
                thumbstick, and trigger.
             4. Multiple web pages should be tested to ensure that everything works correctly.
 
-2. Create the release package.
-   1. Create a release build: `grunt build`
-   2. Create a zip archive of the contents of the `dist` directory. The zip file will be uploaded to the
-      [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
+2. Create the release package: `grunt archive`
+   1. This will generate a zip file with the name "build_{tag_name}.zip" (for example, build_v0.1.0-dev.zip), which
+      will be uploaded to the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
 
-3. Publish to the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions) and create a GitHub
-   release.
+3. Publish to the [Chrome Web Store](https://chrome.google.com/webstore/category/extensions).
    1. Go to the Developer Dashboard on the Chrome Web Store and log in.
    2. On the Developer Dashboard, click "Edit" (located on the Gamepad Navigator's right-hand side).
-   3. On the Gamepad Navigator edit page, click "Upload updated package" and upload the zip created in step 2.2 above.
+   3. On the Gamepad Navigator edit page, click "Upload updated package" and upload the zip created in step 2 above.
    4. Update the "Detailed description" field as necessary. Similar information is contained in this README.
-   5. Update the screenshots and videos if necessary. They will need to be the exact size requested.
+   5. Update the screenshots and videos if necessary. For example, if the images, icons, or the UI of the configuration
+      panel has been changed. They will need to be the exact size requested.
    6. Click "Preview Changes".
       1. Verify that everything appears correct. Pay particular attention to anything that was changed. For example,
          version number/name, description, screenshots, et cetera.
    7. If everything appears correct, publish the changes.
       1. The actual publishing to the Chrome Web Store will take some time and may need to go through a review process.
-   8. Tag the master branch with the release. For example, v1.1.0-beta.
-   9. Create a GitHub release for the tag.
-      1. Go to the [Gamepad Navigator](https://github.com/fluid-lab/gamepad-navigator) GitHub page.
-      2. Click on "Create a new release" under the "Releases" section on the web page's right-hand side.
-      3. For the "Tag Version" and "Release Title", enter the tag name created in step 3.8 (for example, v1.1.0-beta).
-      4. For the description, add a summary of changes and any other relevant information. View prior releases for your
-         reference.
-      5. Attach the build zip file created in step 2.2. Before uploading, make sure the file is named
-         "build_{tag_name}.zip". For example, build_v0.1.0-beta.zip.
-      6. If the release is a beta version, check the "This is a pre-release" option.
-      7. After all the information has been entered correctly, click on the "Publish release" button.
 
 4. Verify the published Gamepad Navigator Chrome extension.
    1. Ensure that the contents of the Gamepad Navigator on the Chrome Web Store appear correct. Double-check the
       details like version number/name, descriptions, screenshots, et cetera.
-   2. Install the version from the Chrome Web Store, and run through the manual testing again. (See step 1.2.3 above)
-   3. If everything is working, announce the release where required (for example, the fluid-work mailing list). If
-      there are any issues, fix them and repeat the process.
+   2. Install the updated extension from the Chrome Web Store, and run through the manual testing again. (See step
+      1.3.3 above)
+   3. If there are any issues, fix them and repeat the process.
+
+5. Create a GitHub release.
+   1. Set up the `.gruntfile.env` file.
+      1. Generate your GitHub access token.  
+         (Refer to the [GitHub Docs](https://tinyurl.com/yxsbzjme) for more details)
+      2. Create a copy of the `.gruntfile.env.default` file at the root level and rename the copy as `.gruntfile.env`.
+      3. Open the `.gruntfile.env` file and set the value of the `GITHUB_ACCESS_TOKEN` variable as your GitHub token
+         generated in the above step.
+   2. Create a release on GitHub: `grunt release`
+      1. This will prompt the user to enter various details (release title, tag version, description, et cetera) on
+         their terminal, and will create a new release as per those details.
+   3. Once the release is created successfully, announce it where required (for example, the fluid-work mailing list).

@@ -1,7 +1,7 @@
 {
     "name": "Gamepad Navigator",
-    "description": "The Gamepad Navigator is a Chrome extension that allows you to navigate web pages and Chromium-based browsers using a game controller.",
     "version": "0.1.0",
+    "description": "The Gamepad Navigator is a Chrome extension that allows you to navigate web pages and Chromium-based browsers using a game controller.",
     "author": "Divyanshu Mahajan",
     "manifest_version": 2,
     "permissions": [
@@ -10,19 +10,23 @@
         "sessions",
         "tabs"
     ],
-    "content_scripts": [{
-        "matches": ["<all_urls>"],
-        "js": [
-            "js/lib/infusion/infusion-all.min.js",
-            "js/lib/ally/ally.min.js",
-            "js/content_scripts/gamepad-navigator.js",
-            "js/shared/configuration-maps.js",
-            "js/content_scripts/input-mapper-content-utils.js",
-            "js/content_scripts/input-mapper-background-utils.js",
-            "js/content_scripts/input-mapper-base.js",
-            "js/content_scripts/input-mapper.js"
-        ]
-    }],
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/lib/infusion/infusion-all.min.js",
+                "js/lib/ally/ally.min.js",
+                "js/content_scripts/gamepad-navigator.js",
+                "js/shared/configuration-maps.js",
+                "js/content_scripts/input-mapper-content-utils.js",
+                "js/content_scripts/input-mapper-background-utils.js",
+                "js/content_scripts/input-mapper-base.js",
+                "js/content_scripts/input-mapper.js"
+            ]
+        }
+    ],
     "background": {
         "scripts": [
             "js/lib/infusion/infusion-all.min.js",
