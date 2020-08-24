@@ -146,8 +146,8 @@ module.exports = function (grunt) {
         var jsonFiles = this.options().jsonFiles;
 
         // Check the version increment type and whether the release is "dev".
-        var specIndexToIncrease = this.flags.patch ? 2 : (this.flags.minor ? 1 : 0),
-            isDev = this.flags.dev;
+        var specIndexToIncrease = grunt.option.flags().includes("--major") ? 0 : (grunt.option.flags().includes("--minor") ? 1 : 2),
+            isFull = grunt.option.flags().includes("--standard");
 
         // Scan the JSON files provided as options.
         fluid.each(jsonFiles, function (jsonFile) {
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
             }
             var newVersionNumber = versionSpecs.join(".").toString(),
                 newVersion = newVersionNumber;
-            if (isDev) {
+            if (!isFull) {
                 newVersion = newVersion + "-dev";
             }
 
@@ -186,7 +186,7 @@ module.exports = function (grunt) {
     });
 
     /**
-     * TODO: Create a grunt plugin replacing the current "github-release" task.
+     * TODO: Create a grunt plugin replacing the current "githubRelease" task.
      * (might be of interest to the community)
      */
     grunt.registerTask("githubRelease", "Task for automated GitHub releases.", function () {
@@ -235,7 +235,7 @@ module.exports = function (grunt) {
             });
 
         // Creates a release in the repository.
-        var createRelease = function (callback, taskOptions) {   // eslint-disable-line
+        var createRelease = function (callback, taskOptions) {
             var requestData = {
                 method: "POST",
                 headers: { "Authorization": "Token " + process.env.GITHUB_ACCESS_TOKEN },
