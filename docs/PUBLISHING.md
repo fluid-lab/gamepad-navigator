@@ -18,14 +18,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          example, 1.0.15 and 1.1.9-dev.  
          (Refer to the [semantic versioning](https://semver.org/) standard documentation for more details)
       2. If the release is a **dev release**, use one of the following commands.
-         1. For bug fixes with no API or functionality changes, update the PATCH version: `grunt updateVersion`
+         1. For bug fixes with no API or functionality changes, update the PATCH version: `grunt updateVersion --patch`
          2. For minor API changes and functionality updates, update the MINOR version: `grunt updateVersion --minor`
          3. For breaking API changes and new functionalities, update the MAJOR version: `grunt updateVersion --major`
       3. For a **standard release**, add the command-line flag `--standard` to the above commands.
-         1. Dev release with PATCH version updates: `grunt updateVersion --standard`
+         1. Dev release with PATCH version updates: `grunt updateVersion --patch --standard`
          2. Dev release with MINOR version updates: `grunt updateVersion --minor --standard`
          3. Dev release with MAJOR version updates: `grunt updateVersion --major --standard`
-      4. Push the changes to the `master` branch.
+      4. For a transition from a **dev release** to a **standard release** without updating the version number, use the
+         command: `grunt updateVersion --standard`
+      5. Push the changes to the `master` branch.
    2. Ensure that all of the code that should be published has been merged into the `master` branch.
    3. Ensure that the code in the `master` branch is working as expected.
       1. Lint: `grunt lint`

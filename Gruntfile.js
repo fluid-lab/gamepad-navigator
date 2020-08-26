@@ -145,9 +145,18 @@ module.exports = function (grunt) {
         // Obtain the list of JSON files to be updated.
         var jsonFiles = this.options().jsonFiles;
 
-        // Check the version increment type and whether the release is "dev".
-        var specIndexToIncrease = grunt.option.flags().includes("--major") ? 0 : (grunt.option.flags().includes("--minor") ? 1 : 2),
-            isFull = grunt.option.flags().includes("--standard");
+        // Check the version increment type and whether the release is "standard".
+        var specIndexToIncrease = null,
+            isStandard = grunt.option.flags().includes("--standard");
+        if (grunt.option.flags().includes("--major")) {
+            specIndexToIncrease = 0;
+        }
+        else if (grunt.option.flags().includes("--minor")) {
+            specIndexToIncrease = 1;
+        }
+        else if (grunt.option.flags().includes("--patch")) {
+            specIndexToIncrease = 2;
+        }
 
         // Scan the JSON files provided as options.
         fluid.each(jsonFiles, function (jsonFile) {
@@ -163,18 +172,21 @@ module.exports = function (grunt) {
                     return parseInt(versionString);
                 });
 
-            // Compute the new version of the file.
-            versionSpecs[specIndexToIncrease]++;
-            for (var index = specIndexToIncrease + 1; index < 3; index++) {
-                versionSpecs[index] = 0;
+            // Update the version number if update-type flag is supplied.
+            if (specIndexToIncrease) {
+                versionSpecs[specIndexToIncrease]++;
+                for (var index = specIndexToIncrease + 1; index < 3; index++) {
+                    versionSpecs[index] = 0;
+                }
             }
+
             var newVersionNumber = versionSpecs.join(".").toString(),
                 newVersion = newVersionNumber;
-            if (!isFull) {
+            if (!isStandard) {
                 newVersion = newVersion + "-dev";
             }
 
-            // Update the JSON files with the latest version.
+            // Update the JSON file with the latest version.
             var jsonFileData = grunt.file.readJSON(jsonFile);
             jsonFileData.version = newVersion;
             grunt.file.write(jsonFile, JSON.stringify(jsonFileData));
