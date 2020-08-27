@@ -56,7 +56,7 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 6. Click on the `Load unpacked` button on the top left of the same window and navigate into the `dist` directory to
    open it. This will load the extension into your Chromium-based browser.
 
-_**Note**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
+_**NOTE**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
 override the default new tab page. However, it can be configured to open any other website instead of Google._
 
 ## Supported Actions
@@ -111,7 +111,7 @@ In case of thumbsticks, the following actions are supported:
 </p>
 
 Although the gamepad inputs are reconfigurable, the extension provides a default configuration for each gamepad input.
-The default action for each gamepad input is as follows.<br>
+The default action for each gamepad input is as follows.  
 (_Please refer to the above diagram for gamepad inputs_)
 
 | Gamepad Input | Default Action | Speed Factor | Invert Action / Open a new tab or window in background |
@@ -137,6 +137,8 @@ The default action for each gamepad input is as follows.<br>
 | `Right Thumbstick Horizontal Direction` | History navigation | - | `false` |
 | `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
 
+<!-- TODO: Mention the keyboard shortcut to open the configuration panel. -->
+
 ## Demo
 
 You can check out the recorded demo to see how the navigator works.
@@ -146,3 +148,8 @@ You can check out the recorded demo to see how the navigator works.
       <img src="https://i.imgur.com/JtZvOcu.png" alt="Gamepad Navigator Demo" />
    </a>
 </p>
+
+## Publishing
+
+For the steps to publish the extension to the Chrome Web Store, please refer to the [PUBLISHING](docs/PUBLISHING.md)
+doc.

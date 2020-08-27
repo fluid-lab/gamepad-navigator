@@ -18,3 +18,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Unpacked chrome extension files
 dist/
+**/*.zip
+
+# Environment variable files
+*.env
