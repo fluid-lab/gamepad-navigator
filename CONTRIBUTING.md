@@ -39,9 +39,9 @@ on the quality and standards of submitted contributions.
 
 ### Open an Issue on GitHub
 
-The Gamepad Navigator uses [GitHub issues](https://github.com/fluid-lab/gamepad-navigator/issues) to keep track of the
-open tickets. The branch containing your contribution should be named after the GitHub issue number you're working
-on. For example, branch "GH-28" for issue #28.
+The Gamepad Navigator uses [GitHub issues](https://github.com/fluid-lab/gamepad-navigator/issues) to track issues. The
+branch containing your contribution should be named after the GitHub issue number you're working on. For example,
+branch "GH-28" for issue #28.
 
 GitHub issues should be meaningful and describe the task, bug, or feature in a way that can be understood by the
 community. Opaque or general descriptions should be avoided. If you have a large task that will involve several
@@ -57,11 +57,11 @@ Go through the following steps to open a new issue/ticket:
    environment, speculated cause, possible solution, or any other feedback). Otherwise, create a new ticket.
 2. Provide as much relevant detail in the ticket description. If the ticket is a bug report, it should include the
    following:
-   - Details of the actual behavior.
-   - Instructions for reproducing that bug.
-   - Difference between the actual and expected behavior.
-   - Additional details about the general context.
-3. Besides, more technical information can be added that might help whosoever working on that ticket (see below).
+   - What is happening? What would you expect to happen instead?
+   - Instructions for reproducing the problem.
+   - Additional details about your environment (operating system, gamepad device details, browser details - name,
+     version).
+3. In addition, please provide any additional information that might help someone working on the ticket (see below).
    - Console logs or error messages.
    - Suspected technical cause of the problem.
    - Suggestions for resolving that bug.
@@ -75,7 +75,7 @@ confident in our ability to avoid regressions. All unit tests should be written 
 
 ### Lint Your Code
 
-JavaScript is a highly dynamic and loose language, and many common errors are not picked up until run time. To avoid
+JavaScript is a highly dynamic and loose language, and many common errors are not picked up until runtime. To avoid
 errors and common pitfalls in the language, and to maintain consistency in terms of syntax, lint your code regularly
 using the provided Grunt lint task (see below). Ensure that you run lint checks on your code before making a commit.
 
@@ -86,7 +86,7 @@ grunt lint
 
 ### Create Meaningful Commit Logs
 
-All commits logs should include the following information:
+All commit log messages should include the following information:
 
 1. A reference to the GitHub issue this commit applies to (at the beginning of the first line).
 2. A short and meaningful summary of the commit, on the first line.
@@ -94,8 +94,8 @@ All commits logs should include the following information:
    ticket at the beginning. For example, "Resolves #18", "Fixes #28", et cetera.
 
 Sometimes, a commit may be trivial or entirely cosmetic (code reformatting, fixing typos in comments, et cetera).
-In those cases, it is acceptable to use the "NOGH:" prefix for your log. However, it is still required to provide a
-meaningful summary and a descriptive commit message.
+In those cases, it is acceptable to use the "NOGH:" prefix for your log. However, you must still provide a meaningful
+summary and a descriptive commit message.
 
 ``` snippet
 GH-29: Added bar method to inputMapper
@@ -107,8 +107,8 @@ Refactored the inputMapper to include a new bar algorithm based on the latest ch
 
 ### Submit a Pull Request
 
-Once you've added tests with your code and passed the linting checks, you can submit a Pull Request (PR) to the
-repository's `master` branch. After the PR has been submitted, ping one or more maintainers on the "#fluid-work" IRC
-channel, fluid-work mailing list, or the PR itself. They will review the contribution, which typically results in a
-back and forth conversation and modifications to the PR. Merging into the project repo is a manual process and requires
-at least one maintainer to do that.
+Once you've added tests with your code and "confirmed that the lint checks are passing, you can submit a Pull Request
+(PR) to the repository's `master` branch. After the PR has been submitted, ping one or more maintainers on the
+"#fluid-work" IRC channel, fluid-work mailing list, or the PR itself. They will review the contribution, which
+typically results in a back and forth conversation and modifications to the PR. Merging into the project repo is a
+manual process and requires at least one maintainer to merge it into the project repo.
