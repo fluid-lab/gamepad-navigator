@@ -59,8 +59,8 @@ Go through the following steps to open a new issue/ticket:
    following:
    - What is happening? What would you expect to happen instead?
    - Instructions for reproducing the problem.
-   - Additional details about your environment (operating system, gamepad device details, browser details - name,
-     version).
+   - Additional details about your environment (operating system, gamepad device details, supported browser version -
+     Chrome, Edge, Opera, and other Chromium-based browsers).
 3. In addition, please provide any additional information that might help someone working on the ticket (see below).
    - Console logs or error messages.
    - Suspected technical cause of the problem.
