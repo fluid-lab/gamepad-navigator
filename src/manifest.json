@@ -7,8 +7,7 @@
     "permissions": [
         "storage",
         "tabs",
-        "sessions",
-        "tabs"
+        "sessions"
     ],
     "content_scripts": [
         {
