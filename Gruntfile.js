@@ -343,7 +343,7 @@ module.exports = function (grunt) {
         };
     });
 
-    grunt.loadNpmTasks("gpii-grunt-lint-all");
+    grunt.loadNpmTasks("fluid-grunt-lint-all");
     grunt.loadNpmTasks("grunt-banner");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
