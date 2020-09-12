@@ -14,9 +14,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 1. Prepare the code and the `master` branch.
    1. Update the `version` number in the [manifest](src/manifest.json#L3) and [package](package.json#L3) files.
-      1. The project follows semantic versioning, i.e. the version is in the format "{MAJOR.MINOR.PATCH}[-dev]". For
-         example, 1.0.15 and 1.1.9-dev.  
-         (Refer to the [semantic versioning](https://semver.org/) standard documentation for more details)
+      1. The project follows [semantic versioning](https://semver.org/), i.e. the version is in the format
+         "{MAJOR.MINOR.PATCH}[-dev]". For example, "1.0.15" and "1.1.9-dev".
+         1. The `version` number in [manifest.json](src/manifest.json) file should be completely numeric. However, other
+            json files (for example, [package.json](package.json)) may contain alphabets and non-numeric characters with
+            the version number.  
+            (See [Manifest Version](https://developer.chrome.com/extensions/manifest/version) for more details)
       2. If the release is a **dev release**, use one of the following commands.
          1. For bug fixes with no API or functionality changes, update the PATCH version: `grunt updateVersion --patch`
          2. For minor API changes and functionality updates, update the MINOR version: `grunt updateVersion --minor`
