@@ -59,6 +59,9 @@ module.exports = function (grunt) {
         clean: {
             previousBuild: {
                 src: ["dist/"]
+            },
+            zip: {
+                src: ["*.zip"]
             }
         },
         copy: {
@@ -81,7 +84,7 @@ module.exports = function (grunt) {
                 dest: "dist/"
             }
         },
-        manifest: grunt.file.readJSON("src/manifest.json"),
+        packageJSON: grunt.file.readJSON("package.json"),
         updateVersion: {
             options: { jsonFiles: ["package.json", "src/manifest.json"] }
         },
@@ -91,7 +94,7 @@ module.exports = function (grunt) {
         },
         compress: {
             dist: {
-                options: { archive: "build_v<%= grunt.file.readJSON(\"src/manifest.json\").version %>.zip" },
+                options: { archive: "build_v<%= packageJSON.version %>.zip" },
                 files: [{
                     expand: true,
                     cwd: "dist/",
@@ -105,12 +108,12 @@ module.exports = function (grunt) {
                     questions: [{
                         config: "githubRelease.options.tag_name",
                         type: "input",
-                        default: "v<%= manifest.version %>",
+                        default: "v<%= packageJSON.version %>",
                         message: "Tag version:"
                     }, {
                         config: "githubRelease.options.name",
                         type: "input",
-                        default: "v<%= manifest.version %>",
+                        default: "v<%= packageJSON.version %>",
                         message: "Release title:"
                     }, {
                         config: "githubRelease.options.body",
@@ -133,7 +136,7 @@ module.exports = function (grunt) {
         githubRelease: {
             options: {
                 repo: "fluid-lab/gamepad-navigator",
-                asset: "build_v<%= manifest.version %>.zip"
+                asset: "build_v<%= packageJSON.version %>.zip"
             }
         }
     });
@@ -182,7 +185,7 @@ module.exports = function (grunt) {
 
             var newVersionNumber = versionSpecs.join(".").toString(),
                 newVersion = newVersionNumber;
-            if (!isStandard) {
+            if (!isStandard && path.basename(jsonFile) !== "manifest.json") {
                 newVersion = newVersion + "-dev";
             }
 
@@ -353,6 +356,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("lint", "Perform all standard lint checks.", ["lint-all"]);
     grunt.registerTask("banner", "Add copyright banner at the top of files.", ["usebanner"]);
+
     grunt.registerTask("build", "Build an unpacked extension.", ["clean", "copy"]);
     grunt.registerTask("archive", "Generate an zip package of the extension.", ["build", "compress"]);
     grunt.registerTask("release", "Create a new release on GitHub and upload the extension's zip file.", ["archive", "prompt", "githubRelease"]);

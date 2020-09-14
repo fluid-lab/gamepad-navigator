@@ -149,6 +149,10 @@ You can check out the recorded demo to see how the navigator works.
    </a>
 </p>
 
+## Contributing
+
+See [CONTRIBUTING](CONTRIBUTING.md) for detailed information.
+
 ## Publishing
 
 For the steps to publish the extension to the Chrome Web Store, please refer to the [PUBLISHING](docs/PUBLISHING.md)
