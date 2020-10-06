@@ -28,6 +28,14 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 
 ## Installation
 
+The Gamepad Navigator Chrome Extension is available for free on the
+[Chrome Web Store](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd).
+
+[![Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd)
+
+The extension can also be installed on other Chromium-based browsers using the source code.  
+(Refer to the steps mentioned below)
+
 1. Clone or download the repository.
 
 2. Install [grunt-cli](https://gruntjs.com/) globally:
@@ -137,7 +145,8 @@ The default action for each gamepad input is as follows.
 | `Right Thumbstick Horizontal Direction` | History navigation | - | `false` |
 | `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
 
-<!-- TODO: Mention the keyboard shortcut to open the configuration panel. -->
+The configuration panel can be opened by clicking on the Gamepad Navigator pop-up icon. You can also use the keyboard
+shortcut `Ctrl + Shift + 5` to open the configuration panel.
 
 ## Demo
 
