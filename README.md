@@ -33,8 +33,7 @@ The Gamepad Navigator Chrome Extension is available for free on the
 
 [![Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd)
 
-The extension can also be installed on other Chromium-based browsers using the source code.  
-(Refer to the steps mentioned below)
+The extension can also be installed on other Chromium-based browsers using the source code (see below).
 
 1. Clone or download the repository.
 
@@ -146,7 +145,7 @@ The default action for each gamepad input is as follows.
 | `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
 
 The configuration panel can be opened by clicking on the Gamepad Navigator pop-up icon. You can also use the keyboard
-shortcut `Ctrl + Shift + 5` to open the configuration panel.
+shortcut `Alt + Shift + G` to open the configuration panel.
 
 ## Demo
 
