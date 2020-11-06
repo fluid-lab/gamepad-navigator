@@ -19,8 +19,8 @@ permission to interact with the content in active web pages, browser windows, an
 
 ## Information the Gamepad Navigator collects
 
-The Gamepad Navigator makes use of user preferences entered using the extension configuration panel. To enable
-navigation features, the content of active websites is also parsed.
+The Gamepad Navigator makes use of user preferences entered using the extension configuration panel, which can be
+removed/deleted using panel buttons. To enable navigation features, the content of active websites is also parsed.
 
 ## How the Gamepad Navigator uses the information
 
