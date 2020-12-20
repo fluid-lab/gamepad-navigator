@@ -5,16 +5,21 @@
 
 * {
     font-family: ubuntu;
+    border-radius: 0.3rem;
 }
 
 :root {
     --width: 465px;
 }
 
+body {
+    background-color: rgb(255, 255, 255);
+}
+
 .gamepad-controls {
     width: var(--width);
-    height: 228px;
-    background-image: url("../images/gamepad.svg");
+    height: 300px;
+    background-image: url("../images/gamepad-dark.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
@@ -64,7 +69,8 @@ label {
     font-size: 1.05rem;
 }
 
-select, input {
+select,
+input {
     margin: 10px 20px 10px 0;
     padding: 10px 5px;
     border: 2px solid;
@@ -81,7 +87,8 @@ select {
     grid-row: 3/4;
 }
 
-select:focus, input:focus {
+select:focus,
+input:focus {
     outline-color: darkorange;
 }
 
@@ -90,7 +97,8 @@ select:focus, input:focus {
     background-color: #ddd;
 }
 
-.speed-factor, .speed-factor-label {
+.speed-factor,
+.speed-factor-label {
     grid-column: 2/3;
 }
 
@@ -113,9 +121,12 @@ select:focus, input:focus {
     justify-self: start;
     width: auto;
     margin: 2px 37px 0 2px;
+    border: 1px solid black;
 }
 
-select, .speed-factor, .checkbox {
+select,
+.speed-factor,
+.checkbox {
     cursor: pointer;
 }
 
@@ -137,48 +148,56 @@ select, .speed-factor, .checkbox {
     width: auto;
     padding: 0px 22px;
     cursor: pointer;
+    border-radius: 0.3rem;
+    border: 2px solid black;
 }
 
-.button:focus, .button:hover {
+.button:focus,
+.button:hover {
     outline-width: 5px;
+    font-size: 1.2rem;
 }
 
 .button:nth-child(1) {
-    background-color: #dc9f33;
+    background-color: #fda307;
 }
 
-.button:focus:nth-child(1), .button:hover:nth-child(1) {
-    background-color: #ffa402;
+.button:focus:nth-child(1),
+.button:hover:nth-child(1) {
+    background-color: #ffaa18;
 }
 
 .button:nth-child(2) {
     background-color: #1169CB;
 }
 
-.button:focus:nth-child(2), .button:hover:nth-child(2) {
+.button:focus:nth-child(2),
+.button:hover:nth-child(2) {
     background-color: #4169EF;
 }
 
 .button:nth-child(3) {
-    background-color: #c31501;
+    background-color: #e41d07;
 }
 
-.button:focus:nth-child(3), .button:hover:nth-child(3) {
-    background-color: #e51501;
+.button:focus:nth-child(3),
+.button:hover:nth-child(3) {
+    background-color: #fa2b18;
 }
 
 .button:nth-child(4) {
-    background-color: yellowgreen;
+    background-color: #a7e206f6;
 }
 
-.button:focus:nth-child(4), .button:hover:nth-child(4) {
-    background-color: #aee909;
+.button:focus:nth-child(4),
+.button:hover:nth-child(4) {
+    background-color: yellowgreen;
 }
 
 .button:disabled,
 .button:disabled:focus,
 .button:disabled:hover {
-    background-color: silver;
+    background-color: rgb(133, 133, 133);
     cursor: unset;
 }
 
@@ -191,65 +210,64 @@ select, .speed-factor, .checkbox {
     display: none;
 }
 
+
 /* Dark Mode Stylesheet */
+
 @media (prefers-color-scheme: dark) {
     body {
         color: #e96c4c;
-        background-color: #141e24;
+        background-color: #000000;
     }
-
+    body:hover {
+        background-color: #161616;
+    }
     .gamepad-controls {
         background-image: url("../images/gamepad-dark.svg");
     }
-
-    select, .speed-factor, .checkbox {
-        background-color: #1B697B;
+    select,
+    .speed-factor,
+    .checkbox {
+        background-color: #2693ac;
         color: white;
         border-color: #1B697B;
     }
-
     .button {
         border: none;
     }
-
     .button:nth-child(1) {
-        background-color: #EAAD3F;
+        background-color: #fda307;
     }
-
-    .button:focus:nth-child(1), .button:hover:nth-child(1) {
-        background-color: #FFB235;
+    .button:focus:nth-child(1),
+    .button:hover:nth-child(1) {
+        background-color: #ffaa18;
     }
-
     .button:nth-child(2) {
-        background-color: #2D7BAE;
+        background-color: #1169CB;
     }
-
-    .button:focus:nth-child(2), .button:hover:nth-child(2) {
-        background-color: #2A7FCA;
+    .button:focus:nth-child(2),
+    .button:hover:nth-child(2) {
+        background-color: #4169EF;
     }
-
     .button:nth-child(3) {
-        background-color: #E96C65;
+        background-color: #e41d07;
     }
-
-    .button:focus:nth-child(3), .button:hover:nth-child(3) {
-        background-color: #FF5D54;
+    .button:focus:nth-child(3),
+    .button:hover:nth-child(3) {
+        background-color: #fa2b18;
     }
-
     .button:nth-child(4) {
-        background-color: #A0CC68;
+        background-color: #a7e206f6;
     }
-    
-    .button:focus:nth-child(4), .button:hover:nth-child(4) {
-        background-color: #97CF52;
+    .button:focus:nth-child(4),
+    .button:hover:nth-child(4) {
+        background-color: yellowgreen;
     }
-
     .button:disabled:nth-child(3),
     .button:disabled:focus:nth-child(3),
     .button:disabled:hover:nth-child(3),
     .button:disabled:nth-child(4),
     .button:disabled:focus:nth-child(4),
     .button:disabled:hover:nth-child(4) {
-        background-color: silver;
+        background-color: rgb(219, 219, 219);
     }
 }
