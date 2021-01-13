@@ -22,15 +22,6 @@ var path = require("path"),
 
 module.exports = function (grunt) {
     grunt.config.init({
-        lintAll: {
-            sources: {
-                js:    ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js"],
-                md:    ["./*.md", "tests/**/*.md", "docs/**/*.md"],
-                json:  ["./*.json", "./.*.json", "tests/**/*.json"],
-                json5: ["./*.json5", "tests/**/*.json5"],
-                other: ["./.*"]
-            }
-        },
         usebanner: {
             options: {
                 licenseBanner: grunt.file.read("templates/LICENSE-banner.txt"),
@@ -346,7 +337,6 @@ module.exports = function (grunt) {
         };
     });
 
-    grunt.loadNpmTasks("fluid-grunt-lint-all");
     grunt.loadNpmTasks("grunt-banner");
     grunt.loadNpmTasks("grunt-contrib-clean");
     grunt.loadNpmTasks("grunt-contrib-copy");
@@ -354,12 +344,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-prompt");
     grunt.loadNpmTasks("grunt-json-prettify");
 
-    grunt.registerTask("lint", "Perform all standard lint checks.", ["lint-all"]);
     grunt.registerTask("banner", "Add copyright banner at the top of files.", ["usebanner"]);
 
     grunt.registerTask("build", "Build an unpacked extension.", ["clean", "copy"]);
     grunt.registerTask("archive", "Generate an zip package of the extension.", ["build", "compress"]);
     grunt.registerTask("release", "Create a new release on GitHub and upload the extension's zip file.", ["archive", "prompt", "githubRelease"]);
 
-    grunt.registerTask("default", ["lint", "banner", "build"]);
+    grunt.registerTask("default", ["banner", "build"]);
 };
