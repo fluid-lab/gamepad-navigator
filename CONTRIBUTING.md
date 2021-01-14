@@ -81,7 +81,7 @@ using the provided Grunt lint task (see below). Ensure that you run lint checks 
 
 ``` snippet
 # Runs linting tasks
-grunt lint
+npm run lint
 ```
 
 ### Create Meaningful Commit Logs
