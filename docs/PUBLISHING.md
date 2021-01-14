@@ -33,7 +33,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
       5. Push the changes to the `master` branch.
    2. Ensure that all of the code that should be published has been merged into the `master` branch.
    3. Ensure that the code in the `master` branch is working as expected.
-      1. Lint: `grunt lint`
+      1. Lint: `npm run lint`
       2. Run tests: `npm test`
       3. Manual test build.
          1. Create a build and load the generated unpacked extension into Chrome.  

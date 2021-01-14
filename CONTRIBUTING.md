@@ -77,7 +77,7 @@ confident in our ability to avoid regressions. All unit tests should be written 
 
 JavaScript is a highly dynamic and loose language, and many common errors are not picked up until runtime. To avoid
 errors and common pitfalls in the language, and to maintain consistency in terms of syntax, lint your code regularly
-using the provided Grunt lint task (see below). Ensure that you run lint checks on your code before making a commit.
+using the provided npm script (see below). Ensure that you run lint checks on your code before making a commit.
 
 ``` snippet
 # Runs linting tasks
