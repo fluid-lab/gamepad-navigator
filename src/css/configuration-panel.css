@@ -1,10 +1,10 @@
 @font-face {
-    font-family: ubuntu;
+    font-family: ubuntu, sans-serif;
     src: url("../fonts/Ubuntu-Medium.ttf");
 }
 
 * {
-    font-family: ubuntu;
+    font-family: ubuntu, sans-serif;
 }
 
 :root {
@@ -12,32 +12,32 @@
 }
 
 .gamepad-controls {
-    width: var(--width);
-    height: 228px;
     background-image: url("../images/gamepad.svg");
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
+    height: 228px;
+    width: var(--width);
 }
 
 .input-list-label {
-    margin-left: 15px;
     margin-bottom: 15px;
+    margin-left: 15px;
 }
 
 .input-list {
-    width: 93.5%;
     margin: 10px 15px 0;
+    width: 93.5%;
 }
 
 .configuration-menu {
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: repeat(20, var(--width));
-    width: var(--width);
-    overflow-x: scroll;
     margin-bottom: 10px;
+    overflow-x: scroll;
     overflow-y: hidden;
+    width: var(--width);
 }
 
 .configuration-menu::-webkit-scrollbar {
@@ -45,30 +45,30 @@
 }
 
 .menu-item {
-    padding: 0 15px;
-    height: 125px;
-    width: calc(var(--width) - 30px);
     display: grid;
     grid-auto-flow: column;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 1fr 1fr 3fr 2fr;
+    height: 125px;
+    padding: 0 15px;
+    width: calc(var(--width) - 30px);
 }
 
 .action-label {
-    grid-row: 2/3;
     grid-column: 1/2;
+    grid-row: 2/3;
 }
 
 label {
-    margin-top: 3px;
     font-size: 1.05rem;
+    margin-top: 3px;
 }
 
-select, input {
-    margin: 10px 20px 10px 0;
-    padding: 10px 5px;
+select,input {
     border: 2px solid;
     font-size: 1rem;
+    margin: 10px 20px 10px 0;
+    padding: 10px 5px;
 }
 
 input {
@@ -76,9 +76,9 @@ input {
 }
 
 select {
-    width: 100%;
     grid-column: 1/3;
     grid-row: 3/4;
+    width: 100%;
 }
 
 select:focus, input:focus {
@@ -86,8 +86,8 @@ select:focus, input:focus {
 }
 
 .speed-factor {
-    grid-row: 3/4;
     background-color: #ddd;
+    grid-row: 3/4;
 }
 
 .speed-factor, .speed-factor-label {
@@ -101,18 +101,18 @@ select:focus, input:focus {
 .checkbox-label {
     grid-column: 1/3;
     grid-row: 4/5;
-    margin-top: 4px;
     margin-left: 25px;
+    margin-top: 4px;
 }
 
 .checkbox {
-    transform: scale(1.3);
+    align-self: center;
     grid-column: 1/2;
     grid-row: 4/5;
-    align-self: center;
     justify-self: start;
-    width: auto;
     margin: 2px 37px 0 2px;
+    transform: scale(1.3);
+    width: auto;
 }
 
 select, .speed-factor, .checkbox {
@@ -120,23 +120,23 @@ select, .speed-factor, .checkbox {
 }
 
 .buttons-container {
-    width: var(--width);
-    padding: 5px 15px 15px;
-    display: grid;
-    grid-template-rows: 1fr 1fr;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
     box-sizing: border-box;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 5px 15px 15px;
+    width: var(--width);
 }
 
 .button {
     color: white;
-    font-weight: 550;
-    font-size: 1rem;
-    height: 50px;
-    width: auto;
-    padding: 0px 22px;
     cursor: pointer;
+    font-size: 1rem;
+    font-weight: 550;
+    height: 50px;
+    padding: 0 22px;
+    width: auto;
 }
 
 .button:focus, .button:hover {
@@ -152,11 +152,11 @@ select, .speed-factor, .checkbox {
 }
 
 .button:nth-child(2) {
-    background-color: #1169CB;
+    background-color: #1169cb;
 }
 
 .button:focus:nth-child(2), .button:hover:nth-child(2) {
-    background-color: #4169EF;
+    background-color: #4169ef;
 }
 
 .button:nth-child(3) {
@@ -183,8 +183,8 @@ select, .speed-factor, .checkbox {
 }
 
 .reduced {
-    width: 96.5%;
     grid-column: 1/2;
+    width: 96.5%;
 }
 
 .hidden {
@@ -194,8 +194,8 @@ select, .speed-factor, .checkbox {
 /* Dark Mode Stylesheet */
 @media (prefers-color-scheme: dark) {
     body {
-        color: #e96c4c;
         background-color: #141e24;
+        color: #e96c4c;
     }
 
     .gamepad-controls {
@@ -203,9 +203,9 @@ select, .speed-factor, .checkbox {
     }
 
     select, .speed-factor, .checkbox {
-        background-color: #1B697B;
+        background-color: #1b697b;
+        border-color: #1b697b;
         color: white;
-        border-color: #1B697B;
     }
 
     .button {
@@ -213,35 +213,35 @@ select, .speed-factor, .checkbox {
     }
 
     .button:nth-child(1) {
-        background-color: #EAAD3F;
+        background-color: #eaad3f;
     }
 
     .button:focus:nth-child(1), .button:hover:nth-child(1) {
-        background-color: #FFB235;
+        background-color: #ffb235;
     }
 
     .button:nth-child(2) {
-        background-color: #2D7BAE;
+        background-color: #2d7bae;
     }
 
     .button:focus:nth-child(2), .button:hover:nth-child(2) {
-        background-color: #2A7FCA;
+        background-color: #2a7fca;
     }
 
     .button:nth-child(3) {
-        background-color: #E96C65;
+        background-color: #e96c65;
     }
 
     .button:focus:nth-child(3), .button:hover:nth-child(3) {
-        background-color: #FF5D54;
+        background-color: #ff5d54;
     }
 
     .button:nth-child(4) {
-        background-color: #A0CC68;
+        background-color: #a0cc68;
     }
-    
+
     .button:focus:nth-child(4), .button:hover:nth-child(4) {
-        background-color: #97CF52;
+        background-color: #97cf52;
     }
 
     .button:disabled:nth-child(3),

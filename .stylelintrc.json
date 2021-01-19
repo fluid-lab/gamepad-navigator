@@ -1,0 +1,6 @@
+{
+    "extends": "stylelint-config-fluid",
+    "rules": {
+        "selector-list-comma-newline-after": "always-multi-line"
+    }
+}
