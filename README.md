@@ -31,7 +31,7 @@ reconfigured from the application to redefine what each d-pad, thumbstick, butto
 The Gamepad Navigator Chrome Extension is available for free on the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd).
 
-[![Chrome Web Store](https://developer.chrome.com/webstore/images/ChromeWebStore_BadgeWBorder_v2_206x58.png)](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd)
+[![Chrome Web Store](https://developer-chrome-com.imgix.net/image/BrQidfK9jaQyIHwdw91aVpkPiib2/LclHxMxqoswLNRcUW3m5.png)](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd)
 
 The extension can also be installed on other Chromium-based browsers using the source code (see below).
 
