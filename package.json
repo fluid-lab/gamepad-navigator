@@ -19,13 +19,13 @@
     },
     "dependencies": {
         "ally.js": "1.4.1",
-        "infusion": "3.0.0-dev.20201113T153152Z.32176dcbe.FLUID-6145"
+        "infusion": "4.0.0-dev.20211216T180403Z.d5f6173fc.FLUID-6703"
     },
     "devDependencies": {
         "dotenv": "16.0.0",
         "eslint": "8.9.0",
         "eslint-config-fluid": "2.0.0",
-        "fluid-lint-all": "1.1.5",
+        "fluid-lint-all": "1.1.6-dev.20220215T092307Z.a830a45.GH-46",
         "grunt": "1.4.1",
         "grunt-banner": "0.6.0",
         "grunt-contrib-clean": "2.0.0",
