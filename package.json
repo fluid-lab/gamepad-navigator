@@ -34,6 +34,7 @@
         "grunt-json-prettify": "0.0.2",
         "grunt-prompt": "1.3.3",
         "node-fetch": "2.6.7",
+        "npm-audit-resolver": "3.0.0-6",
         "testem": "3.6.0"
     }
 }

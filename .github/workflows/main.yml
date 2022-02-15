@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
@@ -37,3 +37,6 @@ jobs:
 
       - name: Cleanup after xvfb
         uses: bcomnes/cleanup-xvfb@v1
+
+      - name: Security Audit
+        run: $(npm bin)/check-audit
