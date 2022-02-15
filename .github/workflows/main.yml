@@ -37,3 +37,6 @@ jobs:
 
       - name: Cleanup after xvfb
         uses: bcomnes/cleanup-xvfb@v1
+
+      - name: Security Audit
+        run: $(npm bin)/check-audit
