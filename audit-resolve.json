@@ -30,15 +30,15 @@
     },
     "1006948|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss-sorting>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930082530
+      "madeAt": 1644947036892
     },
     "1006948|grunt-prompt>inquirer>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930082530
+      "madeAt": 1644947036892
     },
     "1006948|grunt-prompt>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930082531
+      "madeAt": 1644947036892
     },
     "1006949|eslint>lodash": {
       "decision": "ignore",
@@ -54,15 +54,15 @@
     },
     "1006949|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss-sorting>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930087012
+      "madeAt": 1644947046730
     },
     "1006949|grunt-prompt>inquirer>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930087012
+      "madeAt": 1644947046730
     },
     "1006949|grunt-prompt>lodash": {
       "decision": "ignore",
-      "madeAt": 1644930087012
+      "madeAt": 1644947046730
     },
     "1005367|fluid-lint-all>jsonlint>nomnom>underscore": {
       "decision": "ignore",
@@ -126,7 +126,7 @@
     },
     "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>autoprefixer>postcss": {
       "decision": "ignore",
-      "madeAt": 1644930123490
+      "madeAt": 1644947055988
     },
     "1006886|fluid-lint-all>markdownlint>markdown-it": {
       "decision": "ignore",
@@ -135,6 +135,66 @@
     "1006886|fluid-lint-all>markdownlint-config-fluid>markdownlint>markdown-it": {
       "decision": "ignore",
       "madeAt": 1644930125732
+    },
+    "1006948|grunt-contrib-compress>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947036892
+    },
+    "1006948|eslint-config-fluid>eslint-plugin-jsdoc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947036892
+    },
+    "1006948|fluid-lint-all>eslint-config-fluid>eslint-plugin-jsdoc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947036892
+    },
+    "1006949|grunt-contrib-compress>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947046730
+    },
+    "1006949|eslint-config-fluid>eslint-plugin-jsdoc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947046730
+    },
+    "1006949|fluid-lint-all>eslint-config-fluid>eslint-plugin-jsdoc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644947046730
+    },
+    "1005291|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim": {
+      "decision": "ignore",
+      "madeAt": 1644947050941
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>postcss-safe-parser>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>postcss-less>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>postcss-sass>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>postcss-scss>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>sugarss>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss-sorting>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644947055989
     }
   },
   "rules": {},

@@ -15,7 +15,7 @@
                 "<all_urls>"
             ],
             "js": [
-                "js/lib/infusion/infusion-all.min.js",
+                "js/lib/infusion/infusion-all.js",
                 "js/lib/ally/ally.min.js",
                 "js/content_scripts/gamepad-navigator.js",
                 "js/shared/configuration-maps.js",
@@ -28,7 +28,7 @@
     ],
     "background": {
         "scripts": [
-            "js/lib/infusion/infusion-all.min.js",
+            "js/lib/infusion/infusion-all.js",
             "js/background_scripts/message-listener-utils.js",
             "js/background_scripts/message-listener.js",
             "js/background_scripts/message-listener-instance.js"
