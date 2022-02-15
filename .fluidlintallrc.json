@@ -2,13 +2,13 @@
     "sources": {
         "js":    ["./src/js/**/*.js", "tests/js/**/*.js", "./*.js"],
         "md":    ["./*.md", "tests/**/*.md", "docs/**/*.md"],
-        "json":  ["./*.json", "./.*.json", "tests/**/*.json"],
+        "json":  ["./*.json", "./.*.json", "tests/**/*.json", "!audit-resolve.json"],
         "json5": ["./*.json5", "tests/**/*.json5"],
         "other": ["./.*"]
     },
     "lintspaces": {
         "newlines": {
-            "excludes": ["./node_modules/**/*", "./src/images/**/*", "./src/fonts/**/*"]
+            "excludes": ["./node_modules/**/*", "./src/images/**/*", "./src/fonts/**/*", "./audit-resolve.json"]
         }
     },
     "stylelint": {

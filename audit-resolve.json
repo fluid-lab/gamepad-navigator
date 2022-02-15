@@ -1,0 +1,142 @@
+{
+  "decisions": {
+    "1005291|fluid-lint-all>@textlint/markdown-to-ast>remark-parse>trim": {
+      "decision": "ignore",
+      "madeAt": 1644930042129
+    },
+    "1005426|testem>printf": {
+      "decision": "ignore",
+      "madeAt": 1644930048042
+    },
+    "1005512|testem>node-notifier": {
+      "decision": "ignore",
+      "madeAt": 1644930057362
+    },
+    "1006975|testem>socket.io>engine.io": {
+      "decision": "ignore",
+      "madeAt": 1644930060399
+    },
+    "1006948|eslint>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082530
+    },
+    "1006948|eslint>@eslint/eslintrc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082530
+    },
+    "1006948|fluid-lint-all>eslint>@eslint/eslintrc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082530
+    },
+    "1006948|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss-sorting>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082530
+    },
+    "1006948|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082530
+    },
+    "1006948|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930082531
+    },
+    "1006949|eslint>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1006949|eslint>@eslint/eslintrc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1006949|fluid-lint-all>eslint>@eslint/eslintrc>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1006949|fluid-lint-all>stylelint-config-fluid>stylelint-order>postcss-sorting>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1006949|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1006949|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930087012
+    },
+    "1005367|fluid-lint-all>jsonlint>nomnom>underscore": {
+      "decision": "ignore",
+      "madeAt": 1644930092567
+    },
+    "1005439|testem>xmldom": {
+      "decision": "ignore",
+      "madeAt": 1644930096173
+    },
+    "1006820|testem>xmldom": {
+      "decision": "ignore",
+      "madeAt": 1644930099104
+    },
+    "1006231|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930103984
+    },
+    "1006231|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930103984
+    },
+    "1006298|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930107808
+    },
+    "1006298|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930107808
+    },
+    "1006475|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930111722
+    },
+    "1006475|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930111722
+    },
+    "1006517|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930115064
+    },
+    "1006517|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930115064
+    },
+    "1006952|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930121140
+    },
+    "1006952|grunt-prompt>lodash": {
+      "decision": "ignore",
+      "madeAt": 1644930121140
+    },
+    "1006846|fluid-lint-all>stylelint>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644930123490
+    },
+    "1006846|fluid-lint-all>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644930123490
+    },
+    "1006846|fluid-lint-all>stylelint-config-fluid>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1644930123490
+    },
+    "1006886|fluid-lint-all>markdownlint>markdown-it": {
+      "decision": "ignore",
+      "madeAt": 1644930125732
+    },
+    "1006886|fluid-lint-all>markdownlint-config-fluid>markdownlint>markdown-it": {
+      "decision": "ignore",
+      "madeAt": 1644930125732
+    }
+  },
+  "rules": {},
+  "version": 1
+}
