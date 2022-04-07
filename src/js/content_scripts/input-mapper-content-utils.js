@@ -283,7 +283,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     /**
      *
-     * Click on the currently focused element.
+     * Simulate a mouse click on the currently focused element.
      *
      * @param {Integer} value - The value of the gamepad input.
      *
@@ -332,10 +332,24 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 }
             }
             else {
+                // Simulate a mousedown event.
+                document.activeElement.dispatchEvent(new MouseEvent("mousedown"));
+
                 // Click on the focused element.
-                document.activeElement.click();
+                document.activeElement.dispatchEvent(new MouseEvent("click"));
             }
         }
+        else if (document.activeElement.nodeName !== "SELECT") {
+            // Simulate a mouseup event.
+            document.activeElement.dispatchEvent(new MouseEvent("mouseup"));
+        }
+    };
+
+    /**
+     * Simulate a mouse up (for example, when a "click" button is released.
+     */
+    gamepad.inputMapperUtils.content.mouseup = function () {
+        document.activeElement.dispatchEvent(new MouseEvent("mouseup"));
     };
 
     /**
