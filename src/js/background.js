@@ -246,9 +246,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         actionExecutor: function (actionData) {
             gamepad.messageListener.actionExecutor(messageListener, actionData);
         },
-        openNewTab: gamepad.messageListenerUtils.openNewTab, // active, homepageURL
-        closeCurrentTab: function (tab) {
-            chrome.tabs.remove(tab);
+        // All actions are called with: tabId, invert, active, left, homepageURL
+        openNewTab: function (tabId, invert, active, left, homepageURL) {
+            // TODO: Currently opens a new tab and a new window.
+            gamepad.messageListenerUtils.openNewTab(active, homepageURL);
+        },
+        closeCurrentTab: function (tabId) {
+            chrome.tabs.remove(tabId);
         },
         goToPreviousTab: function () {
             gamepad.messageListenerUtils.switchTab("previousTab");
@@ -256,7 +260,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         goToNextTab: function () {
             gamepad.messageListenerUtils.switchTab("nextTab");
         },
-        openNewWindow: gamepad.messageListenerUtils.openNewWindow,
+        openNewWindow: function (tabId, invert, active, left, homepageURL) {
+            gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
+        },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
         goToPreviousWindow: function () {
             gamepad.messageListenerUtils.switchWindow("previousWindow");
@@ -276,7 +282,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         restoreWindowSize: function (tabId, invert, active, homepageURL, left) {
             gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", left);
         },
-        reopenTabOrWindow: chrome.sessions.restore
+        reopenTabOrWindow: function () {
+            chrome.sessions.restore();
+        }
     };
 
     /**

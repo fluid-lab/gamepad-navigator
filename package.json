@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "ally.js": "1.4.1",
-        "infusion": "4.0.0"
+        "infusion": "4.6.0"
     },
     "devDependencies": {
         "dotenv": "16.0.0",
