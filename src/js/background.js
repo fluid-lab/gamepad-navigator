@@ -105,40 +105,51 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.switchWindow = function (windowDirection) {
-        chrome.windows.getAll(function (windowsArray) {
-            // Switch only if more than one window is present.
-            if (windowsArray.length > 1) {
-                // Find the index of the currently active window.
-                var focusedWindowIndex = null;
-                for (var index = 0; index < windowsArray.length; index++) {
-                    if (focusedWindowIndex === null) {
-                        var window = windowsArray[index];
-                        if (window.focused) {
-                            focusedWindowIndex = index;
-                            return true;
+        chrome.windows.getLastFocused(function (focusedWindow) {
+            if (focusedWindow) {
+                chrome.windows.getAll(function (windowsArray) {
+                    // Switch only if more than one window is present.
+                    if (windowsArray.length > 1) {
+                        // Find the index of the currently active window.
+                        var focusedWindowIndex = null;
+                        for (var index = 0; index < windowsArray.length; index++) {
+                            if (focusedWindowIndex === null) {
+                                var window = windowsArray[index];
+                                if (window.id === focusedWindow.id) {
+                                    focusedWindowIndex = index;
+                                }
+                            }
+                        }
+
+                        if (focusedWindowIndex === null) {
+                            throw new Error("Can't detect focused browser window.");
+                        }
+                        else {
+                            var windowIndexToFocus = focusedWindowIndex;
+                            // Switch browser window.
+                            if (windowDirection === "previousWindow") {
+                                if (focusedWindowIndex === 0) {
+                                    windowIndexToFocus = windowsArray.length - 1;
+                                }
+                                else {
+                                    windowIndexToFocus = focusedWindowIndex - 1;
+                                }
+                            }
+                            else if (windowDirection === "nextWindow") {
+                                if (focusedWindowIndex >= windowsArray.length - 1) {
+                                    windowIndexToFocus = 0;
+                                }
+                                else {
+                                    windowIndexToFocus = focusedWindowIndex + 1;
+                                }
+                            }
+
+                            chrome.windows.update(windowsArray[windowIndexToFocus].id, {
+                                focused: true
+                            });
                         }
                     }
-                }
-
-                // Switch browser window.
-                if (windowDirection === "previousWindow") {
-                    /**
-                     * If the first window is focused then switch to the last window.
-                     * Otherwise, switch to the previous window.
-                     */
-                    if (focusedWindowIndex === 0) {
-                        focusedWindowIndex = windowsArray.length;
-                    }
-                    chrome.windows.update(windowsArray[focusedWindowIndex - 1].id, {
-                        focused: true
-                    });
-                }
-                else if (windowDirection === "nextWindow") {
-                    // Switch to the next window.
-                    chrome.windows.update(windowsArray[(focusedWindowIndex + 1) % windowsArray.length].id, {
-                        focused: true
-                    });
-                }
+                });
             }
         });
     };
@@ -308,7 +319,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     left = actionData.left,
                     homepageURL = actionData.homepageURL;
                 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                    action(tabs[0].id, invert, active, homepageURL, left);
+                    var tabId = tabs[0] ? tabs[0].id : undefined;
+                    action(tabId, invert, active, homepageURL, left);
                 });
             }
         }
