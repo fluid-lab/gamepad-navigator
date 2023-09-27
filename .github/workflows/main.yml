@@ -39,7 +39,7 @@ jobs:
         uses: bcomnes/cleanup-xvfb@v1
 
       - name: Install Security Audit Globally
-        run: npm install -g resolve-audit
+        run: npm install -g npm-audit-resolver
 
       - name: Security Audit
         run: check-audit
