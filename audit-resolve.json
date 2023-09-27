@@ -350,11 +350,19 @@
     },
     "1089867|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim": {
       "decision": "ignore",
-      "madeAt": 1695799373819
+      "madeAt": 1695804179719
     },
     "1092663|fluid-lint-all>markdownlint-config-fluid>markdownlint>markdown-it": {
       "decision": "ignore",
       "madeAt": 1695799384909
+    },
+    "1089867|eslint-plugin-markdown>remark-parse>trim": {
+      "decision": "ignore",
+      "madeAt": 1695804179719
+    },
+    "1092663|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim>markdownlint-config-fluid>markdownlint>markdown-it": {
+      "decision": "ignore",
+      "madeAt": 1695804181532
     }
   },
   "rules": {},
