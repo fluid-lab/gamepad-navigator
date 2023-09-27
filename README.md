@@ -79,21 +79,21 @@ The Gamepad Navigator currently supports the following actions for buttons and t
 | **Scroll right** | Scroll the web page right. | [scrollRight](docs/components/inputMapper.base.md#inputmapperbasescrollrightvalue-speedfactor) |
 | **Scroll up** | Scroll the web page up. | [scrollUp](docs/components/inputMapper.base.md#inputmapperbasescrollupvalue-speedfactor) |
 | **Scroll down** | Scroll the web page down. | [scrollDown](docs/components/inputMapper.base.md#inputmapperbasescrolldownvalue-speedfactor) |
-| **Zoom-in on the active web page** | Zoom in on the current tab in the active browser window. | [zoomIn](docs/components/messageListener.md#messagelistenerzoomin) |
-| **Zoom-out on the active web page** | Zoom out on the current tab in the active browser window. | [zoomOut](docs/components/messageListener.md#messagelistenerzoomout) |
-| **Open a new tab** | Open a new tab in the current browser window. | [openNewTab](docs/components/messageListener.md#messagelisteneropennewtabactive-homepageurl) |
-| **Close current browser tab** | Close the current tab in the active browser window. | [closeCurrentTab](docs/components/messageListener.md#messagelistenerclosecurrenttabtabid) |
-| **Switch to the previous browser tab** | Switch from the current tab to the previous tab in the active browser window. | [goToPreviousTab](docs/components/messageListener.md#messagelistenergotoprevioustab) |
-| **Switch to the next browser tab** | Switch from the current tab to the next tab in the active browser window. | [goToNextTab](docs/components/messageListener.md#messagelistenergotonexttab) |
-| **Open a new browser window** | Opens a new window. | [openNewWindow](docs/components/messageListener.md#messagelisteneropennewwindowactive-homepageurl) |
-| **Close current browser window** | Close the currently active browser window. | [closeCurrentWindow](docs/components/messageListener.md#messagelistenerclosecurrentwindow) |
-| **Switch to the previous browser window** | Switch from the currently active browser window to the previous browser window. | [goToPreviousWindow](docs/components/messageListener.md#messagelistenergotopreviouswindow) |
-| **Switch to the next browser window** | Switch from the currently active browser window to the next browser window. | [goToNextWindow](docs/components/messageListener.md#messagelistenergotonextwindow) |
+| **Zoom-in on the active web page** | Zoom in on the current tab in the active browser window. | [zoomIn](docs/messageListener.md#messagelistenerzoomin) |
+| **Zoom-out on the active web page** | Zoom out on the current tab in the active browser window. | [zoomOut](docs/messageListener.md#messagelistenerzoomout) |
+| **Open a new tab** | Open a new tab in the current browser window. | [openNewTab](docs/messageListener.md#messagelisteneropennewtabactive-homepageurl) |
+| **Close current browser tab** | Close the current tab in the active browser window. | [closeCurrentTab](docs/messageListener.md#messagelistenerclosecurrenttabtabid) |
+| **Switch to the previous browser tab** | Switch from the current tab to the previous tab in the active browser window. | [goToPreviousTab](docs/messageListener.md#messagelistenergotoprevioustab) |
+| **Switch to the next browser tab** | Switch from the current tab to the next tab in the active browser window. | [goToNextTab](docs/messageListener.md#messagelistenergotonexttab) |
+| **Open a new browser window** | Opens a new window. | [openNewWindow](docs/messageListener.md#messagelisteneropennewwindowactive-homepageurl) |
+| **Close current browser window** | Close the currently active browser window. | [closeCurrentWindow](docs/messageListener.md#messagelistenerclosecurrentwindow) |
+| **Switch to the previous browser window** | Switch from the currently active browser window to the previous browser window. | [goToPreviousWindow](docs/messageListener.md#messagelistenergotopreviouswindow) |
+| **Switch to the next browser window** | Switch from the currently active browser window to the next browser window. | [goToNextWindow](docs/messageListener.md#messagelistenergotonextwindow) |
 | **Back (history)** | Navigate to the previous page in history. | [previousPageInHistory](docs/components/inputMapper.base.md#inputmapperbasepreviouspageinhistoryvalue) |
 | **Next (history)** | Navigate to the next page in history. | [nextPageInHistory](docs/components/inputMapper.base.md#inputmapperbasenextpageinhistoryvalue) |
-| **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/components/messageListener.md#messagelistenermaximizewindowleft) |
-| **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/components/messageListener.md#messagelistenerrestorewindowsizeleft) |
-| **Reopen the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/components/messageListener.md#messagelistenerreopentaborwindow) |
+| **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/messageListener.md#messagelistenermaximizewindowleft) |
+| **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/messageListener.md#messagelistenerrestorewindowsizeleft) |
+| **Reopen the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/messageListener.md#messagelistenerreopentaborwindow) |
 
 In case of thumbsticks, the following actions are supported:
 

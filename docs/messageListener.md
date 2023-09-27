@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -12,41 +12,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 # `gamepad.messageListener`
 
-This component listens to the messages and signals sent by the [`inputMapper`](inputMapper.md) component in the content
-scripts and then calls the action invokers according to the received message.
+This object is passed to the Chrome extension runtime and executes actions based on messages sent by the
+[`inputMapper`](components/inputMapper.md) component.
 
-## Using this grade
-
-The component can be used by creating its instance or by making a custom component using the grade.
-
-``` javascript
-// Either create an instance of the messageListener.
-var messageListenerInstanceOne = gamepad.messageListener();
-
-// Otherwise create a custom component using the messageListener grade.
-fluid.defaults("my.messageListener.grade", {
-    gradeNames: ["gamepad.messageListener", "my.CustomGrade"]
-});
-var messageListenerInstanceTwo = my.messageListener.grade();
-```
-
-## Component Options
-
-This component does not provide any configuration options.
-
-## Non-navigation Invokers
-
-### `{messageListener}.addListener()`
-
-- Returns: Nothing.
-
-Listens to the messages received from the [`inputMapper`](inputMapper.md) component in the content scripts by using
-[`chrome.runtime.onMessage.addListener`](https://developer.chrome.com/extensions/runtime#event-onMessage) and triggers
-the [actionExecutor](#messagelisteneractionexecutoractiondata) invoker as a callback function.
+## Non-navigation Methods
 
 ### `{messageListener}.actionExecutor(actionData)`
 
-- `actionData {Object}` The message object received from the [`inputMapper`](inputMapper.md) component in the content
+- `actionData {Object}` The message object received from the [`inputMapper`](components/inputMapper.md) component in the content
   scripts. (see below)
 - Returns: Nothing.
 
@@ -70,9 +43,9 @@ from the `actionData` object recieved from the content scripts. Below is an exam
 }
 ```
 
-## Navigation Invokers
+## Navigation Methods
 
-### `{messageListener}.openNewTab(active, homepageURL)`
+### `{messageListener}.openNewTab([tabId], [invert], active, homepageURL, [left])`
 
 - `active {Boolean}` Whether a new browser tab should be focused when opened.
 - `homepageURL {String}` The URL that a new browser tab should load when opened.
@@ -81,7 +54,7 @@ from the `actionData` object recieved from the content scripts. Below is an exam
 Opens a new tab in the current browser window using the
 [`chrome.tabs.create`](https://developer.chrome.com/extensions/tabs#method-create) method.
 
-### `{messageListener}.closeCurrentTab(tabId)`
+### `{messageListener}.closeCurrentTab(tabId, [invert], [active], [homepageURL], [left])`
 
 - `tabId {Number}` ID of the currently active tab.
 - Returns: Nothing.
@@ -89,21 +62,21 @@ Opens a new tab in the current browser window using the
 Closes the current tab in the active browser window using the
 [`chrome.tabs.remove`](https://developer.chrome.com/extensions/tabs#method-remove) method.
 
-### `{messageListener}.goToPreviousTab()`
+### `{messageListener}.goToPreviousTab([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
 Switches from the current tab to the previous tab in the active browser window. If the active tab is the first tab in
 the list, then the focus will move to the last tab.
 
-### `{messageListener}.goToNextTab()`
+### `{messageListener}.goToNextTab([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
 Switches from the current tab to the next tab in the active browser window. If the active tab is the last tab in the
 list, then the focus will move to the first tab.
 
-### `{messageListener}.openNewWindow(active, homepageURL)`
+### `{messageListener}.openNewWindow([tabId], [invert], active, homepageURL, [left])`
 
 - `active {Boolean}` Whether a new browser window should be focused when opened.
 - `homepageURL {String}` The URL that a new browser window should load when opened.
@@ -112,7 +85,7 @@ list, then the focus will move to the first tab.
 Opens a new browser window using the
 [`chrome.windows.create`](https://developer.chrome.com/extensions/windows#method-create) method.
 
-### `{messageListener}.closeCurrentWindow()`
+### `{messageListener}.closeCurrentWindow([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
@@ -120,21 +93,21 @@ Closes the currently active browser window using the
 [`chrome.windows.getCurrent`](https://developer.chrome.com/extensions/windows#method-getCurrent) and
 [`chrome.windows.remove`](https://developer.chrome.com/extensions/windows#method-remove) methods.
 
-### `{messageListener}.goToPreviousWindow()`
+### `{messageListener}.goToPreviousWindow([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
 Switches from the currently active browser window to the previous browser window. If the active window is the first
 window in the list, then the focus will move to the last window.
 
-### `{messageListener}.goToNextWindow()`
+### `{messageListener}.goToNextWindow([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
 Switches from the currently active browser window to the next browser window. If the active window is the last window in
 the list, then the focus will move to the first window.
 
-### `{messageListener}.zoomIn()`
+### `{messageListener}.zoomIn([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
@@ -143,7 +116,7 @@ Zoom in on the current tab in the active browser window using the
 [`chrome.tabs.getZoom`](https://developer.chrome.com/extensions/tabs#method-getZoom), and
 [`chrome.tabs.setZoom`](https://developer.chrome.com/extensions/tabs#method-setZoom) methods.
 
-### `{messageListener}.zoomOut()`
+### `{messageListener}.zoomOut([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
@@ -152,7 +125,7 @@ Zoom out on the current tab in the active browser window using the
 [`chrome.tabs.getZoom`](https://developer.chrome.com/extensions/tabs#method-getZoom), and
 [`chrome.tabs.setZoom`](https://developer.chrome.com/extensions/tabs#method-setZoom) methods.
 
-### `{messageListener}.maximizeWindow(left)`
+### `{messageListener}.maximizeWindow([tabId], [invert], [active], [homepageURL], left)`
 
 - `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
 - Returns: Nothing.
@@ -160,7 +133,7 @@ Zoom out on the current tab in the active browser window using the
 Maximize the current browser window. Saves the browser window's position and dimensions inside the `windowProperties`
 member variable before the window is maximized.
 
-### `{messageListener}.restoreWindowSize(left)`
+### `{messageListener}.restoreWindowSize([tabId], [invert], [active], [homepageURL], left)`
 
 - `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
 - Returns: Nothing.
@@ -169,7 +142,7 @@ Restores the size of the currently active browser window. The previous dimension
 `windowProperties` member variable if stored previously. Otherwise, a set of default values are used for the window's
 position and dimensions.
 
-### `{messageListener}.reopenTabOrWindow()`
+### `{messageListener}.reopenTabOrWindow([tabId], [invert], [active], [homepageURL], [left])`
 
 - Returns: Nothing.
 
