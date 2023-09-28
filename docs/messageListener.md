@@ -19,8 +19,8 @@ This object is passed to the Chrome extension runtime and executes actions based
 
 ### `{messageListener}.actionExecutor(actionData)`
 
-- `actionData {Object}` The message object received from the [`inputMapper`](components/inputMapper.md) component in the content
-  scripts. (see below)
+- `actionData {Object}` The message object received from the [`inputMapper`](components/inputMapper.md) component in the
+  content scripts. (see below)
 - Returns: Nothing.
 
 Identifies and triggers the **navigation-producing invokers** according to the `actionData`. The navigation-producing
