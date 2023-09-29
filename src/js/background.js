@@ -83,6 +83,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (active) {
             windowConfig.state = "maximized";
         }
+
         chrome.windows.create(windowConfig);
     };
 
@@ -257,8 +258,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         actionExecutor: function (actionData) {
             gamepad.messageListener.actionExecutor(messageListener, actionData);
         },
-        // All actions are called with: tabId, invert, active, left, homepageURL
-        openNewTab: function (tabId, invert, active, left, homepageURL) {
+        // All actions are called with: tabId, invert, active, homepageURL, left
+        openNewTab: function (tabId, invert, active, homepageURL) {
             // TODO: Currently opens a new tab and a new window.
             gamepad.messageListenerUtils.openNewTab(active, homepageURL);
         },
@@ -271,7 +272,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         goToNextTab: function () {
             gamepad.messageListenerUtils.switchTab("nextTab");
         },
-        openNewWindow: function (tabId, invert, active, left, homepageURL) {
+        openNewWindow: function (tabId, invert, active, homepageURL) {
             gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
         },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
