@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [18.x]
 
     env:
       HEADLESS: true
@@ -38,5 +38,8 @@ jobs:
       - name: Cleanup after xvfb
         uses: bcomnes/cleanup-xvfb@v1
 
+      - name: Install Security Audit Globally
+        run: npm install -g npm-audit-resolver
+
       - name: Security Audit
-        run: $(npm bin)/check-audit
+        run: check-audit

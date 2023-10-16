@@ -19,16 +19,16 @@
     },
     "dependencies": {
         "ally.js": "1.4.1",
-        "infusion": "4.0.0"
+        "infusion": "4.6.0"
     },
     "devDependencies": {
-        "dotenv": "16.0.0",
-        "eslint": "8.12.0",
-        "eslint-config-fluid": "2.0.1",
-        "fluid-lint-all": "1.1.6-dev.20220215T092307Z.a830a45.GH-46",
-        "grunt": "1.4.1",
+        "dotenv": "16.3.1",
+        "eslint": "8.50.0",
+        "eslint-config-fluid": "2.1.1",
+        "fluid-lint-all": "1.2.9",
+        "grunt": "1.6.1",
         "grunt-banner": "0.6.0",
-        "grunt-contrib-clean": "2.0.0",
+        "grunt-contrib-clean": "2.0.1",
         "grunt-contrib-compress": "2.0.0",
         "grunt-contrib-copy": "1.0.0",
         "grunt-json-prettify": "0.0.2",

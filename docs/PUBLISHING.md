@@ -37,7 +37,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
       2. Run tests: `npm test`
       3. Manual test build.
          1. Create a build and load the generated unpacked extension into Chrome.  
-            (Refer to the [Installation](#installation) section for more details)
+            (Refer to the [Installation](../README.md#installation) section for more details)
          2. Test all of the available configuration options (Action, Speed Factor, et cetera) and ensure that they work
             on the browser correctly.
             1. Refresh any browser tabs/windows that were open before installing the extension.

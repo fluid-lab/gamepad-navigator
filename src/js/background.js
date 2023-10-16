@@ -10,12 +10,12 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
 
-/* global gamepad, chrome */
+/* global chrome */
 
-(function (fluid) {
+(function () {
     "use strict";
 
-    fluid.registerNamespace("gamepad.messageListenerUtils");
+    var gamepad = { messageListener: {}, messageListenerUtils: {} };
 
     /**
      *
@@ -83,6 +83,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (active) {
             windowConfig.state = "maximized";
         }
+
         chrome.windows.create(windowConfig);
     };
 
@@ -105,37 +106,51 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.switchWindow = function (windowDirection) {
-        chrome.windows.getAll(function (windowsArray) {
-            // Switch only if more than one window is present.
-            if (windowsArray.length > 1) {
-                // Find index of the currently active window.
-                var focusedWindowIndex = null;
-                fluid.find(windowsArray, function (window, index) {
-                    if (window.focused) {
-                        focusedWindowIndex = index;
-                        return true;
+        chrome.windows.getLastFocused(function (focusedWindow) {
+            if (focusedWindow) {
+                chrome.windows.getAll(function (windowsArray) {
+                    // Switch only if more than one window is present.
+                    if (windowsArray.length > 1) {
+                        // Find the index of the currently active window.
+                        var focusedWindowIndex = null;
+                        for (var index = 0; index < windowsArray.length; index++) {
+                            if (focusedWindowIndex === null) {
+                                var window = windowsArray[index];
+                                if (window.id === focusedWindow.id) {
+                                    focusedWindowIndex = index;
+                                }
+                            }
+                        }
+
+                        if (focusedWindowIndex === null) {
+                            throw new Error("Can't detect focused browser window.");
+                        }
+                        else {
+                            var windowIndexToFocus = focusedWindowIndex;
+                            // Switch browser window.
+                            if (windowDirection === "previousWindow") {
+                                if (focusedWindowIndex === 0) {
+                                    windowIndexToFocus = windowsArray.length - 1;
+                                }
+                                else {
+                                    windowIndexToFocus = focusedWindowIndex - 1;
+                                }
+                            }
+                            else if (windowDirection === "nextWindow") {
+                                if (focusedWindowIndex >= windowsArray.length - 1) {
+                                    windowIndexToFocus = 0;
+                                }
+                                else {
+                                    windowIndexToFocus = focusedWindowIndex + 1;
+                                }
+                            }
+
+                            chrome.windows.update(windowsArray[windowIndexToFocus].id, {
+                                focused: true
+                            });
+                        }
                     }
                 });
-
-                // Switch browser window.
-                if (windowDirection === "previousWindow") {
-                    /**
-                     * If the first window is focused then switch to the last window.
-                     * Otherwise, switch to the previous window.
-                     */
-                    if (focusedWindowIndex === 0) {
-                        focusedWindowIndex = windowsArray.length;
-                    }
-                    chrome.windows.update(windowsArray[focusedWindowIndex - 1].id, {
-                        focused: true
-                    });
-                }
-                else if (windowDirection === "nextWindow") {
-                    // Switch to the next window.
-                    chrome.windows.update(windowsArray[(focusedWindowIndex + 1) % windowsArray.length].id, {
-                        focused: true
-                    });
-                }
             }
         });
     };
@@ -221,10 +236,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
                         // Update window with the new properties.
                         chrome.windows.update(windowPostUpdate.id, {
-                            width: fluid.get(previousProperties, "width") || Math.round(3 * screen.width / 5),
-                            height: fluid.get(previousProperties, "height") || Math.round(4 * screen.height / 5),
-                            left: fluid.get(previousProperties, "left") || (left + Math.round(screen.width / 15)),
-                            top: fluid.get(previousProperties, "top") || Math.round(screen.height / 15)
+                            width: previousProperties.width || Math.round(3 * screen.width / 5),
+                            height: previousProperties.height || Math.round(4 * screen.height / 5),
+                            left: previousProperties.left || (left + Math.round(screen.width / 15)),
+                            top: previousProperties.top || Math.round(screen.height / 15)
                         });
 
                         // Update the isMaximized member variable.
@@ -234,4 +249,84 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             });
         });
     };
-})(fluid);
+
+    var messageListener = {
+        // previous "members"
+        windowProperties: {},
+
+        // previous "invokers"
+        actionExecutor: function (actionData) {
+            gamepad.messageListener.actionExecutor(messageListener, actionData);
+        },
+        // All actions are called with: tabId, invert, active, homepageURL, left
+        openNewTab: function (tabId, invert, active, homepageURL) {
+            // TODO: Currently opens a new tab and a new window.
+            gamepad.messageListenerUtils.openNewTab(active, homepageURL);
+        },
+        closeCurrentTab: function (tabId) {
+            chrome.tabs.remove(tabId);
+        },
+        goToPreviousTab: function () {
+            gamepad.messageListenerUtils.switchTab("previousTab");
+        },
+        goToNextTab: function () {
+            gamepad.messageListenerUtils.switchTab("nextTab");
+        },
+        openNewWindow: function (tabId, invert, active, homepageURL) {
+            gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
+        },
+        closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
+        goToPreviousWindow: function () {
+            gamepad.messageListenerUtils.switchWindow("previousWindow");
+        },
+        goToNextWindow: function () {
+            gamepad.messageListenerUtils.switchWindow("nextWindow");
+        },
+        zoomIn: function () {
+            gamepad.messageListenerUtils.setZoom("zoomIn");
+        },
+        zoomOut: function () {
+            gamepad.messageListenerUtils.setZoom("zoomOut");
+        },
+        maximizeWindow: function (tabId, invert, active, homepageURL, left) {
+            gamepad.messageListenerUtils.changeWindowSize(messageListener, "maximized", left);
+        },
+        restoreWindowSize: function (tabId, invert, active, homepageURL, left) {
+            gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", left);
+        },
+        reopenTabOrWindow: function () {
+            chrome.sessions.restore();
+        }
+    };
+
+    /**
+     *
+     * Calls the invoker methods according to the message is recieved from the content
+     * script.
+     *
+     * @param {Object} messageListener - The messageListener.
+     * @param {Object} actionData - The message object recieved from the content scripts.
+     *
+     */
+    gamepad.messageListener.actionExecutor = function (messageListener, actionData) {
+        // Execute the actions only if the action data is available.
+        if (actionData.actionName) {
+            var action = messageListener[actionData.actionName];
+
+            // Trigger the action only if a valid action is found.
+            if (action) {
+                var invert = actionData.invert,
+                    active = actionData.active,
+                    left = actionData.left,
+                    homepageURL = actionData.homepageURL;
+                chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                    var tabId = tabs[0] ? tabs[0].id : undefined;
+                    action(tabId, invert, active, homepageURL, left);
+                });
+            }
+        }
+    };
+
+    // Instantiate and add action handler as a listener.
+    chrome.runtime.onMessage.addListener(messageListener.actionExecutor);
+})();
