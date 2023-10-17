@@ -94,6 +94,10 @@ The Gamepad Navigator currently supports the following actions for buttons and t
 | **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/messageListener.md#messagelistenermaximizewindowleft) |
 | **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/messageListener.md#messagelistenerrestorewindowsizeleft) |
 | **Reopen the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/messageListener.md#messagelistenerreopentaborwindow) |
+| **Send left arrow to the focused element.** | Send left arrow to the focused element. | [sendArrowLeft](docs/components/inputMapper.md#inputmappersendarrowleftvalue) |
+| **Send right arrow to the focused element.** | Send right arrow to the focused element. | [sendArrowRight](docs/components/inputMapper.md#inputmappersendarrowrightvalue) |
+| **Send up arrow to the focused element.** | Send up arrow to the focused element. | [sendArrowUp](docs/components/inputMapper.md#inputmappersendarrowupvalue) |
+| **Send down arrow to the focused element.** | Send down arrow to the focused element. | [sendArrowDown](docs/components/inputMapper.md#inputmappersendarrowdownvalue) |
 
 In case of thumbsticks, the following actions are supported:
 
@@ -105,6 +109,8 @@ In case of thumbsticks, the following actions are supported:
 | **Focus on the previous/next element** | Change the focus from the currently focused element to the previous or next tabbable element. | [thumbstickTabbing](docs/components/inputMapper.base.md#inputmapperbasethumbsticktabbingvalue-speedfactor-invert) |
 | **Zoom in or out on the active web page** | Zoom in or out on the current tab in the active browser window. | [thumbstickZoom](docs/components/inputMapper.md#inputmapperthumbstickzoomvalue-invert) |
 | **Maximize/restore the size of current browser window** | Change the size of the current browser window, i.e. maximize or restore. | [thumbstickWindowSize](docs/components/inputMapper.md#inputmapperthumbstickwindowsizevalue-invert) |
+| **Send left/right arrows to the current focused element.** | Send left/right arrows to the current focused element. | [thumbstickHorizontalArrows](docs/components/inputMapper.md#inputmapperthumbstickhorizontalarrowsvalue-speedfactor-invert) |
+| **Send up/down arrows to the current focused element.** | Send up/down arrows to the current focused element. | [thumbstickVerticalArrows](docs/components/inputMapper.md#inputmapperthumbstickverticalarrowsvalue-speedfactor-invert) |
 
 ## Default Controls
 

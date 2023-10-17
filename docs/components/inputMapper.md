@@ -216,18 +216,16 @@ direction should maximize the current browser window.
 Sends a message to the `messageListener` component present in the background script to reopen the last closed browser
 session using buttons and triggers. The closed session could be a tab or a window.
 
-### `{inputMapper}.sendArrowLeft(value, oldValue)`
+### `{inputMapper}.sendArrowLeft(value)`
 
 - `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
 - Returns: Nothing.
 
 Send a left arrow to the current focused element when a button is pressed.
 
-### `{inputMapper}.sendArrowRight(value, oldValue)`
+### `{inputMapper}.sendArrowRight(value)`
 
 - `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
 - Returns: Nothing.
 
 Send a right arrow to the current focused element when a button is pressed.
