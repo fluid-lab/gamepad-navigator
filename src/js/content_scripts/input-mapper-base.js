@@ -65,7 +65,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             tabbableElements: null,
             mutationObserverInstance: null
         },
-        cutoffValue: 0.20,
+        // TODO: Make this configurable.
+        // "Jitter" cutoff Value for analog thumb sticks.
+        cutoffValue: 0.40,
         scrollInputMultiplier: 50,
         invokers: {
             produceNavigation: {
