@@ -94,7 +94,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 zoomOut: "Zoom-out on the active web page",
                 maximizeWindow: "Maximize the current browser window",
                 restoreWindowSize: "Restore the size of current browser window",
-                reopenTabOrWindow: "Re-open the last closed tab or window"
+                reopenTabOrWindow: "Re-open the last closed tab or window",
+                sendArrowLeft: "Send left arrow to the focused element.",
+                sendArrowRight: "Send right arrow to the focused element.",
+                sendArrowUp: "Send up arrow to the focused element.",
+                sendArrowDown: "Send down arrow to the focused element."
             },
             axes: {
                 null: "None",
@@ -103,7 +107,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 thumbstickHistoryNavigation: "History navigation",
                 thumbstickTabbing: "Focus on the previous/next element",
                 thumbstickZoom: "Zoom in or out on the active web page",
-                thumbstickWindowSize: "Maximize/restore the size of current browser window"
+                thumbstickWindowSize: "Maximize/restore the size of current browser window",
+                thumbstickHorizontalArrows: "Send left/right arrows to the current focused element.",
+                thumbstickVerticalArrows: "Send up/down arrows to the current focused element."
             }
         },
         // Describes the actions that use a particular configuration option.
@@ -117,7 +123,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 "scrollDown",
                 "scrollHorizontally",
                 "scrollVertically",
-                "thumbstickTabbing"
+                "thumbstickTabbing",
+                "thumbstickHorizontalArrows",
+                "thumbstickVerticalArrows"
             ],
             backgroundOption: ["openNewTab", "openNewWindow"],
             invertOption: [
@@ -126,7 +134,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 "thumbstickHistoryNavigation",
                 "thumbstickTabbing",
                 "thumbstickZoom",
-                "thumbstickWindowSize"
+                "thumbstickWindowSize",
+                "thumbstickHorizontalArrows",
+                "thumbstickVerticalArrows"
             ]
         },
         invokers: {
