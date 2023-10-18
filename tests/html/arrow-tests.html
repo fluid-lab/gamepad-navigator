@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Gamepad Navigator Arrow Tests</title>
+
+        <link rel="stylesheet" media="screen" href="../../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
+        <link rel="stylesheet" href="../../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
+
+        <script type="text/javascript" src="../../node_modules/infusion/dist/infusion-all.js"></script>
+        <script type="text/javascript" src="../../node_modules/ally.js/ally.min.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/lib/qunit/js/qunit.js"></script>
+        <script type="text/javascript" src="../../node_modules/infusion/tests/test-core/jqUnit/js/jqUnit.js"></script>
+
+        <script type="text/javascript" src="../../src/js/content_scripts/gamepad-navigator.js"></script>
+        <script type="text/javascript" src="../../src/js/shared/configuration-maps.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-content-utils.js"></script>
+        <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-base.js"></script>
+
+        <script type="text/javascript" src="../js/gamepad-mock.js"></script>
+        <script type="text/javascript" src="../js/test-utils.js"></script>
+        <script type="text/javascript" src="../js/lib/mocked-window.js"></script>
+
+        <script type="text/javascript" src="../js/arrows/arrows-mock-utils.js"></script>
+        <script type="text/javascript" src="../js/arrows/arrows-tests.js"></script>
+    </head>
+    <body id="body">
+        <h1 id="qunit-header">Gamepad Navigator Arrow Tests</h1>
+        <h2 id="qunit-banner"></h2>
+        <div id="qunit-testrunner-toolbar"></div>
+        <h2 id="qunit-userAgent"></h2>
+        <ol id="qunit-tests"></ol>
+
+        <!-- Test HTML -->
+        <div class="test-elements">
+            <div id="arrow-target" tabindex="0"></div>
+        </div>
+    </body>
+</html>
