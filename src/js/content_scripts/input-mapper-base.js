@@ -55,13 +55,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 forwardTab: null,
                 reverseTab: null,
                 zoomIn: null,
-                zoomOut: null
+                zoomOut: null,
+                ArrowLeft: null,
+                ArrowRight: null,
+                ArrowUp: null,
+                ArrowDown: null
             },
             currentTabIndex: 0,
             tabbableElements: null,
             mutationObserverInstance: null
         },
-        cutoffValue: 0.20,
+        // TODO: Make this configurable.
+        // "Jitter" cutoff Value for analog thumb sticks.
+        cutoffValue: 0.40,
         scrollInputMultiplier: 50,
         invokers: {
             produceNavigation: {
@@ -89,6 +95,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * TODO: Add tests for links and other elements that involve navigation
              * between pages.
              */
+            // Actions, these are called with: value, speedFactor, invert, background, oldValue, homepageURL
             click: {
                 funcName: "gamepad.inputMapperUtils.content.click",
                 args: ["{arguments}.0"]
@@ -141,6 +148,32 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            },
+            // Arrow actions for buttons
+            sendArrowLeft: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{arguments}.0", "ArrowLeft"] // value, key
+            },
+            sendArrowRight: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{arguments}.0", "ArrowRight"] // value, key
+            },
+            sendArrowUp: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{arguments}.0", "ArrowUp"] // value, key
+            },
+            sendArrowDown: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{arguments}.0", "ArrowDown"] // value, key
+            },
+            // Arrow actions for axes
+            thumbstickHorizontalArrows: {
+                funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowRight", "ArrowLeft"] // value, speedFactor, invert, forwardKey, backwardKey
+            },
+            thumbstickVerticalArrows: {
+                funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowDown", "ArrowUp"] // value, speedFactor, invert, forwardKey, backwardKey
             }
         }
     });

@@ -430,4 +430,59 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             });
         }
     };
+
+    /**
+     *
+     * Simulate a key press (down and up) on the current focused element.
+     * @param {Number} value - The current value of the input (from 0 to 1).
+     * @param {String} key - The key (ex: `ArrowLeft`) to simulate.
+     *
+     */
+    gamepad.inputMapperUtils.content.sendKey = function (value, key) {
+        if (value > 0) {
+            var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
+            document.activeElement.dispatchEvent(keyDownEvent);
+
+            // TODO: Test with text inputs and textarea fields to see if
+            // beforeinput and input are needed.
+
+            var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
+            document.activeElement.dispatchEvent(keyUpEvent);
+        }
+    };
+
+    /**
+     *
+     * Move through the webpage by sending arrow keys to the focused element.
+     *
+     * @param {Object} that - The inputMapper component.
+     * @param {Integer} value - The value of the gamepad input.
+     * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
+     * @param {Boolean} invert - Whether the tabbing should be in opposite order.
+     * @param {String} forwardKey - The key/code for the forward arrow (right or down).
+     * @param {String} backwardKey - The key/code for the backward arrow (left or up).
+     *
+     */
+    gamepad.inputMapperUtils.content.thumbstickArrows = function (that, value, speedFactor, invert, forwardKey, backwardKey) {
+        var inversionFactor = invert ? -1 : 1;
+        value = value * inversionFactor;
+        clearInterval(that.intervalRecords[forwardKey]);
+        clearInterval(that.intervalRecords[backwardKey]);
+        if (value > that.options.cutoffValue) {
+            that.intervalRecords[forwardKey] = setInterval(
+                gamepad.inputMapperUtils.content.sendKey,
+                that.options.frequency * speedFactor,
+                value,
+                forwardKey
+            );
+        }
+        else if (value < (-1 * that.options.cutoffValue)) {
+            that.intervalRecords[backwardKey] = setInterval(
+                gamepad.inputMapperUtils.content.sendKey,
+                that.options.frequency * speedFactor,
+                -1 * value,
+                backwardKey
+            );
+        }
+    };
 })(fluid, jQuery);

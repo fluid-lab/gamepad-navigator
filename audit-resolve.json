@@ -363,6 +363,30 @@
     "1092663|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim>markdownlint-config-fluid>markdownlint>markdown-it": {
       "decision": "ignore",
       "madeAt": 1695804181532
+    },
+    "1094349|@babel/traverse": {
+      "decision": "ignore",
+      "madeAt": 1697531752684
+    },
+    "1094304|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim>markdownlint-config-fluid>markdownlint>markdown-it>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1697531759856
+    },
+    "1094304|stylelint-config-fluid>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1697531759856
+    },
+    "1094304|stylelint-order>postcss": {
+      "decision": "ignore",
+      "madeAt": 1697531759856
+    },
+    "1094304|stylelint-scss>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1697531759856
+    },
+    "1094304|sugarss>postcss": {
+      "decision": "ignore",
+      "madeAt": 1697531759856
     }
   },
   "rules": {},

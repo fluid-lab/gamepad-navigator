@@ -215,3 +215,49 @@ direction should maximize the current browser window.
 
 Sends a message to the `messageListener` component present in the background script to reopen the last closed browser
 session using buttons and triggers. The closed session could be a tab or a window.
+
+### `{inputMapper}.sendArrowLeft(value)`
+
+- `value {Number}` Current value of the gamepad input.
+- Returns: Nothing.
+
+Send a left arrow to the current focused element when a button is pressed.
+
+### `{inputMapper}.sendArrowRight(value)`
+
+- `value {Number}` Current value of the gamepad input.
+- Returns: Nothing.
+
+Send a right arrow to the current focused element when a button is pressed.
+
+### `{inputMapper}.sendArrowUp(value)`
+
+- `value {Number}` Current value of the gamepad input.
+- Returns: Nothing.
+
+Send an up arrow to the current focused element when a button is pressed.
+
+### `{inputMapper}.sendArrowDown(value)`
+
+- `value {Number}` Current value of the gamepad input.
+- Returns: Nothing.
+
+Send a down arrow to the current focused element when a button is pressed.
+
+### `{inputMapper}.thumbstickHorizontalArrows(value, speedFactor, invert)`
+
+- `value {Number}` Current value of the gamepad input.
+- `speedFactor {Number}` Current value of the gamepad input.
+- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order.
+- Returns: Nothing.
+
+Send left/right arrows to the current focused element to simulate arrow navigation.
+
+### `{inputMapper}.thumbstickVerticalArrows(value, speedFactor, invert)`
+
+- `value {Number}` Current value of the gamepad input.
+- `speedFactor {Number}` Current value of the gamepad input.
+- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order.
+- Returns: Nothing.
+
+Send up/down arrows to the current focused element to simulate arrow navigation.
