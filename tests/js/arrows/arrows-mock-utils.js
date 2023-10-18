@@ -20,6 +20,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     // Custom gamepad navigator component grade for arrow button tests.
     fluid.defaults("gamepad.tests.arrows.buttonInputMapper", {
         gradeNames: ["gamepad.inputMapper.base"],
+        invokers: {
+            // Disable polling to reduce the need for timeouts and other async management.
+            onConnected: {
+                funcName: "fluid.identity"
+            }
+        },
         model: {
             map: {
                 buttons: {
