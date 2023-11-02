@@ -14,11 +14,19 @@
             "matches": [
                 "<all_urls>"
             ],
+            "css": [
+                "css/common.css",
+                "css/modal.css",
+                "css/action-launcher.css"
+            ],
             "js": [
                 "js/lib/infusion/infusion-all.js",
                 "js/lib/ally/ally.min.js",
                 "js/content_scripts/gamepad-navigator.js",
                 "js/shared/configuration-maps.js",
+                "js/shared/templateRenderer.js",
+                "js/content_scripts/modal.js",
+                "js/content_scripts/action-launcher.js",
                 "js/content_scripts/input-mapper-content-utils.js",
                 "js/content_scripts/input-mapper-background-utils.js",
                 "js/content_scripts/input-mapper-base.js",
