@@ -32,7 +32,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     // Face Button.
                     // Circle on PlayStation controller & B on Xbox controller.
                     "1": {
-                        defaultAction: null,
+                        defaultAction: "openActionLauncher",
                         currentAction: null,
                         speedFactor: 1,
                         background: false
