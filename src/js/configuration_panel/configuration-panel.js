@@ -98,7 +98,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 sendArrowLeft: "Send left arrow to the focused element.",
                 sendArrowRight: "Send right arrow to the focused element.",
                 sendArrowUp: "Send up arrow to the focused element.",
-                sendArrowDown: "Send down arrow to the focused element."
+                sendArrowDown: "Send down arrow to the focused element.",
+                openActionLauncher: "Open Action Launcher"
             },
             axes: {
                 null: "None",

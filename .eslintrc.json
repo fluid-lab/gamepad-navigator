@@ -2,5 +2,12 @@
     "env": {
         "browser": true
     },
-    "extends": "eslint-config-fluid"
+    "extends": "eslint-config-fluid",
+    "rules": {
+        "indent": [
+            "error",
+            4,
+            { "SwitchCase": 1}
+        ]
+    }
 }

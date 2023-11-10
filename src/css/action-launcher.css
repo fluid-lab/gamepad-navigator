@@ -1,0 +1,21 @@
+.actionLauncher-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 1rem;
+}
+
+.actionLauncher-actions-action {
+    font-size: 1.25rem;
+    padding: 0.75rem;
+}
+
+.actionLauncher-actions-action:hover {
+    outline: aquamarine;
+}
+
+.actionLauncher-actions-action:focus {
+    background-color: aquamarine;
+    font-size: 1.4rem;
+    outline: none;
+}

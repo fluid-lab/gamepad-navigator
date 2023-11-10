@@ -18,13 +18,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     var gamepad = fluid.registerNamespace("gamepad");
     fluid.registerNamespace("gamepad.inputMapper");
 
+
+    // TODO: Focus trap in modal, look at Weavly and others.
+    // TODO: Close on click outside inner container.
+    // TODO: Close on escape.
     fluid.defaults("gamepad.inputMapper", {
-        gradeNames: ["gamepad.inputMapper.base"],
+        gradeNames: ["gamepad.inputMapper.base", "fluid.viewComponent"],
         listeners: {
             "onCreate.restoreFocus": "{that}.restoreFocus",
             "onCreate.updateControls": "{that}.updateControls"
         },
         invokers: {
+            // Actions, these are called with: value, speedFactor, invert, background, oldValue, homepageURL
             restoreFocus: {
                 funcName: "gamepad.inputMapper.restoreFocus",
                 args: ["{that}.options.windowObject", "{that}.tabindexSortFilter"]
@@ -92,9 +97,36 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             reopenTabOrWindow: {
                 funcName: "gamepad.inputMapperUtils.background.sendMessage",
                 args: ["{that}", "reopenTabOrWindow", "{arguments}.0", "{arguments}.4"]
+            },
+            openActionLauncher: {
+                funcName: "gamepad.inputMapper.openActionLauncher",
+                args: ["{that}", "{arguments}.0", "{arguments}.4"] // value, oldValue
+            }
+        },
+        model: {
+            hideActionPanelLauncher: true
+        },
+        components: {
+            actionLauncher: {
+                container: "{that}.container",
+                type: "gamepad.actionLauncher",
+                options: {
+                    model: {
+                        hidden: "{gamepad.inputMapper}.model.hideActionPanelLauncher",
+                        lastExternalFocused: "{gamepad.inputMapper}.model.lastExternalFocused"
+                    }
+                }
             }
         }
     });
+
+    gamepad.inputMapper.openActionLauncher = function (that, value, oldValue) {
+        if (value && !oldValue) {
+            that.applier.change("lastExternalFocused", document.activeElement);
+
+            that.applier.change("hideActionPanelLauncher", false);
+        }
+    };
 
     /**
      *
@@ -177,6 +209,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         };
     })(window);
 
+    // TODO: Make this something the input mapper does itself to decide whether
+    // it should be active.  When not visible, deactivate all modals and stop
+    // listening to gamepad input.  When visible, start listening.  See if there
+    // is some way to keep it alive if the window is visible but the dev tools
+    // are focused.
     /**
      *
      * Manages the inputMapper instance according to the visibility status of the
@@ -204,7 +241,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                  */
 
                 // Pass the configuration options to the inputMapper component.
-                inputMapperInstance = gamepad.inputMapper(configurationOptions);
+                // TODO: Reactivate a "dormant" inputMapper instance here.
+                inputMapperInstance = gamepad.inputMapper("body", configurationOptions);
                 inputMapperInstance.events.onGamepadConnected.fire();
             }
             else if (visibilityStatus === "hidden" && inputMapperInstance !== null) {
@@ -212,6 +250,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                  * Destroy the instance of the inputMapper in the current tab when another
                  * window/tab is focused or opened.
                  */
+                // TODO: Manage this better, it makes inspecting HTML really hard.
+                // TODO: Make the input mapper "dormant".
                 inputMapperInstance.destroy();
             }
         };

@@ -296,6 +296,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
         reopenTabOrWindow: function () {
             chrome.sessions.restore();
+        },
+        openActionLauncher: function () {
+            gamepad.messageListenerUtils.openActionLauncher();
         }
     };
 

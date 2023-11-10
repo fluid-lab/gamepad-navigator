@@ -1,0 +1,46 @@
+.modal-outer-container {
+    align-content: center;
+    background-color: #000c;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 998;
+}
+
+.modal-inner-container {
+    background-color: white;
+    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 75%;
+    left: 12.5%;
+    position: fixed;
+    top: 12.5%;
+    width: 75%;
+    z-index: 997;
+}
+
+.modal-header {
+    align-self: center;
+}
+
+.modal-header h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.modal-body {
+    border: 1px solid #ccc;
+    overflow-y: scroll;
+}
+
+.modal-footer {
+    align-self: center;
+}
+
+.modal-footer button {
+    font-size: 2rem;
+    margin: 1rem;
+}

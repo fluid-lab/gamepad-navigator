@@ -1,12 +1,3 @@
-@font-face {
-    font-family: ubuntu, sans-serif;
-    src: url("../fonts/Ubuntu-Medium.ttf");
-}
-
-* {
-    font-family: ubuntu, sans-serif;
-}
-
 :root {
     --width: 465px;
 }
