@@ -2,7 +2,13 @@
     "name": "gamepad-navigator",
     "version": "0.2.0",
     "description": "A Chrome extension that allows you to navigate web pages and Chromium-based browsers using a game controller.",
-    "author": "Divyanshu Mahajan",
+    "contributors": [
+        { "name": "Divyanshu Mahajan" },
+        {
+            "name": "Tony Atkins",
+            "url": "https://duhrer.github.io/"
+        }
+    ],
     "license": "BSD-3-Clause",
     "repository": {
         "type": "git",
@@ -19,13 +25,14 @@
     },
     "dependencies": {
         "ally.js": "1.4.1",
+        "fluid-osk": "0.1.0-dev.20220408T124144Z.50e779c.GH-1",
         "infusion": "4.6.0"
     },
     "devDependencies": {
         "dotenv": "16.3.1",
         "eslint": "8.50.0",
-        "eslint-config-fluid": "2.1.1",
-        "fluid-lint-all": "1.2.9",
+        "eslint-config-fluid": "2.1.1-dev.20231104T144458Z.5488e1c.GH-17",
+        "fluid-lint-all": "1.2.10-dev.20231104T184451Z.53e64ec.GH-64",
         "grunt": "1.6.1",
         "grunt-banner": "0.6.0",
         "grunt-contrib-clean": "2.0.1",
