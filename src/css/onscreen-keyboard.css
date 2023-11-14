@@ -1,0 +1,29 @@
+.osk-keyboard {
+    margin: auto;
+    padding-bottom: 2rem;
+    padding-top: 2rem;
+    width: 80%;
+}
+
+.osk-text-input {
+    margin: auto;
+    margin-top: 2rem;
+    width: 80%;
+}
+
+button.osk-key {
+    color: black;
+}
+
+.osk-key {
+    background-color: #ccc;
+}
+
+.osk-key:focus {
+    border: 3px solid #339;
+}
+
+.onscreen-keyboard-modal .modal-inner-container {
+    height: 40rem;
+    top: 25%;
+}

@@ -23,8 +23,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.modal", {
         gradeNames: ["gamepad.templateRenderer"],
         model: {
-            hidden: true,
-            lastExternalFocused: false
+            classNames: "",
+            hidden: true
         },
         modelListeners: {
             hidden: [
@@ -49,12 +49,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
         markup: {
             // TODO: Add the ability to retrieve our icon URL and display the icon onscreen.
-            container: "<div class='modal-outer-container'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
+            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
         },
         invokers: {
             closeModal: {
                 funcName: "gamepad.modal.closeModal",
-                args: ["{that}", "{arguments}.0"] // event
+                args: ["{gamepad.modalManager}", "{arguments}.0"] // event
             },
             handleKeydown: {
                 funcName: "gamepad.modal.handleKeydown",
@@ -74,14 +74,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}", true]
             }
         },
-        // TODO: Relay hidden classname to control visibility.
-        // TODO: clicking outside the inner container should close the modal.
-        // We can't use this form because we also need to restore focus.
-        // modelRelay: {
-        //     source: "{that}.model.dom.outerContainer.click",
-        //     target: "{that}.model.hidden",
-        //     singleTransform: "fluid.transforms.toggle"
-        // },
         listeners: {
             "onCreate.bindOuterContainerClick": {
                 this: "{that}.container",
@@ -134,11 +126,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    gamepad.modal.closeModal = function (that, event) {
+    /**
+     *
+     * @param {Object} modalManager - The modal manager component.
+     * @param {Event} event - The event to which we are responding.
+     */
+    gamepad.modal.closeModal = function (modalManager, event) {
         event.preventDefault();
-        that.applier.change("hidden", true);
-        if (that.model.lastExternalFocused && that.model.lastExternalFocused.focus) {
-            that.model.lastExternalFocused.focus();
+        modalManager.applier.change("activeModal", false);
+        if (modalManager.model.lastExternalFocused && modalManager.model.lastExternalFocused.focus) {
+            modalManager.model.lastExternalFocused.focus();
         }
     };
 
@@ -170,5 +167,86 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (!hidden) {
             that.focusFirst();
         }
+    };
+
+    fluid.defaults("gamepad.modalManager", {
+        gradeNames: ["gamepad.templateRenderer"],
+        markup: {
+            container: "<div class='gamepad-navigator-modal-manager'></div>",
+            styles: "<style>%styles</style>"
+        },
+        model: {
+            activeModal: false,
+            shadowElement: false,
+            lastExternalFocused: false,
+            textInputValue: "",
+            textInputType: "",
+
+            // Inline all styles from JS-wrapped global namespaced variable.
+            styles: gamepad.css
+        },
+        events: {
+            onShadowReady: null
+        },
+        components: {
+            actionLauncher: {
+                container: "{that}.model.shadowElement",
+                type: "gamepad.actionLauncher",
+                createOnEvent: "onShadowReady",
+                options: {
+                    model: {
+                        hidden: "{gamepad.modalManager}.model.hideActionLauncher"
+                    }
+                }
+            },
+            onscreenKeyboard: {
+                container: "{that}.model.shadowElement",
+                type: "gamepad.osk.modal",
+                createOnEvent: "onShadowReady",
+                options: {
+                    model: {
+                        hidden: "{gamepad.modalManager}.model.hideOnscreenKeyboard",
+                        textInputValue: "{gamepad.modalManager}.model.textInputValue",
+                        textInputType: "{gamepad.modalManager}.model.textInputType"
+                    }
+                }
+            }
+        },
+        listeners: {
+            "onCreate.createShadow": {
+                funcName: "gamepad.modalManager.createShadow",
+                args: ["{that}"]
+            }
+        },
+        modelListeners: {
+            activeModal: {
+                excludeSource: "init",
+                funcName: "gamepad.modalManager.toggleModals",
+                args: ["{that}"]
+            }
+        }
+    });
+
+    gamepad.modalManager.createShadow = function (that) {
+        var host = that.container[0];
+        var shadowElement = host.attachShadow({mode: "open"});
+
+        // We inline all styles here so that all modals get the common styles,
+        // and to avoid managing multiple shadow elements.
+        shadowElement.innerHTML = fluid.stringTemplate(that.options.markup.styles, that.model);
+
+        that.applier.change("shadowElement", shadowElement);
+        that.events.onShadowReady.fire();
+    };
+
+    gamepad.modalManager.toggleModals = function (that) {
+        var transaction = that.applier.initiate();
+        var hideActionLauncher = that.model.activeModal !== "actionLauncher";
+        transaction.fireChangeRequest({ path: "hideActionLauncher", value: hideActionLauncher });
+
+        var hideOnscreenKeyboard = that.model.activeModal !== "onscreenKeyboard";
+        transaction.fireChangeRequest({ path: "hideOnscreenKeyboard", value: hideOnscreenKeyboard });
+
+        transaction.commit();
     };
 })(fluid);

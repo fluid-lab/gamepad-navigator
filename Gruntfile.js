@@ -68,6 +68,18 @@ module.exports = function (grunt) {
                 src: "node_modules/ally.js/ally.min.js",
                 dest: "dist/js/lib/ally/"
             },
+            oskCss: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/fluid-osk/src/css/*",
+                dest: "dist/css/lib/fluid-osk"
+            },
+            oskJs: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/fluid-osk/src/js/*",
+                dest: "dist/js/lib/fluid-osk"
+            },
             source: {
                 expand: true,
                 cwd: "src",

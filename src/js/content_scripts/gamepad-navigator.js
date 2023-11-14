@@ -19,6 +19,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
+            // TODO: Figure out how this is used and how it differs from "in view";
             connected: false,
             axes: {},
             buttons: {}

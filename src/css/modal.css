@@ -1,6 +1,11 @@
+.hidden {
+    display: none;
+}
+
 .modal-outer-container {
     align-content: center;
     background-color: #000c;
+    font-family: inherit;
     height: 100%;
     left: 0;
     position: fixed;
@@ -12,6 +17,7 @@
 .modal-inner-container {
     background-color: white;
     border-radius: 1rem;
+    color: black;
     display: flex;
     flex-direction: column;
     height: 75%;
@@ -41,6 +47,11 @@
 }
 
 .modal-footer button {
+    background-color: #ccc;
+    border: 1px solid #999;
+    border-radius: 0.5rem;
+    color: black;
     font-size: 2rem;
     margin: 1rem;
+    padding: 0.5rem;
 }

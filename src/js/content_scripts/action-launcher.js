@@ -18,6 +18,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.actionLauncher", {
         gradeNames: ["gamepad.modal"],
         model: {
+            classNames: " actionLauncher-modal",
             label: "Gamepad Navigator: Launch Action"
         },
         components: {

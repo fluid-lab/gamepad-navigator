@@ -20,12 +20,15 @@
     "homepage": "https://github.com/fluid-lab/gamepad-navigator#readme",
     "scripts": {
         "lint": "fluid-lint-all",
-        "postinstall": "grunt build",
+        "build": "npm run build:grunt && npm run build:css",
+        "build:grunt": "grunt build",
+        "build:css": "node ./utils/bundleCss.js",
+        "postinstall": "npm run build",
         "test": "testem ci --file tests/testem.json"
     },
     "dependencies": {
         "ally.js": "1.4.1",
-        "fluid-osk": "0.1.0-dev.20220408T124144Z.50e779c.GH-1",
+        "fluid-osk": "0.1.0-dev.20231110T145341Z.c8aee65.GH-1",
         "infusion": "4.6.0"
     },
     "devDependencies": {
