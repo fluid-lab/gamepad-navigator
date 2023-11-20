@@ -4,7 +4,7 @@
     },
     "extends": "eslint-config-fluid",
     "rules": {
-        "indent": [
+        "@stylistic/js/indent": [
             "error",
             4,
             { "SwitchCase": 1}
