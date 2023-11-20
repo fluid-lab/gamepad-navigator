@@ -414,7 +414,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Get the index of the currently active element, if available.
             if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" });
+                var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
                 activeElementIndex = tabbableElements.indexOf(document.activeElement);
             }
 
@@ -447,7 +447,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Get the index of the currently active element, if available.
             if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" });
+                var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
                 activeElementIndex = tabbableElements.indexOf(document.activeElement);
             }
 

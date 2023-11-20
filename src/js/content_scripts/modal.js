@@ -153,8 +153,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var innerContainer = that.locate("innerContainer");
 
         // Search for tabbables, focus on first or last element depending.
-        // TODO: Repurpose sorting from other areas where we use ally?
-        var tabbableElements = ally.query.tabbable({ context: innerContainer, strategy: "strict" });
+        var tabbableElements = ally.query.tabsequence({ context: innerContainer, strategy: "strict" });
         if (tabbableElements.length) {
             var elementIndex = reverse ? tabbableElements.length - 1 : 0;
             var elementToFocus = tabbableElements[elementIndex];

@@ -253,7 +253,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     };
 
     gamepad.inputMapper.base.updateTabbables = function (that) {
-        that.tabbableElements = ally.query.tabbable({ strategy: "strict" });
+        that.tabbableElements = ally.query.tabsequence({ strategy: "strict" });
     };
 
 
