@@ -37,6 +37,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
 
         model: {
+            row: -1,
             value: 1,
             oldValue: 0,
             speedFactor: 1,
@@ -58,6 +59,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             handleKeydown: {
                 funcName: "gamepad.actionLauncher.action.handleKeydown",
                 args: ["{that}", "{arguments}.0"] // event
+            },
+            handleFocus: {
+                funcName: "gamepad.actionLauncher.action.handleFocus",
+                args: ["{that}", "{arguments}.0"] // event
             }
         },
 
@@ -71,9 +76,31 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 this: "{that}.container",
                 method: "keydown",
                 args: ["{that}.handleKeydown"]
+            },
+            "onCreate.bindFocus": {
+                this: "{that}.container",
+                method: "focus",
+                args: ["{that}.handleFocus"]
+            }
+        },
+
+        modelListeners: {
+            "focusedRow": {
+                funcName: "gamepad.actionLauncher.action.handleFocusedRowChange",
+                args: ["{that}", "{that}.model.focusedRow", "{that}.model.row"]
             }
         }
     });
+
+    gamepad.actionLauncher.action.handleFocusedRowChange = function (that, focusedRow, row) {
+        if (row === focusedRow) {
+            that.container[0].focus();
+        }
+    };
+
+    gamepad.actionLauncher.action.handleFocus = function (that) {
+        that.applier.change("focusedRow", that.model.row);
+    };
 
     gamepad.actionLauncher.action.handleClick = function (actionComponent, inputMapperComponent, modalComponent, event) {
         event.preventDefault();
@@ -127,93 +154,122 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
 
         model: {
+            focusedRow: 0,
             // TODO: Add support for controlling `backgroundOption` in the `openNewTab` and `openNewWindow` actions.
-            actionDefs: {
-                // All button-driven actions, except for the action launcher itself.
-                click: {
-                    description: "Click"
+            actionDefs: [
+                // All button-driven actions, except for the action launcher itself, ordered by subjective "usefulness".
+                // TODO: Add action to open configuration menu, when available.
+                {
+                    key: "openNewWindow",
+                    description: "Open a new browser window"
                 },
-                previousPageInHistory: {
+                {
+                    key: "openNewTab",
+                    description: "Open a new tab"
+                },
+                {
+                    key: "goToPreviousWindow",
+                    description: "Switch to the previous browser window"
+                },
+                {
+                    key: "goToNextWindow",
+                    description: "Switch to the next browser window"
+                },
+                {
+                    key: "goToPreviousTab",
+                    description: "Switch to the previous browser tab"
+                },
+                {
+                    key: "goToNextTab",
+                    description: "Switch to the next browser tab"
+                },
+                {
+                    key: "closeCurrentTab",
+                    description: "Close current browser tab"
+                },
+                {
+                    key: "closeCurrentWindow",
+                    description: "Close current browser window"
+                },
+                {
+                    key: "reopenTabOrWindow",
+                    description: "Re-open the last closed tab or window"
+                },
+                {
+                    key: "previousPageInHistory",
                     description: "History back button"
                 },
-                nextPageInHistory: {
+                {
+                    key: "nextPageInHistory",
                     description: "History next button"
                 },
-                reverseTab: {
+                {
+                    key: "maximizeWindow",
+                    description: "Maximize the current browser window"
+                },
+                {
+                    key: "restoreWindowSize",
+                    description: "Restore the size of current browser window"
+                },
+                // These should nearly always already be bound.
+                {
+                    key: "click",
+                    description: "Click"
+                },
+                {
+                    key: "reverseTab",
                     description: "Focus on the previous element"
                 },
-                forwardTab: {
+                {
+                    key: "forwardTab",
                     description: "Focus on the next element"
                 },
-                scrollLeft: {
+                // Here for completeness, but IMO less likely to be used.
+                {
+                    key: "scrollLeft",
                     description: "Scroll left",
                     frequency: 250
                 },
-                scrollRight: {
+                {
+                    key: "scrollRight",
                     description: "Scroll right",
                     frequency: 250
                 },
-                scrollUp: {
+                {
+                    key: "scrollUp",
                     description: "Scroll up",
                     frequency: 250
                 },
-                scrollDown: {
+                {
+                    key: "scrollDown",
                     description: "Scroll down",
                     frequency: 250
                 },
-                goToPreviousTab: {
-                    description: "Switch to the previous browser tab"
-                },
-                goToNextTab: {
-                    description: "Switch to the next browser tab"
-                },
-                closeCurrentTab: {
-                    description: "Close current browser tab"
-                },
-                openNewTab: {
-                    description: "Open a new tab"
-                },
-                closeCurrentWindow: {
-                    description: "Close current browser window"
-                },
-                openNewWindow: {
-                    description: "Open a new browser window"
-                },
-                goToPreviousWindow: {
-                    description: "Switch to the previous browser window"
-                },
-                goToNextWindow: {
-                    description: "Switch to the next browser window"
-                },
-                zoomIn: {
+                {
+                    key: "zoomIn",
                     description: "Zoom-in on the active web page"
                 },
-                zoomOut: {
+                {
+                    key: "zoomOut",
                     description: "Zoom-out on the active web page"
                 },
-                maximizeWindow: {
-                    description: "Maximize the current browser window"
-                },
-                restoreWindowSize: {
-                    description: "Restore the size of current browser window"
-                },
-                reopenTabOrWindow: {
-                    description: "Re-open the last closed tab or window"
-                },
-                sendArrowLeft: {
+                {
+                    key: "sendArrowLeft",
                     description: "Send left arrow to the focused element."
                 },
-                sendArrowRight: {
+                {
+                    key: "sendArrowRight",
                     description: "Send right arrow to the focused element."
                 },
-                sendArrowUp: {
+                {
+                    key: "sendArrowUp",
                     description: "Send up arrow to the focused element."
                 },
-                sendArrowDown: {
+                {
+                    key: "sendArrowDown",
                     description: "Send down arrow to the focused element."
                 }
-                // TODO: Add action to open configuration menu, when available.
-            }
+            ]
         },
 
         dynamicComponents: {
@@ -223,7 +279,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 sources: "{that}.model.actionDefs",
                 options: {
                     model: {
-                        actionKey: "{sourcePath}",
+                        focusedRow: "{gamepad.actionLauncher.actionsPanel}.model.focusedRow",
+                        row: "{sourcePath}",
+                        actionKey: "{source}.key",
                         description: "{source}.description",
                         speedFactor: "{source}.speedFactor",
                         invert: "{source}.invert",
@@ -232,6 +290,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     }
                 }
             }
+        },
+
+        invokers: {
+            handleKeydown: {
+                funcName: "gamepad.actionLauncher.actionsPanel.handleKeydown",
+                args: ["{that}", "{arguments}.0"] // event
+            }
+        },
+
+        listeners: {
+            "onCreate.bindKeydown": {
+                this: "{that}.container",
+                method: "keydown",
+                args: ["{that}.handleKeydown"]
+            }
         }
     });
+
+    gamepad.actionLauncher.actionsPanel.handleKeydown = function (that, event) {
+        if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.code)) {
+            event.preventDefault();
+            var lastRow = that.model.actionDefs.length - 1;
+            switch (event.code) {
+                case "ArrowLeft":
+                case "ArrowUp":
+                    var previousRow = that.model.focusedRow > 0 ? that.model.focusedRow - 1 : lastRow;
+                    that.applier.change("focusedRow", previousRow);
+                    break;
+                case "ArrowRight":
+                case "ArrowDown":
+                    var nextRow = that.model.focusedRow < lastRow ? that.model.focusedRow + 1 : 0;
+                    that.applier.change("focusedRow", nextRow);
+                    break;
+            }
+        }
+    };
 })(fluid);
