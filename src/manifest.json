@@ -7,7 +7,8 @@
     "permissions": [
         "storage",
         "tabs",
-        "sessions"
+        "sessions",
+        "search"
     ],
     "content_scripts": [
         {
@@ -32,6 +33,8 @@
                 "js/content_scripts/modal.js",
                 "js/content_scripts/action-launcher.js",
                 "js/content_scripts/onscreen-keyboard.js",
+                "js/content_scripts/search-keyboard.js",
+                "js/content_scripts/modalManager.js",
                 "js/content_scripts/input-mapper-content-utils.js",
                 "js/content_scripts/input-mapper-background-utils.js",
                 "js/content_scripts/input-mapper-base.js",

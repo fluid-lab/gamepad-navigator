@@ -154,6 +154,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             openActionLauncher: {
                 funcName: "gamepad.inputMapper.openActionLauncher",
                 args: ["{that}", "{arguments}.0", "{arguments}.4"] // value, oldValue
+            },
+            openSearchKeyboard: {
+                funcName: "gamepad.inputMapper.openSearchKeyboard",
+                args: ["{that}", "{arguments}.0", "{arguments}.4"] // value, oldValue
             }
         },
         components: {
@@ -187,14 +191,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    gamepad.inputMapper.openActionLauncher = function (that, value, oldValue) {
-        if (that.model.pageInView && value && !oldValue) {
-            // In this case we don't want to fail over to a modal's activeElement.
-            that.applier.change("lastExternalFocused", document.activeElement);
+    gamepad.inputMapper.generateModalOpenFunction = function (modalKey) {
+        return function (that, value, oldValue) {
+            if (that.model.pageInView && value && !oldValue) {
+                // In this case we don't want to fail over to a modal's activeElement.
+                that.applier.change("lastExternalFocused", document.activeElement);
 
-            that.applier.change("activeModal", "actionLauncher");
-        }
+                that.applier.change("activeModal", modalKey);
+            }
+        };
     };
+
+    // We do this in a funky way because of our fixed method signature across actions.
+    gamepad.inputMapper.openActionLauncher = gamepad.inputMapper.generateModalOpenFunction("actionLauncher");
+    gamepad.inputMapper.openSearchKeyboard = gamepad.inputMapper.generateModalOpenFunction("searchKeyboard");
 
     gamepad.inputMapper.handlePageInViewChange = function (that) {
         if (that.model.pageInView) {

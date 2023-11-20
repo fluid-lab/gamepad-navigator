@@ -43,6 +43,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             icon: ".modal-icon",
             innerContainer: ".modal-inner-container",
             modalBody: ".modal-body",
+            modalFooter: ".modal-footer",
             modalCloseButton: ".modal-close-button",
             leadingFocusTrap: ".modal-focus-trap-leading",
             trailingFocusTrap: ".modal-focus-trap-trailing"
@@ -166,86 +167,5 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (!hidden) {
             that.focusFirst();
         }
-    };
-
-    fluid.defaults("gamepad.modalManager", {
-        gradeNames: ["gamepad.templateRenderer"],
-        markup: {
-            container: "<div class='gamepad-navigator-modal-manager'></div>",
-            styles: "<style>%styles</style>"
-        },
-        model: {
-            activeModal: false,
-            shadowElement: false,
-            lastExternalFocused: false,
-            textInputValue: "",
-            textInputType: "",
-
-            // Inline all styles from JS-wrapped global namespaced variable.
-            styles: gamepad.css
-        },
-        events: {
-            onShadowReady: null
-        },
-        components: {
-            actionLauncher: {
-                container: "{that}.model.shadowElement",
-                type: "gamepad.actionLauncher",
-                createOnEvent: "onShadowReady",
-                options: {
-                    model: {
-                        hidden: "{gamepad.modalManager}.model.hideActionLauncher"
-                    }
-                }
-            },
-            onscreenKeyboard: {
-                container: "{that}.model.shadowElement",
-                type: "gamepad.osk.modal",
-                createOnEvent: "onShadowReady",
-                options: {
-                    model: {
-                        hidden: "{gamepad.modalManager}.model.hideOnscreenKeyboard",
-                        textInputValue: "{gamepad.modalManager}.model.textInputValue",
-                        textInputType: "{gamepad.modalManager}.model.textInputType"
-                    }
-                }
-            }
-        },
-        listeners: {
-            "onCreate.createShadow": {
-                funcName: "gamepad.modalManager.createShadow",
-                args: ["{that}"]
-            }
-        },
-        modelListeners: {
-            activeModal: {
-                excludeSource: "init",
-                funcName: "gamepad.modalManager.toggleModals",
-                args: ["{that}"]
-            }
-        }
-    });
-
-    gamepad.modalManager.createShadow = function (that) {
-        var host = that.container[0];
-        var shadowElement = host.attachShadow({mode: "open"});
-
-        // We inline all styles here so that all modals get the common styles,
-        // and to avoid managing multiple shadow elements.
-        shadowElement.innerHTML = fluid.stringTemplate(that.options.markup.styles, that.model);
-
-        that.applier.change("shadowElement", shadowElement);
-        that.events.onShadowReady.fire();
-    };
-
-    gamepad.modalManager.toggleModals = function (that) {
-        var transaction = that.applier.initiate();
-        var hideActionLauncher = that.model.activeModal !== "actionLauncher";
-        transaction.fireChangeRequest({ path: "hideActionLauncher", value: hideActionLauncher });
-
-        var hideOnscreenKeyboard = that.model.activeModal !== "onscreenKeyboard";
-        transaction.fireChangeRequest({ path: "hideOnscreenKeyboard", value: hideOnscreenKeyboard });
-
-        transaction.commit();
     };
 })(fluid);

@@ -250,6 +250,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
+    gamepad.messageListenerUtils.search = function (actionData) {
+        chrome.search.query({
+            disposition: actionData.disposition,
+            text: actionData.text
+        });
+    };
+
+
+
     var messageListener = {
         // previous "members"
         windowProperties: {},
@@ -258,7 +267,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         actionExecutor: function (actionData) {
             gamepad.messageListener.actionExecutor(messageListener, actionData);
         },
-        // All actions are called with: tabId, invert, active, homepageURL, left
+
+        // All legacy actions are called with: tabId, invert, active, homepageURL, left
+        // TODO: Rewrite these to use actionData directly.
         openNewTab: function (tabId, invert, active, homepageURL) {
             // TODO: Currently opens a new tab and a new window.
             gamepad.messageListenerUtils.openNewTab(active, homepageURL);
@@ -266,16 +277,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         closeCurrentTab: function (tabId) {
             chrome.tabs.remove(tabId);
         },
-        goToPreviousTab: function () {
-            gamepad.messageListenerUtils.switchTab("previousTab");
-        },
-        goToNextTab: function () {
-            gamepad.messageListenerUtils.switchTab("nextTab");
-        },
         openNewWindow: function (tabId, invert, active, homepageURL) {
             gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
         },
-        closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
+
+        maximizeWindow: function (tabId, invert, active, homepageURL, left) {
+            gamepad.messageListenerUtils.changeWindowSize(messageListener, "maximized", left);
+        },
+        restoreWindowSize: function (tabId, invert, active, homepageURL, left) {
+            gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", left);
+        },
+        // TODO: Rewrite these to use actionData directly.
+
+        // From now on, actions will be called directly with the actionData from the message.  These are either new
+        // or have no data and can use the new method.
+        reopenTabOrWindow: function () {
+            chrome.sessions.restore();
+        },
         goToPreviousWindow: function () {
             gamepad.messageListenerUtils.switchWindow("previousWindow");
         },
@@ -288,19 +306,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         zoomOut: function () {
             gamepad.messageListenerUtils.setZoom("zoomOut");
         },
-        maximizeWindow: function (tabId, invert, active, homepageURL, left) {
-            gamepad.messageListenerUtils.changeWindowSize(messageListener, "maximized", left);
+        goToPreviousTab: function () {
+            gamepad.messageListenerUtils.switchTab("previousTab");
         },
-        restoreWindowSize: function (tabId, invert, active, homepageURL, left) {
-            gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", left);
+        goToNextTab: function () {
+            gamepad.messageListenerUtils.switchTab("nextTab");
         },
-        reopenTabOrWindow: function () {
-            chrome.sessions.restore();
-        },
+        closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
         openActionLauncher: function () {
             gamepad.messageListenerUtils.openActionLauncher();
-        }
+        },
+        search: gamepad.messageListenerUtils.search
     };
+
+    // Temporary list of actions that can take a full actionData payload directly.
+    gamepad.messageListener.newSchoolActions = [
+        "reopenTabOrWindow",
+        "goToPreviousWindow",
+        "goToNextWindow",
+        "zoomIn",
+        "zoomOut",
+        "goToPreviousTab",
+        "goToNextTab",
+        "closeCurrentWindow",
+        "openActionLauncher",
+        "openSearchKeyboard",
+        "search"
+    ];
 
     /**
      *
@@ -318,14 +350,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             // Trigger the action only if a valid action is found.
             if (action) {
-                var invert = actionData.invert,
-                    active = actionData.active,
-                    left = actionData.left,
-                    homepageURL = actionData.homepageURL;
-                chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                    var tabId = tabs[0] ? tabs[0].id : undefined;
-                    action(tabId, invert, active, homepageURL, left);
-                });
+                if (gamepad.messageListener.newSchoolActions.includes(actionData.actionName)) {
+                    chrome.tabs.query({ active: true, currentWindow: true }, function () {
+                        action(actionData);
+                    });
+                }
+                else {
+                    var invert = actionData.invert,
+                        active = actionData.active,
+                        left = actionData.left,
+                        homepageURL = actionData.homepageURL;
+                    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+                        var tabId = tabs[0] ? tabs[0].id : undefined;
+                        action(tabId, invert, active, homepageURL, left);
+                    });
+
+                }
             }
         }
     };

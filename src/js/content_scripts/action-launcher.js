@@ -160,6 +160,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // All button-driven actions, except for the action launcher itself, ordered by subjective "usefulness".
                 // TODO: Add action to open configuration menu, when available.
                 {
+                    key: "openSearchKeyboard",
+                    description: "Search"
+                },
+                {
                     key: "openNewWindow",
                     description: "Open a new browser window"
                 },
