@@ -1,14 +1,14 @@
 .osk-keyboard {
     margin: auto;
-    padding-bottom: 2rem;
-    padding-top: 2rem;
-    width: 80%;
+    padding-bottom: clamp(0.125rem, 5vh, 2rem);
+    padding-top: clamp(0.125rem, 5vh, 2rem);
+    width: 90%;
 }
 
 .osk-text-input {
     margin: auto;
-    margin-top: 2rem;
-    width: 80%;
+    margin-top: clamp(0.5rem, 2vh, 2rem);
+    width: 90%;
 }
 
 button.osk-key {
@@ -17,6 +17,7 @@ button.osk-key {
 
 .osk-key {
     background-color: #ccc;
+    margin: clamp(0.1rem, 0.3vw, 0.75rem);
 }
 
 .osk-key:focus {
@@ -24,6 +25,6 @@ button.osk-key {
 }
 
 .onscreen-keyboard-modal .modal-inner-container {
-    height: 40rem;
-    top: 25%;
+    height: clamp(20rem, 80vh, 50rem);
+    top: clamp(5rem, 10vh, 10rem);
 }

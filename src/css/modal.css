@@ -28,6 +28,20 @@
     z-index: 997;
 }
 
+@media (max-height: 400px) {
+    :host(.gamepad-navigator-modal-manager.modal-inner-container) {
+        height: 95%;
+        top: 2.5%;
+    }
+}
+
+@media (max-width: 600px) {
+    :host(.gamepad-navigator-modal-manager) .modal-inner-container {
+        left: 2.5%;
+        width: 95%;
+    }
+}
+
 .modal-header {
     align-self: center;
 }
@@ -39,6 +53,7 @@
 
 .modal-body {
     border: 1px solid #ccc;
+    height: 100%;
     overflow-y: scroll;
 }
 
