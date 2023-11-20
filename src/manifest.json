@@ -2,7 +2,7 @@
     "name": "Gamepad Navigator",
     "version": "0.3.0",
     "description": "A Chrome extension that allows you to navigate web pages and Chromium-based browsers using a game controller.",
-    "author": "Divyanshu Mahajan",
+    "author": "The Gamepad Navigator Authors",
     "manifest_version": 3,
     "permissions": [
         "storage",
