@@ -199,7 +199,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapper.handlePageInViewChange = function (that) {
         if (that.model.pageInView) {
             gamepad.inputMapper.updateControls(that);
-            // TODO: Restore focus.
         }
         else {
             that.applier.change("activeModal", false);

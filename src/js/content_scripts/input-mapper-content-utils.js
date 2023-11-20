@@ -298,59 +298,62 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapperUtils.content.click = function (that, value) {
         if (that.model.pageInView && (value > 0)) {
             var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
-            var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
 
-            // Open the new onscreen keyboard to input text.
-            if (isTextInput) {
-                var lastExternalFocused = activeElement;
-                that.applier.change("lastExternalFocused", lastExternalFocused);
-                that.applier.change("textInputValue", lastExternalFocused.value);
-                that.applier.change("activeModal", "onscreenKeyboard");
-            }
-            /**
-             * If SELECT element is currently focused, toggle its state. Otherwise perform
-             * the regular click operation.
-             */
-            else if (activeElement.nodeName === "SELECT") {
-                var optionsLength = 0;
+            if (activeElement) {
+                var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
 
-                // Compute the number of options and store it.
-                activeElement.childNodes.forEach(function (childNode) {
-                    if (childNode.nodeName === "OPTION") {
-                        optionsLength++;
+                // Open the new onscreen keyboard to input text.
+                if (isTextInput) {
+                    var lastExternalFocused = activeElement;
+                    that.applier.change("lastExternalFocused", lastExternalFocused);
+                    that.applier.change("textInputValue", lastExternalFocused.value);
+                    that.applier.change("activeModal", "onscreenKeyboard");
+                }
+                /**
+                 * If SELECT element is currently focused, toggle its state. Otherwise perform
+                 * the regular click operation.
+                 */
+                else if (activeElement.nodeName === "SELECT") {
+                    var optionsLength = 0;
+
+                    // Compute the number of options and store it.
+                    activeElement.childNodes.forEach(function (childNode) {
+                        if (childNode.nodeName === "OPTION") {
+                            optionsLength++;
+                        }
+                    });
+
+                    // Toggle the SELECT dropdown.
+                    if (!activeElement.getAttribute("size") || activeElement.getAttribute("size") === "1") {
+                        /**
+                         * Store the initial size of the dropdown in a separate attribute
+                         * (if specified already).
+                         */
+                        var initialSizeString = activeElement.getAttribute("size");
+                        if (initialSizeString) {
+                            activeElement.setAttribute("initialSize", parseInt(initialSizeString));
+                        }
+
+                        /**
+                         * Allow limited expansion to avoid an overflowing list, considering the
+                         * list could go as large as 100 or more (for example, a list of
+                         * countries).
+                         */
+                        var length = Math.min(15, optionsLength);
+                        activeElement.setAttribute("size", length);
                     }
-                });
+                    else {
+                        // Obtain the initial size of the dropdown.
+                        var sizeString = activeElement.getAttribute("initialSize") || "1";
 
-                // Toggle the SELECT dropdown.
-                if (!activeElement.getAttribute("size") || activeElement.getAttribute("size") === "1") {
-                    /**
-                     * Store the initial size of the dropdown in a separate attribute
-                     * (if specified already).
-                     */
-                    var initialSizeString = activeElement.getAttribute("size");
-                    if (initialSizeString) {
-                        activeElement.setAttribute("initialSize", parseInt(initialSizeString));
+                        // Restore the size of the dropdown.
+                        activeElement.setAttribute("size", parseInt(sizeString));
                     }
-
-                    /**
-                     * Allow limited expansion to avoid an overflowing list, considering the
-                     * list could go as large as 100 or more (for example, a list of
-                     * countries).
-                     */
-                    var length = Math.min(15, optionsLength);
-                    activeElement.setAttribute("size", length);
                 }
                 else {
-                    // Obtain the initial size of the dropdown.
-                    var sizeString = activeElement.getAttribute("initialSize") || "1";
-
-                    // Restore the size of the dropdown.
-                    activeElement.setAttribute("size", parseInt(sizeString));
+                    // Click on the focused element.
+                    activeElement.click();
                 }
-            }
-            else {
-                // Click on the focused element.
-                activeElement.click();
             }
         }
     };
@@ -478,13 +481,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (that.model.pageInView && (value > 0)) {
             var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
             var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
-            activeElement.dispatchEvent(keyDownEvent);
 
-            // TODO: Test with text inputs and textarea fields to see if
-            // beforeinput and input are needed.
+            if (activeElement) {
+                activeElement.dispatchEvent(keyDownEvent);
 
-            var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
-            activeElement.dispatchEvent(keyUpEvent);
+                // TODO: Test with text inputs and textarea fields to see if
+                // beforeinput and input are needed.
+
+                var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
+                activeElement.dispatchEvent(keyUpEvent);
+            }
         }
     };
 
