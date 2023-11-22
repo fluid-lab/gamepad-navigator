@@ -38,11 +38,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.messageListenerUtils.switchTab = function (tabDirection) {
         chrome.tabs.query({ currentWindow: true }, function (tabsArray) {
+            // Filter to "controllable" tabs.
+            var filteredTabs = tabsArray.filter(gamepad.messageListenerUtils.filterControllableTabs);
+
             // Switch only if more than one tab is present.
-            if (tabsArray.length > 1) {
+            if (filteredTabs.length > 1) {
                 // Find index of the currently active tab.
                 var activeTabIndex = null;
-                tabsArray.forEach(function (tab, index) {
+                filteredTabs.forEach(function (tab, index) {
                     if (tab.active) {
                         activeTabIndex = index;
                     }
@@ -55,13 +58,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                      * Otherwise, switch to the previous tab.
                      */
                     if (activeTabIndex === 0) {
-                        activeTabIndex = tabsArray.length;
+                        activeTabIndex = filteredTabs.length;
                     }
-                    chrome.tabs.update(tabsArray[activeTabIndex - 1].id, { active: true });
+                    chrome.tabs.update(filteredTabs[activeTabIndex - 1].id, { active: true });
                 }
                 else if (tabDirection === "nextTab") {
                     // Switch to the next tab.
-                    chrome.tabs.update(tabsArray[(activeTabIndex + 1) % tabsArray.length].id, { active: true });
+                    chrome.tabs.update(filteredTabs[(activeTabIndex + 1) % filteredTabs.length].id, { active: true });
                 }
             }
         });
@@ -93,9 +96,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.closeCurrentWindow = function () {
+        // TODO: Add a check to ensure that there is at least one controllable window open and focus on that.
         chrome.windows.getCurrent(function (currentWindow) {
             chrome.windows.remove(currentWindow.id);
         });
+    };
+
+    gamepad.messageListenerUtils.filterControllableTabs = function (tabElement) {
+        return tabElement.url && !tabElement.url.startsWith("chrome://");
+    };
+
+    gamepad.messageListenerUtils.filterControllableWindows = function (windowElement) {
+        if (!windowElement.tabs) { return false; }
+
+        var filteredTabs = windowElement.tabs.filter(gamepad.messageListenerUtils.filterControllableTabs);
+        return filteredTabs.length > 0;
     };
 
     /**
@@ -108,14 +123,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.messageListenerUtils.switchWindow = function (windowDirection) {
         chrome.windows.getLastFocused(function (focusedWindow) {
             if (focusedWindow) {
-                chrome.windows.getAll(function (windowsArray) {
+                chrome.windows.getAll({ populate: true}, function (windowsArray) {
+                    // Filter to controllable windows.
+                    var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+
                     // Switch only if more than one window is present.
-                    if (windowsArray.length > 1) {
+                    if (filteredWindows.length > 1) {
                         // Find the index of the currently active window.
                         var focusedWindowIndex = null;
-                        for (var index = 0; index < windowsArray.length; index++) {
+                        for (var index = 0; index < filteredWindows.length; index++) {
                             if (focusedWindowIndex === null) {
-                                var window = windowsArray[index];
+                                var window = filteredWindows[index];
                                 if (window.id === focusedWindow.id) {
                                     focusedWindowIndex = index;
                                 }
@@ -130,14 +148,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                             // Switch browser window.
                             if (windowDirection === "previousWindow") {
                                 if (focusedWindowIndex === 0) {
-                                    windowIndexToFocus = windowsArray.length - 1;
+                                    windowIndexToFocus = filteredWindows.length - 1;
                                 }
                                 else {
                                     windowIndexToFocus = focusedWindowIndex - 1;
                                 }
                             }
                             else if (windowDirection === "nextWindow") {
-                                if (focusedWindowIndex >= windowsArray.length - 1) {
+                                if (focusedWindowIndex >= filteredWindows.length - 1) {
                                     windowIndexToFocus = 0;
                                 }
                                 else {
@@ -145,7 +163,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                                 }
                             }
 
-                            chrome.windows.update(windowsArray[windowIndexToFocus].id, {
+                            chrome.windows.update(filteredWindows[windowIndexToFocus].id, {
                                 focused: true
                             });
                         }
@@ -275,6 +293,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             gamepad.messageListenerUtils.openNewTab(active, homepageURL);
         },
         closeCurrentTab: function (tabId) {
+            // TODO: Only close the tab if it's "controllable"
             chrome.tabs.remove(tabId);
         },
         openNewWindow: function (tabId, invert, active, homepageURL) {
@@ -292,6 +311,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // From now on, actions will be called directly with the actionData from the message.  These are either new
         // or have no data and can use the new method.
         reopenTabOrWindow: function () {
+            // TODO: Confirm whether or not the restored window has focus.
             chrome.sessions.restore();
         },
         goToPreviousWindow: function () {
