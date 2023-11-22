@@ -366,10 +366,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 return true;
             }
         }
-        // TODO: Add support for this in the future.
-        // else if (element.nodeName === "TEXTAREA") {
-        //     return true;
-        // }
+        else if (element.nodeName === "TEXTAREA") {
+            return true;
+        }
 
         return false;
     };
