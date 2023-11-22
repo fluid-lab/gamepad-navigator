@@ -96,16 +96,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.messageListenerUtils.closeCurrentWindow = function () {
-        // TODO: Add a check to ensure that there is at least one controllable window open and focus on that.
-        chrome.windows.getCurrent(function (currentWindow) {
-            chrome.windows.remove(currentWindow.id);
+        chrome.windows.getAll({ populate: true}, function (windowArray) {
+            var controllableWindows = windowArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+            if (controllableWindows.length > 1) {
+                var focusedWindow = false;
+                var focusedWindowIndex = -1;
+
+                controllableWindows.forEach(function (window, index) {
+                    if (window.focused) {
+                        focusedWindow = window;
+                        focusedWindowIndex = index;
+                    }
+                });
+
+                if (focusedWindow) {
+                    var newFocusIndex = (focusedWindowIndex + 1) % controllableWindows.length;
+                    var windowToFocus = controllableWindows[newFocusIndex];
+
+                    chrome.windows.remove(focusedWindow.id);
+
+                    chrome.windows.update(windowToFocus.id, {
+                        focused: true
+                    });
+                }
+            }
         });
     };
 
+    // Exclude tabs whose URL begins with `chrome://`, which do not contain
+    // our scripts and cannot be controlled using a gamepad.
     gamepad.messageListenerUtils.filterControllableTabs = function (tabElement) {
         return tabElement.url && !tabElement.url.startsWith("chrome://");
     };
 
+    // Exclude windows that do not contain controllable tabs (see above).
     gamepad.messageListenerUtils.filterControllableWindows = function (windowElement) {
         if (!windowElement.tabs) { return false; }
 
@@ -293,8 +317,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             gamepad.messageListenerUtils.openNewTab(active, homepageURL);
         },
         closeCurrentTab: function (tabId) {
-            // TODO: Only close the tab if it's "controllable"
-            chrome.tabs.remove(tabId);
+            // Only close the tab if there is another "controllable" tab available.
+            chrome.tabs.query({currentWindow: true }, function (tabs) {
+                var controllableTabs = tabs.filter(gamepad.messageListenerUtils.filterControllableTabs);
+                // More than one tab, just close the tab.
+                if (controllableTabs.length > 1) {
+                    chrome.tabs.remove(tabId);
+                }
+                // Fail over to the window close logic.
+                else {
+                    gamepad.messageListenerUtils.closeCurrentWindow();
+                }
+            });
         },
         openNewWindow: function (tabId, invert, active, homepageURL) {
             gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
