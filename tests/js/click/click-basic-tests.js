@@ -15,6 +15,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 (function (fluid, $) {
     "use strict";
 
+    /**
+     * TODO: Add tests for links and other elements that involve navigation
+     * between pages.
+     */
+
     $(document).ready(function () {
 
         fluid.registerNamespace("gamepad");
