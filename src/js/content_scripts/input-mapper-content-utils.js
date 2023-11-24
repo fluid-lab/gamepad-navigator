@@ -305,20 +305,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         activeElementIndex = that.currentTabIndex;
                     }
 
+                    var increment = 0;
                     if (direction === "forwardTab") {
-                        that.currentTabIndex = (activeElementIndex + 1) % length;
+                        increment = 1;
                     }
                     else if (direction === "reverseTab") {
-                        /**
-                         * Move to the first element if the last element on the webpage
-                         * is focused.
-                         */
-                        if (activeElementIndex === 0) {
-                            activeElementIndex = length;
-                        }
-                        that.currentTabIndex = activeElementIndex - 1;
+                        increment = -1;
                     }
-                    that.tabbableElements[that.currentTabIndex].focus();
+
+                    activeElement.blur();
+
+                    that.currentTabIndex = (that.tabbableElements.length + (activeElementIndex + increment)) % that.tabbableElements.length;
+                    var elementToFocus = that.tabbableElements[that.currentTabIndex];
+                    elementToFocus.focus();
+
+                    // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
+                    if (!that.model.activeModal && elementToFocus !== document.activeElement) {
+                        that.currentTabIndex = (that.tabbableElements.length + (that.currentTabIndex + increment)) % that.tabbableElements.length;
+                        var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
+                        failoverElementToFocus.focus();
+                    }
                 }
             }
         }
@@ -344,6 +350,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     var lastExternalFocused = activeElement;
                     that.applier.change("lastExternalFocused", lastExternalFocused);
                     that.applier.change("textInputValue", lastExternalFocused.value);
+                    lastExternalFocused.blur();
+
                     that.applier.change("activeModal", "onscreenKeyboard");
                 }
                 /**
