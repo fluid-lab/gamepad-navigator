@@ -9,7 +9,6 @@ compliance with this License.
 You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 */
-/* globals chrome */
 (function (fluid) {
     "use strict";
     var gamepad = fluid.registerNamespace("gamepad");
@@ -57,14 +56,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         event.preventDefault();
 
         if (that.model.textInputValue && that.model.textInputValue.trim().length) {
-            var searchMessage = {
+            var actionOptions = {
                 actionName: "search",
                 // See: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search/query
                 disposition: "NEW_TAB",
                 text: that.model.textInputValue.trim()
             };
 
-            chrome.runtime.sendMessage(searchMessage);
+            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
         }
     };
 })(fluid);

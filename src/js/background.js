@@ -33,41 +33,44 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * Switch to the next or the previous tab in the current window.
      *
-     * @param {String} tabDirection - The direction in which the tab focus should change,
+     * @param {String} tabDirection - The direction in which the tab focus should change.
+     * @return {Promise} - A promise that will resolve with a response payload.
      *
      */
-    gamepad.messageListenerUtils.switchTab = function (tabDirection) {
-        chrome.tabs.query({ currentWindow: true }, function (tabsArray) {
-            // Filter to "controllable" tabs.
-            var filteredTabs = tabsArray.filter(gamepad.messageListenerUtils.filterControllableTabs);
+    gamepad.messageListenerUtils.switchTab = async function (tabDirection) {
+        var tabsArray = await chrome.tabs.query({ currentWindow: true });
+        // Filter to "controllable" tabs.
+        var filteredTabs = tabsArray.filter(gamepad.messageListenerUtils.filterControllableTabs);
 
-            // Switch only if more than one tab is present.
-            if (filteredTabs.length > 1) {
-                // Find index of the currently active tab.
-                var activeTabIndex = null;
-                filteredTabs.forEach(function (tab, index) {
-                    if (tab.active) {
-                        activeTabIndex = index;
-                    }
-                });
+        // Switch only if more than one tab is present.
+        if (filteredTabs.length > 1) {
+            // Find index of the currently active tab.
+            var activeTabIndex = null;
+            filteredTabs.forEach(function (tab, index) {
+                if (tab.active) {
+                    activeTabIndex = index;
+                }
+            });
 
-                // Switch browser tab.
-                if (tabDirection === "previousTab") {
-                    /**
-                     * If the first tab is focused then switch to the last tab.
-                     * Otherwise, switch to the previous tab.
-                     */
-                    if (activeTabIndex === 0) {
-                        activeTabIndex = filteredTabs.length;
-                    }
-                    chrome.tabs.update(filteredTabs[activeTabIndex - 1].id, { active: true });
+            // Switch browser tab.
+            if (tabDirection === "previousTab") {
+                /**
+                 * If the first tab is focused then switch to the last tab.
+                 * Otherwise, switch to the previous tab.
+                 */
+                if (activeTabIndex === 0) {
+                    activeTabIndex = filteredTabs.length;
                 }
-                else if (tabDirection === "nextTab") {
-                    // Switch to the next tab.
-                    chrome.tabs.update(filteredTabs[(activeTabIndex + 1) % filteredTabs.length].id, { active: true });
-                }
+                await chrome.tabs.update(filteredTabs[activeTabIndex - 1].id, { active: true });
             }
-        });
+            else if (tabDirection === "nextTab") {
+                // Switch to the next tab.
+                await chrome.tabs.update(filteredTabs[(activeTabIndex + 1) % filteredTabs.length].id, { active: true });
+            }
+        }
+        else {
+            return { vibrate: true };
+        }
     };
 
     /**
@@ -93,34 +96,37 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     /**
      *
      * Close the currently opened window.
+     * @return {Promise} - A `Promise` that will complete with a response payload.
      *
      */
-    gamepad.messageListenerUtils.closeCurrentWindow = function () {
-        chrome.windows.getAll({ populate: true}, function (windowArray) {
-            var controllableWindows = windowArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
-            if (controllableWindows.length > 1) {
-                var focusedWindow = false;
-                var focusedWindowIndex = -1;
+    gamepad.messageListenerUtils.closeCurrentWindow = async function () {
+        var windowArray = await chrome.windows.getAll({ populate: true});
+        var controllableWindows = windowArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+        if (controllableWindows.length > 1) {
+            var focusedWindow = false;
+            var focusedWindowIndex = -1;
 
-                controllableWindows.forEach(function (window, index) {
-                    if (window.focused) {
-                        focusedWindow = window;
-                        focusedWindowIndex = index;
-                    }
-                });
-
-                if (focusedWindow) {
-                    var newFocusIndex = (focusedWindowIndex + 1) % controllableWindows.length;
-                    var windowToFocus = controllableWindows[newFocusIndex];
-
-                    chrome.windows.remove(focusedWindow.id);
-
-                    chrome.windows.update(windowToFocus.id, {
-                        focused: true
-                    });
+            controllableWindows.forEach(function (window, index) {
+                if (window.focused) {
+                    focusedWindow = window;
+                    focusedWindowIndex = index;
                 }
+            });
+
+            if (focusedWindow) {
+                var newFocusIndex = (focusedWindowIndex + 1) % controllableWindows.length;
+                var windowToFocus = controllableWindows[newFocusIndex];
+
+                chrome.windows.remove(focusedWindow.id);
+
+                chrome.windows.update(windowToFocus.id, {
+                    focused: true
+                });
             }
-        });
+        }
+        else {
+            return { vibrate: true };
+        }
     };
 
     // Exclude tabs whose URL begins with `chrome://`, which do not contain
@@ -144,57 +150,58 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {String} windowDirection - The direction in which the window focus should change,
      *
      */
-    gamepad.messageListenerUtils.switchWindow = function (windowDirection) {
-        chrome.windows.getLastFocused(function (focusedWindow) {
-            if (focusedWindow) {
-                chrome.windows.getAll({ populate: true}, function (windowsArray) {
-                    // Filter to controllable windows.
-                    var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+    gamepad.messageListenerUtils.switchWindow = async function (windowDirection) {
+        var focusedWindow = await chrome.windows.getLastFocused();
+        if (focusedWindow) {
+            var windowsArray = await chrome.windows.getAll({ populate: true});
+            // Filter to controllable windows.
+            var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
 
-                    // Switch only if more than one window is present.
-                    if (filteredWindows.length > 1) {
-                        // Find the index of the currently active window.
-                        var focusedWindowIndex = null;
-                        for (var index = 0; index < filteredWindows.length; index++) {
-                            if (focusedWindowIndex === null) {
-                                var window = filteredWindows[index];
-                                if (window.id === focusedWindow.id) {
-                                    focusedWindowIndex = index;
-                                }
-                            }
-                        }
-
-                        if (focusedWindowIndex === null) {
-                            throw new Error("Can't detect focused browser window.");
-                        }
-                        else {
-                            var windowIndexToFocus = focusedWindowIndex;
-                            // Switch browser window.
-                            if (windowDirection === "previousWindow") {
-                                if (focusedWindowIndex === 0) {
-                                    windowIndexToFocus = filteredWindows.length - 1;
-                                }
-                                else {
-                                    windowIndexToFocus = focusedWindowIndex - 1;
-                                }
-                            }
-                            else if (windowDirection === "nextWindow") {
-                                if (focusedWindowIndex >= filteredWindows.length - 1) {
-                                    windowIndexToFocus = 0;
-                                }
-                                else {
-                                    windowIndexToFocus = focusedWindowIndex + 1;
-                                }
-                            }
-
-                            chrome.windows.update(filteredWindows[windowIndexToFocus].id, {
-                                focused: true
-                            });
+            // Switch only if more than one window is present.
+            if (filteredWindows.length > 1) {
+                // Find the index of the currently active window.
+                var focusedWindowIndex = null;
+                for (var index = 0; index < filteredWindows.length; index++) {
+                    if (focusedWindowIndex === null) {
+                        var window = filteredWindows[index];
+                        if (window.id === focusedWindow.id) {
+                            focusedWindowIndex = index;
                         }
                     }
-                });
+                }
+
+                if (focusedWindowIndex === null) {
+                    throw new Error("Can't detect focused browser window.");
+                }
+                else {
+                    var windowIndexToFocus = focusedWindowIndex;
+                    // Switch browser window.
+                    if (windowDirection === "previousWindow") {
+                        if (focusedWindowIndex === 0) {
+                            windowIndexToFocus = filteredWindows.length - 1;
+                        }
+                        else {
+                            windowIndexToFocus = focusedWindowIndex - 1;
+                        }
+                    }
+                    else if (windowDirection === "nextWindow") {
+                        if (focusedWindowIndex >= filteredWindows.length - 1) {
+                            windowIndexToFocus = 0;
+                        }
+                        else {
+                            windowIndexToFocus = focusedWindowIndex + 1;
+                        }
+                    }
+
+                    await chrome.windows.update(filteredWindows[windowIndexToFocus].id, {
+                        focused: true
+                    });
+                }
             }
-        });
+            else {
+                return { vibrate: true };
+            }
+        }
     };
 
     /**
@@ -202,25 +209,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Change the zoom value of the current browser tab.
      *
      * @param {String} zoomType - Determines if the page should be zoomed in or out.
-     *
+     * @return {Object} - A response payload if there are custom instructions for the client to follow up on.
      */
-    gamepad.messageListenerUtils.setZoom = function (zoomType) {
-        chrome.tabs.query({ currentWindow: true, active: true }, function (currentTab) {
-            // Obtain the zoom value of the current tab.
-            chrome.tabs.getZoom(currentTab.id, function (currentZoomFactor) {
-                // Compute the new zoom value according to the zoom type.
-                var newZoomFactor = null;
-                if (zoomType === "zoomIn") {
-                    newZoomFactor = currentZoomFactor + 0.1;
-                }
-                else if (zoomType === "zoomOut") {
-                    newZoomFactor = currentZoomFactor - 0.1;
-                }
+    gamepad.messageListenerUtils.setZoom = async function (zoomType) {
+        var currentTab = await chrome.tabs.query({ currentWindow: true, active: true });
 
-                // Set the new zoom value.
-                chrome.tabs.setZoom(currentTab.id, newZoomFactor);
-            });
-        });
+        // Obtain the zoom value of the current tab.
+        var currentZoomFactor = await chrome.tabs.getZoom(currentTab.id);
+
+        // Compute the new zoom value according to the zoom type.
+        var newZoomFactor = null;
+        if (zoomType === "zoomIn") {
+            newZoomFactor = currentZoomFactor + 0.1;
+        }
+        else if (zoomType === "zoomOut") {
+            newZoomFactor = currentZoomFactor - 0.1;
+        }
+
+        if (currentZoomFactor === newZoomFactor) {
+            return { vibrate: true };
+        }
+        else {
+            // Set the new zoom value.
+            chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+        }
     };
 
     /**
@@ -231,199 +243,158 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {String} windowState - Value of the new state of the browser window.
      *                               For example, "maximized", "minimized", etc.
      * @param {Number} left - The position of the left edge of the screen (in pixels).
+     * @return {Promise} - A promise that will resolve with a response payload.
      *
      */
-    gamepad.messageListenerUtils.changeWindowSize = function (that, windowState, left) {
-        chrome.windows.getCurrent(function (currentWindow) {
-            chrome.windows.update(currentWindow.id, { state: windowState }, function () {
-                /**
-                 * Set the dimensions of the window if the "maximized" state doesn't work
-                 * (Fallback Method).
-                 */
-                chrome.windows.getCurrent(function (windowPostUpdate) {
-                    that.windowProperties[windowPostUpdate.id] = that.windowProperties[windowPostUpdate.id] || { isMaximized: null };
+    gamepad.messageListenerUtils.changeWindowSize = async function (that, windowState, left) {
+        var currentWindow = await chrome.windows.getCurrent();
 
-                    // Value of "state" on OS X is "fullscreen" if window is maximized.
-                    if (that.windowProperties[windowPostUpdate.id].isMaximized === null) {
-                        that.windowProperties[windowPostUpdate.id].isMaximized = windowPostUpdate.state === "fullscreen";
-                    }
-                    var isMaximized = that.windowProperties[windowPostUpdate.id].isMaximized;
+        if (currentWindow.state === windowState) {
+            return { vibrate: true };
+        }
 
-                    /**
-                     * Second check is for cases when the window is not maximized during
-                     * the first update.
-                     */
-                    if (windowState === "maximized" && windowPostUpdate.state !== "maximized" && !isMaximized) {
-                        // Preserve configuration before maximizing.
-                        that.windowProperties[windowPostUpdate.id] = {
-                            width: windowPostUpdate.width,
-                            height: windowPostUpdate.height,
-                            left: windowPostUpdate.left,
-                            top: windowPostUpdate.top
-                        };
+        await chrome.windows.update(currentWindow.id, { state: windowState });
 
-                        // Update window with the new properties.
-                        chrome.windows.update(windowPostUpdate.id, {
-                            width: screen.width,
-                            height: screen.height,
-                            left: left,
-                            top: 0
-                        });
+        var windowPostUpdate = await chrome.windows.getCurrent();
+        that.windowProperties[windowPostUpdate.id] = that.windowProperties[windowPostUpdate.id] || { isMaximized: null };
 
-                        // Update the isMaximized member variable.
-                        that.windowProperties[windowPostUpdate.id].isMaximized = true;
-                    }
-                    else if (windowPostUpdate.state === "normal" && windowState === "normal" && isMaximized) {
-                        var previousProperties = that.windowProperties[windowPostUpdate.id];
+        // Value of "state" on OS X is "fullscreen" if window is maximized.
+        if (that.windowProperties[windowPostUpdate.id].isMaximized === null) {
+            that.windowProperties[windowPostUpdate.id].isMaximized = windowPostUpdate.state === "fullscreen";
+        }
+        var isMaximized = that.windowProperties[windowPostUpdate.id].isMaximized;
 
-                        // Update window with the new properties.
-                        chrome.windows.update(windowPostUpdate.id, {
-                            width: previousProperties.width || Math.round(3 * screen.width / 5),
-                            height: previousProperties.height || Math.round(4 * screen.height / 5),
-                            left: previousProperties.left || (left + Math.round(screen.width / 15)),
-                            top: previousProperties.top || Math.round(screen.height / 15)
-                        });
+        /**
+         * Second check is for cases when the window is not maximized during
+         * the first update.
+         */
+        if (windowState === "maximized" && windowPostUpdate.state !== "maximized" && !isMaximized) {
+            // Preserve configuration before maximizing.
+            that.windowProperties[windowPostUpdate.id] = {
+                width: windowPostUpdate.width,
+                height: windowPostUpdate.height,
+                left: windowPostUpdate.left,
+                top: windowPostUpdate.top
+            };
 
-                        // Update the isMaximized member variable.
-                        that.windowProperties[windowPostUpdate.id].isMaximized = false;
-                    }
-                });
+            // Update window with the new properties.
+            await chrome.windows.update(windowPostUpdate.id, {
+                width: screen.width,
+                height: screen.height,
+                left: left,
+                top: 0
             });
-        });
+
+            // Update the isMaximized member variable.
+            that.windowProperties[windowPostUpdate.id].isMaximized = true;
+        }
+        else if (windowPostUpdate.state === "normal" && windowState === "normal" && isMaximized) {
+            var previousProperties = that.windowProperties[windowPostUpdate.id];
+
+            // Update window with the new properties.
+            await chrome.windows.update(windowPostUpdate.id, {
+                width: previousProperties.width || Math.round(3 * screen.width / 5),
+                height: previousProperties.height || Math.round(4 * screen.height / 5),
+                left: previousProperties.left || (left + Math.round(screen.width / 15)),
+                top: previousProperties.top || Math.round(screen.height / 15)
+            });
+
+            // Update the isMaximized member variable.
+            that.windowProperties[windowPostUpdate.id].isMaximized = false;
+        }
     };
 
-    gamepad.messageListenerUtils.search = function (actionData) {
+    gamepad.messageListenerUtils.search = function (actionOptions) {
         chrome.search.query({
-            disposition: actionData.disposition,
-            text: actionData.text
+            disposition: actionOptions.disposition,
+            text: actionOptions.text
         });
     };
-
-
 
     var messageListener = {
         // previous "members"
         windowProperties: {},
 
-        // previous "invokers"
-        actionExecutor: function (actionData) {
-            gamepad.messageListener.actionExecutor(messageListener, actionData);
-        },
-
-        // All legacy actions are called with: tabId, invert, active, homepageURL, left
-        // TODO: Rewrite these to use actionData directly.
-        openNewTab: function (tabId, invert, active, homepageURL) {
+        // previous "invokers", or "actions".
+        // On the client side, we check the control state before triggering
+        // these, so the method signature is simply `action(actionOptions)`.
+        openNewTab: async function (actionOptions) {
             // TODO: Currently opens a new tab and a new window.
-            gamepad.messageListenerUtils.openNewTab(active, homepageURL);
+            return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.homepageURL);
         },
-        closeCurrentTab: function (tabId) {
-            // Only close the tab if there is another "controllable" tab available.
-            chrome.tabs.query({currentWindow: true }, function (tabs) {
+        closeCurrentTab: async function (actionOptions) {
+            if (actionOptions.tabId) {
+                var tabs = await chrome.tabs.query({currentWindow: true });
                 var controllableTabs = tabs.filter(gamepad.messageListenerUtils.filterControllableTabs);
-                // More than one tab, just close the tab.
+                // More than one controllable tab, just close the tab.
                 if (controllableTabs.length > 1) {
-                    chrome.tabs.remove(tabId);
+                    await chrome.tabs.remove(actionOptions.tabId);
                 }
-                // Fail over to the window close logic.
+                // Fail over to the window close logic, which will check for controllable tabs in other windows.
                 else {
-                    gamepad.messageListenerUtils.closeCurrentWindow();
+                    return await gamepad.messageListenerUtils.closeCurrentWindow();
                 }
-            });
+            }
         },
-        openNewWindow: function (tabId, invert, active, homepageURL) {
-            gamepad.messageListenerUtils.openNewWindow(active, homepageURL);
+        openNewWindow: async function (actionOptions) {
+            return await gamepad.messageListenerUtils.openNewWindow(actionOptions.active, actionOptions.homepageURL);
         },
 
-        maximizeWindow: function (tabId, invert, active, homepageURL, left) {
-            gamepad.messageListenerUtils.changeWindowSize(messageListener, "maximized", left);
+        maximizeWindow: async function (actionOptions) {
+            return await gamepad.messageListenerUtils.changeWindowSize(messageListener, "maximized", actionOptions.left);
         },
-        restoreWindowSize: function (tabId, invert, active, homepageURL, left) {
-            gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", left);
+        restoreWindowSize: async function (actionOptions) {
+            return await gamepad.messageListenerUtils.changeWindowSize(messageListener, "normal", actionOptions.left);
         },
-        // TODO: Rewrite these to use actionData directly.
 
-        // From now on, actions will be called directly with the actionData from the message.  These are either new
-        // or have no data and can use the new method.
-        reopenTabOrWindow: function () {
-            // TODO: Confirm whether or not the restored window has focus.
-            chrome.sessions.restore();
+        // Restored windows have focus, so there is still a danger of uncontrollable windows popping up.
+        reopenTabOrWindow: async function () {
+            await chrome.sessions.restore();
         },
-        goToPreviousWindow: function () {
-            gamepad.messageListenerUtils.switchWindow("previousWindow");
+        goToPreviousWindow: async function () {
+            return await gamepad.messageListenerUtils.switchWindow("previousWindow");
         },
-        goToNextWindow: function () {
-            gamepad.messageListenerUtils.switchWindow("nextWindow");
+        goToNextWindow: async function () {
+            return await gamepad.messageListenerUtils.switchWindow("nextWindow");
         },
-        zoomIn: function () {
-            gamepad.messageListenerUtils.setZoom("zoomIn");
+        zoomIn: async function () {
+            return await gamepad.messageListenerUtils.setZoom("zoomIn");
         },
-        zoomOut: function () {
-            gamepad.messageListenerUtils.setZoom("zoomOut");
+        zoomOut: async function () {
+            return await gamepad.messageListenerUtils.setZoom("zoomOut");
         },
-        goToPreviousTab: function () {
-            gamepad.messageListenerUtils.switchTab("previousTab");
+        goToPreviousTab: async function () {
+            return await gamepad.messageListenerUtils.switchTab("previousTab");
         },
-        goToNextTab: function () {
-            gamepad.messageListenerUtils.switchTab("nextTab");
+        goToNextTab: async function () {
+            return await gamepad.messageListenerUtils.switchTab("nextTab");
         },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
-        openActionLauncher: function () {
-            gamepad.messageListenerUtils.openActionLauncher();
+        openActionLauncher: async function () {
+            return await gamepad.messageListenerUtils.openActionLauncher();
         },
         search: gamepad.messageListenerUtils.search
     };
 
-    // Temporary list of actions that can take a full actionData payload directly.
-    gamepad.messageListener.newSchoolActions = [
-        "reopenTabOrWindow",
-        "goToPreviousWindow",
-        "goToNextWindow",
-        "zoomIn",
-        "zoomOut",
-        "goToPreviousTab",
-        "goToNextTab",
-        "closeCurrentWindow",
-        "openActionLauncher",
-        "openSearchKeyboard",
-        "search"
-    ];
+    chrome.runtime.onConnect.addListener(function (port) {
+        port.onMessage.addListener(async function (actionOptions) {
+            // Execute the actions only if the action data is available.
+            if (actionOptions.actionName) {
+                var action = messageListener[actionOptions.actionName];
 
-    /**
-     *
-     * Calls the invoker methods according to the message is recieved from the content
-     * script.
-     *
-     * @param {Object} messageListener - The messageListener.
-     * @param {Object} actionData - The message object recieved from the content scripts.
-     *
-     */
-    gamepad.messageListener.actionExecutor = function (messageListener, actionData) {
-        // Execute the actions only if the action data is available.
-        if (actionData.actionName) {
-            var action = messageListener[actionData.actionName];
+                // Trigger the action only if a valid action is found.
+                if (action) {
+                    var tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+                    var tabId = tabs[0] ? tabs[0].id : undefined;
 
-            // Trigger the action only if a valid action is found.
-            if (action) {
-                if (gamepad.messageListener.newSchoolActions.includes(actionData.actionName)) {
-                    chrome.tabs.query({ active: true, currentWindow: true }, function () {
-                        action(actionData);
-                    });
-                }
-                else {
-                    var invert = actionData.invert,
-                        active = actionData.active,
-                        left = actionData.left,
-                        homepageURL = actionData.homepageURL;
-                    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-                        var tabId = tabs[0] ? tabs[0].id : undefined;
-                        action(tabId, invert, active, homepageURL, left);
-                    });
+                    var wrappedActionOptions = JSON.parse(JSON.stringify(actionOptions));
+                    wrappedActionOptions.tabId = tabId;
 
+                    var actionResult = await action(wrappedActionOptions);
+                    port.postMessage(actionResult);
+                    port.disconnect();
                 }
             }
-        }
-    };
-
-    // Instantiate and add action handler as a listener.
-    chrome.runtime.onMessage.addListener(messageListener.actionExecutor);
+        });
+    });
 })();

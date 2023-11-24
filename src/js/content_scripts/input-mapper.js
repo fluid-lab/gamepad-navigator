@@ -90,74 +90,74 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         invokers: {
-            // Actions, these are called with: value, speedFactor, invert, background, oldValue, homepageURL
+            // Actions, these are called with: value, oldValue, actionOptions
             goToPreviousTab: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "goToPreviousTab", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousTab" }]
             },
             goToNextTab: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "goToNextTab", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextTab"}]
             },
             closeCurrentTab: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "closeCurrentTab", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentTab"}]
             },
             openNewTab: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "openNewTab", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewTab" }]
             },
             openNewWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "openNewWindow", "{arguments}.0", "{arguments}.4", "{arguments}.3", "{arguments}.5"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewWindow" }]
             },
             closeCurrentWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "closeCurrentWindow", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentWindow" }]
             },
             goToPreviousWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "goToPreviousWindow", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousWindow" }]
             },
             goToNextWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "goToNextWindow", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextWindow" }]
             },
             zoomIn: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "zoomIn", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomIn" }]
             },
             zoomOut: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "zoomOut", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomOut" }]
             },
             thumbstickZoom: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"]
             },
             maximizeWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "maximizeWindow", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "maximizeWindow" }]
             },
             restoreWindowSize: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "restoreWindowSize", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "restoreWindowSize" }]
             },
             thumbstickWindowSize: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickWindowSize",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
+                args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
             },
             reopenTabOrWindow: {
-                funcName: "gamepad.inputMapperUtils.background.sendMessage",
-                args: ["{that}", "reopenTabOrWindow", "{arguments}.0", "{arguments}.4"]
+                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlRelease",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "reopenTabOrWindow" }]
             },
             openActionLauncher: {
                 funcName: "gamepad.inputMapper.openActionLauncher",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"] // value, oldValue
+                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
             },
             openSearchKeyboard: {
                 funcName: "gamepad.inputMapper.openSearchKeyboard",
-                args: ["{that}", "{arguments}.0", "{arguments}.4"] // value, oldValue
+                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
             }
         },
         components: {
