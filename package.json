@@ -20,9 +20,10 @@
     "homepage": "https://github.com/fluid-lab/gamepad-navigator#readme",
     "scripts": {
         "lint": "fluid-lint-all",
-        "build": "npm run build:grunt && npm run build:css",
+        "build": "npm run build:grunt && npm run build:css && npm run build:svgs",
         "build:grunt": "grunt build",
         "build:css": "node ./utils/bundleCss.js",
+        "build:svgs": "node ./utils/bundleSvgs.js",
         "postinstall": "npm run build",
         "test": "testem ci --file tests/testem.json"
     },

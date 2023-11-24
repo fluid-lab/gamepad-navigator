@@ -43,12 +43,20 @@
 }
 
 .modal-header {
+    align-items: center;
     align-self: center;
+    display: flex;
+    flex-direction: row;
 }
 
 .modal-header h3 {
     font-size: 2rem;
     font-weight: bold;
+}
+
+.modal-header .modal-icon svg {
+    height: 5rem;
+    width: 5rem;
 }
 
 .modal-body {

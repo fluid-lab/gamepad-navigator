@@ -29,6 +29,7 @@
                 "js/content_scripts/gamepad-navigator.js",
                 "js/shared/configuration-maps.js",
                 "js/content_scripts/styles.js",
+                "js/content_scripts/svgs.js",
                 "js/content_scripts/templateRenderer.js",
                 "js/content_scripts/modal.js",
                 "js/content_scripts/action-launcher.js",
