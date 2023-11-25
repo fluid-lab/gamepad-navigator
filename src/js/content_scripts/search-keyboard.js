@@ -30,7 +30,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         invokers: {
             handleSearchButtonClick: {
                 funcName: "gamepad.searchKeyboard.modal.handleSearchButtonClick",
-                args: ["{that}", "{arguments}.0"]
+                args: ["{that}", "{inputMapper}", "{arguments}.0"]
             }
         },
 
@@ -51,7 +51,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     });
 
-    gamepad.searchKeyboard.modal.handleSearchButtonClick = function (that, event) {
+    gamepad.searchKeyboard.modal.handleSearchButtonClick = function (that, inputMapper, event) {
         that.applier.change("activeModal", false);
         event.preventDefault();
 
@@ -63,7 +63,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 text: that.model.textInputValue.trim()
             };
 
-            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
+            gamepad.inputMapperUtils.background.postMessage(inputMapper, actionOptions);
         }
     };
 })(fluid);

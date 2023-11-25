@@ -40,11 +40,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             row: -1,
             value: 1,
             oldValue: 0,
-            speedFactor: 1,
-            invert: false,
-            background: false,
-            homepageURL: "https://www.google.com/",
-            frequency: 100
+            commonConfiguration: {
+                homepageURL: "https://www.google.com/"
+            },
+            actionOptions: {
+                speedFactor: 1,
+                invert: false,
+                background: false,
+                frequency: 100
+            }
         },
 
         markup: {
@@ -114,27 +118,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // triggered appropriately.
 
             // All actions are called with:
-            // value, speedFactor, invert, background, oldValue, homepageURL
+            // value, oldValue, actionOptions
 
             // Simulate button down
             actionFn(
                 1,
-                actionComponent.model.speedFactor,
-                actionComponent.model.invert,
-                actionComponent.model.background,
                 0,
-                actionComponent.model.homepageURL
+                actionComponent.model.actionOptions
             );
 
             // Simulate button up after a delay (100ms by default)
             setTimeout(function () {
                 actionFn(
                     0,
-                    actionComponent.model.speedFactor,
-                    actionComponent.model.invert,
-                    actionComponent.model.background,
                     1,
-                    actionComponent.model.homepageURL
+                    actionComponent.model.actionOptions
                 );
             }, actionComponent.model.frequency);
         }
@@ -287,10 +285,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         row: "{sourcePath}",
                         actionKey: "{source}.key",
                         description: "{source}.description",
-                        speedFactor: "{source}.speedFactor",
-                        invert: "{source}.invert",
-                        background: "{source}.background",
-                        frequency: "{source}.frequency"
+                        actionOptions: {
+                            speedFactor: "{source}.speedFactor",
+                            invert: "{source}.invert",
+                            background: "{source}.background",
+                            frequency: "{source}.frequency"
+                        }
                     }
                 }
             }

@@ -397,4 +397,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         });
     });
+
+    // Open our "launchpad", which only stays open if there are no other
+    // "controllable" windows/tabs.
+    chrome.runtime.onStartup.addListener(function () {
+        chrome.runtime.openOptionsPage();
+    });
 })();
