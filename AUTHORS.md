@@ -18,7 +18,7 @@ This is the list of Gamepad Navigator copyright holders. It does not list all in
 assigned copyright to an institution or made only minor changes. Please see the version control system's revision
 history for details on contributions.
 
-Copyright (c) 2020
+Copyright (c) 2023
 
 - Divyanshu Mahajan
 - Tony Atkins
