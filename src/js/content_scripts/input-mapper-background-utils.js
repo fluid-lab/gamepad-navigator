@@ -25,8 +25,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * when the user navigates back to the same tab.
      */
 
-    gamepad.inputMapperUtils.background.postMessageOnControlRelease = function (that, value, oldValue, actionOptions) {
-        if (value < oldValue && oldValue > that.options.cutoffValue) {
+    gamepad.inputMapperUtils.background.postMessageOnControlDown = function (that, value, oldValue, actionOptions) {
+        if (oldValue === 0 && value > that.model.prefs.analogCutoff) {
             gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
         }
     };

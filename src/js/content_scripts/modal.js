@@ -50,7 +50,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             trailingFocusTrap: ".modal-focus-trap-trailing"
         },
         markup: {
-            // TODO: Add the ability to retrieve our icon URL and display the icon onscreen.
             container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
         },
         invokers: {

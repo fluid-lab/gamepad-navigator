@@ -156,7 +156,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // TODO: Add support for controlling `backgroundOption` in the `openNewTab` and `openNewWindow` actions.
             actionDefs: [
                 // All button-driven actions, except for the action launcher itself, ordered by subjective "usefulness".
-                // TODO: Add action to open configuration menu, when available.
+                {
+                    key: "openConfigPanel",
+                    description: "Configure Gamepad Navigator"
+                },
                 {
                     key: "openSearchKeyboard",
                     description: "Search"
@@ -254,22 +257,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 {
                     key: "zoomOut",
                     description: "Zoom-out on the active web page"
-                },
-                {
-                    key: "sendArrowLeft",
-                    description: "Send left arrow to the focused element."
-                },
-                {
-                    key: "sendArrowRight",
-                    description: "Send right arrow to the focused element."
-                },
-                {
-                    key: "sendArrowUp",
-                    description: "Send up arrow to the focused element."
-                },
-                {
-                    key: "sendArrowDown",
-                    description: "Send down arrow to the focused element."
                 }
             ]
         },

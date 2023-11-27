@@ -527,15 +527,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Simulate a key press (down and up) on the current focused element.
      * @param {Object} that - The inputMapper component.
      * @param {Number} value - The current value of the input (from 0 to 1).
-     * @param {String} key - The key (ex: `ArrowLeft`) to simulate.
+     * @param {Object} actionOptions - The options for this action.
+     * @property {String} key - The key (ex: `ArrowLeft`) to simulate.
      *
      */
-    gamepad.inputMapperUtils.content.sendKey = function (that, value, key) {
-        if (that.model.pageInView && (value > 0)) {
-            var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
+    gamepad.inputMapperUtils.content.sendKey = function (that, value, actionOptions) {
+        var key = fluid.get(actionOptions, "key");
+
+        // TODO: Make this use the "analogCutoff" preference.
+        if (that.model.pageInView && (value > that.options.cutoffValue) && (key !== undefined)) {
             var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
             if (activeElement) {
+                var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
                 activeElement.dispatchEvent(keyDownEvent);
 
                 // TODO: Test with text inputs and textarea fields to see if
@@ -570,7 +574,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 that.options.frequency * speedFactor, // delay
                 that, // arg 0
                 value, //arg 1
-                forwardKey // arg 2
+                { key: forwardKey } // arg 2
             );
         }
         else if (value < (-1 * that.options.cutoffValue)) {
@@ -579,7 +583,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 that.options.frequency * speedFactor,
                 that,
                 -1 * value,
-                backwardKey
+                { key: backwardKey }
             );
         }
     };

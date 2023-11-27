@@ -16,9 +16,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
-    fluid.registerNamespace("gamepad.configMaps");
-    fluid.registerNamespace("gamepad.inputMapper.base");
-    fluid.registerNamespace("gamepad.inputMapperUtils.content");
+    // TODO: Fairly sure none of these are required.
+    // fluid.registerNamespace("gamepad.configMaps");
+    // fluid.registerNamespace("gamepad.inputMapper.base");
+    // fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
     fluid.defaults("gamepad.inputMapper.base", {
         gradeNames: ["gamepad.configMaps", "gamepad.navigator"],
@@ -50,6 +51,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * TODO: Move the member variables used for the inter-navigation web page
              * features to the "inputMapper" component.
              */
+            // TODO: These should be expressed per control rather than per action, as we might bind an action to more than one control.
             intervalRecords: {
                 upwardScroll: null,
                 downwardScroll: null,
@@ -66,12 +68,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             currentTabIndex: 0,
             tabbableElements: null,
-            mutationObserverInstance: null
+            mutationObserverInstance: null,
+            // TODO: Ensure that there are sensible defaults somewhere.
+            prefs: {},
+            bindings: {}
         },
         // TODO: Make this configurable.
         // "Jitter" cutoff Value for analog thumb sticks.
-        cutoffValue: 0.40,
-        scrollInputMultiplier: 50,
+        cutoffValue: 0.40, // TODO: Make this a preference
+        scrollInputMultiplier: 50, // TODO: Make this a preference
+
         invokers: {
             updateTabbables: {
                 funcName: "gamepad.inputMapper.base.updateTabbables",
@@ -154,22 +160,29 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"]
             },
+
+            sendKey: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
+            },
+
+            // TODO: Remove these once we are using the new bindings instead of the old "map".
             // Arrow actions for buttons
             sendArrowLeft: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", "ArrowLeft"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowLeft" }] // value, actionOptions
             },
             sendArrowRight: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", "ArrowRight"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowRight" }] // value, actionOptions
             },
             sendArrowUp: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", "ArrowUp"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowUp" }] // value, actionOptions
             },
             sendArrowDown: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", "ArrowDown"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowDown" }] // value, actionOptions
             },
             // Arrow actions for axes
             thumbstickHorizontalArrows: {
@@ -294,23 +307,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 
     gamepad.inputMapper.base.vibrate = function (that) {
-        // TODO: Make this configurable, and/or make more than one vibration.
+        if (that.model.prefs.vibrate) {
+            var gamepads = that.options.windowObject.navigator.getGamepads();
+            var nonNullGamepads = gamepads.filter(function (gamepad) { return gamepad !== null; });
 
-        var gamepads = that.options.windowObject.navigator.getGamepads();
-        var nonNullGamepads = gamepads.filter(function (gamepad) { return gamepad !== null; });
-
-        fluid.each(nonNullGamepads, function (gamepad) {
-            if (gamepad.vibrationActuator) {
-                gamepad.vibrationActuator.playEffect(
-                    "dual-rumble",
-                    {
-                        duration: 250,
-                        startDelay: 0,
-                        strongMagnitude: 0.25,
-                        weakMagnitude: .75
-                    }
-                );
-            }
-        });
+            fluid.each(nonNullGamepads, function (gamepad) {
+                if (gamepad.vibrationActuator) {
+                    gamepad.vibrationActuator.playEffect(
+                        "dual-rumble",
+                        {
+                            duration: 250,
+                            startDelay: 0,
+                            strongMagnitude: 0.25,
+                            weakMagnitude: .75
+                        }
+                    );
+                }
+            });
+        }
     };
 })(fluid);

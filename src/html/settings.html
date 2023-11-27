@@ -12,9 +12,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Gamepad Navigator Launchpad</title>
+        <title>Gamepad Navigator Settings</title>
 
-        <link rel="stylesheet" href="../css/about.css"/>
+        <link rel="stylesheet" href="../css/settings.css"/>
 
         <!-- Our content_scripts are not injected into this page, so we load them manually -->
         <script src="../js/lib/infusion/infusion-all.js"></script>
@@ -28,6 +28,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         <script src="../js/lib/fluid-osk/inputs.js"></script>
         <script src="../js/content_scripts/gamepad-navigator.js"></script>
         <script src="../js/shared/configuration-maps.js"></script>
+        <script src="../js/shared/prefs.js"></script>
+        <script src="../js/content_scripts/utils.js"></script>
+        <script src="../js/content_scripts/bindings.js"></script>
         <script src="../js/content_scripts/styles.js"></script>
         <script src="../js/content_scripts/svgs.js"></script>
         <script src="../js/content_scripts/templateRenderer.js"></script>
@@ -41,25 +44,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         <script src="../js/content_scripts/input-mapper-base.js"></script>
         <script src="../js/content_scripts/input-mapper.js" defer></script>
 
-        <!-- startup script to attempt to close this if other controllable windows are available. -->
-        <script src="../js/about_page/startup.js"></script>
+        <script src="../js/settings/toggle.js"></script>
+        <script src="../js/settings/settings.js" defer></script>
     </head>
     <body>
-        <div class="gamepad-launchpad-header">
-            <img class="gamepad-launchpad-icon" src="../images/gamepad-icon.png"/>
+        <div class="gamepad-settings-header">
+            <img class="gamepad-settings-icon" src="../images/gamepad-icon.png"/>
 
-            <h3>Gamepad Navigator Launchpad</h3>    
+            <h3>Gamepad Navigator Settings</h3>    
         </div>
 
-        <div class="gamepad-launchpad-body">
-            <p>
-                Some pages, like those opened by "New Tab" or "New Window" cannot be controlled using the Gamepad Navigator.
-            </p>
-    
-            <p>
-                If there are no controllable pages open on startup, this page is opened automatically to ensure that there
-                is always at least one controllable window.
-            </p>    
+        <div class="gamepad-settings-body">
         </div>
     </body>
 </html>

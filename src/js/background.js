@@ -311,6 +311,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
+    gamepad.messageListenerUtils.openOptionsPage = async function () {
+        var windowsArray = await chrome.windows.getAll({ populate: true});
+        var settingsWindowId = null;
+        var settingsTabId = null;
+        windowsArray.forEach(function (window) {
+            if (!settingsTabId) {
+                var settingsTab = window.tabs.find(function (tab) {
+                    return tab.url.startsWith("chrome-extension://") && tab.url.endsWith("settings.html");
+                });
+                if (settingsTab) {
+                    settingsWindowId = window.id;
+                    settingsTabId = settingsTab.id;
+                }
+            }
+        });
+
+        // If there's already a settings tab, focus on it.
+        if (settingsTabId) {
+            await chrome.windows.update(settingsWindowId, { focused: true});
+            await chrome.tabs.update(settingsTabId, { active: true });
+        }
+        // Otherwise, open a new one.
+        else {
+            return await chrome.runtime.openOptionsPage();
+        }
+    };
+
     var messageListener = {
         // previous "members"
         windowProperties: {},
@@ -319,7 +346,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // On the client side, we check the control state before triggering
         // these, so the method signature is simply `action(actionOptions)`.
         openNewTab: async function (actionOptions) {
-            // TODO: Currently opens a new tab and a new window.
             return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.homepageURL);
         },
         closeCurrentTab: async function (actionOptions) {
@@ -373,7 +399,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         openActionLauncher: async function () {
             return await gamepad.messageListenerUtils.openActionLauncher();
         },
-        search: gamepad.messageListenerUtils.search
+        search: gamepad.messageListenerUtils.search,
+        openOptionsPage: gamepad.messageListenerUtils.openOptionsPage
     };
 
     chrome.runtime.onConnect.addListener(function (port) {
@@ -398,9 +425,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     });
 
-    // Open our "launchpad", which only stays open if there are no other
-    // "controllable" windows/tabs.
     chrome.runtime.onStartup.addListener(function () {
-        chrome.runtime.openOptionsPage();
+        chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
+            var storedPrefs = storedObject && storedObject["gamepad-prefs"];
+            // If our prefs exactly match the defaults, nothing is stored.
+            // In this case, the default behaviour is to open a window, so if
+            // there are no stored settings, we do that.
+            if (!storedPrefs || storedPrefs["openWindowOnStartup"]) {
+                chrome.runtime.openOptionsPage();
+            }
+        });
     });
 })();
