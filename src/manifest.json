@@ -55,6 +55,15 @@
         "48": "images/gamepad-icon-48px.png",
         "128": "images/gamepad-icon-128px.png"
     },
+    "action": {
+        "default_icon": {
+            "16": "images/gamepad-icon-16px.png",
+            "32": "images/gamepad-icon-32px.png",
+            "48": "images/gamepad-icon-48px.png",
+            "128": "images/gamepad-icon-128px.png"
+        },
+        "default_title": "Open Gamepad Navigator settings."
+    },
     "options_ui": {
         "open_in_tab": true,
         "page": "html/settings.html"

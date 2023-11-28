@@ -425,6 +425,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     });
 
+    // If the user's preferences allow us to, open the settings panel on startup.
     chrome.runtime.onStartup.addListener(function () {
         chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
             var storedPrefs = storedObject && storedObject["gamepad-prefs"];
@@ -435,5 +436,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 chrome.runtime.openOptionsPage();
             }
         });
+    });
+
+    // Open the settings panel when the icon is clicked.
+    chrome.action.onClicked.addListener(() => {
+        chrome.runtime.openOptionsPage();
     });
 })();
