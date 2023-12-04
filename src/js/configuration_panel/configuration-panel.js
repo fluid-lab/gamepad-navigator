@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -99,7 +99,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 sendArrowRight: "Send right arrow to the focused element.",
                 sendArrowUp: "Send up arrow to the focused element.",
                 sendArrowDown: "Send down arrow to the focused element.",
-                openActionLauncher: "Open Action Launcher"
+                openActionLauncher: "Open Action Launcher",
+                openSearchKeyboard: "Open Search"
             },
             axes: {
                 null: "None",

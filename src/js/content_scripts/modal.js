@@ -23,9 +23,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.modal", {
         gradeNames: ["gamepad.templateRenderer"],
         model: {
-            hidden: true,
-            lastExternalFocused: false
+            classNames: "",
+            hidden: true
         },
+        icon: gamepad.svg["gamepad-icon"],
         modelListeners: {
             hidden: [
                 {
@@ -43,18 +44,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             icon: ".modal-icon",
             innerContainer: ".modal-inner-container",
             modalBody: ".modal-body",
+            modalFooter: ".modal-footer",
             modalCloseButton: ".modal-close-button",
             leadingFocusTrap: ".modal-focus-trap-leading",
             trailingFocusTrap: ".modal-focus-trap-trailing"
         },
         markup: {
-            // TODO: Add the ability to retrieve our icon URL and display the icon onscreen.
-            container: "<div class='modal-outer-container'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
+            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
         },
         invokers: {
             closeModal: {
                 funcName: "gamepad.modal.closeModal",
-                args: ["{that}", "{arguments}.0"] // event
+                args: ["{gamepad.modalManager}", "{arguments}.0"] // event
             },
             handleKeydown: {
                 funcName: "gamepad.modal.handleKeydown",
@@ -74,15 +75,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}", true]
             }
         },
-        // TODO: Relay hidden classname to control visibility.
-        // TODO: clicking outside the inner container should close the modal.
-        // We can't use this form because we also need to restore focus.
-        // modelRelay: {
-        //     source: "{that}.model.dom.outerContainer.click",
-        //     target: "{that}.model.hidden",
-        //     singleTransform: "fluid.transforms.toggle"
-        // },
         listeners: {
+            "onCreate.drawIcon": {
+                funcName: "gamepad.modal.drawIcon",
+                args: ["{that}"]
+            },
             "onCreate.bindOuterContainerClick": {
                 this: "{that}.container",
                 method: "click",
@@ -134,11 +131,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    gamepad.modal.closeModal = function (that, event) {
+    gamepad.modal.drawIcon = function (that) {
+        var iconElement = that.locate("icon");
+        iconElement.html(that.options.icon);
+    };
+
+    /**
+     *
+     * @param {Object} modalManager - The modal manager component.
+     * @param {Event} event - The event to which we are responding.
+     */
+    gamepad.modal.closeModal = function (modalManager, event) {
         event.preventDefault();
-        that.applier.change("hidden", true);
-        if (that.model.lastExternalFocused && that.model.lastExternalFocused.focus) {
-            that.model.lastExternalFocused.focus();
+        modalManager.applier.change("activeModal", false);
+        if (modalManager.model.lastExternalFocused && modalManager.model.lastExternalFocused.focus) {
+            modalManager.model.lastExternalFocused.focus();
         }
     };
 
@@ -156,8 +163,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var innerContainer = that.locate("innerContainer");
 
         // Search for tabbables, focus on first or last element depending.
-        // TODO: Repurpose sorting from other areas where we use ally?
-        var tabbableElements = ally.query.tabbable({ context: innerContainer, strategy: "strict" });
+        var tabbableElements = ally.query.tabsequence({ context: innerContainer, strategy: "strict" });
         if (tabbableElements.length) {
             var elementIndex = reverse ? tabbableElements.length - 1 : 0;
             var elementToFocus = tabbableElements[elementIndex];

@@ -415,6 +415,30 @@
     "1094500|grunt-prompt>lodash": {
       "decision": "ignore",
       "madeAt": 1698935257541
+    },
+    "1094544|fluid-lint-all>eslint-plugin-markdown>remark-parse>trim>markdownlint-config-fluid>markdownlint>markdown-it>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699613213481
+    },
+    "1094544|stylelint-config-fluid>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699613213481
+    },
+    "1094544|stylelint-scss>stylelint>autoprefixer>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699613213481
+    },
+    "1094544|sugarss>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699612632490
+    },
+    "1094544|postcss-less>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699613213481
+    },
+    "1094544|stylelint-order>postcss": {
+      "decision": "ignore",
+      "madeAt": 1699613213481
     }
   },
   "rules": {},

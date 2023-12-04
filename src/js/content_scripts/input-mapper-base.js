@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -16,12 +16,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
-    fluid.registerNamespace("gamepad.configMaps");
-    fluid.registerNamespace("gamepad.inputMapper.base");
-    fluid.registerNamespace("gamepad.inputMapperUtils.content");
+    // TODO: Fairly sure none of these are required.
+    // fluid.registerNamespace("gamepad.configMaps");
+    // fluid.registerNamespace("gamepad.inputMapper.base");
+    // fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
     fluid.defaults("gamepad.inputMapper.base", {
         gradeNames: ["gamepad.configMaps", "gamepad.navigator"],
+        model: {
+            pageInView: true
+        },
         modelListeners: {
             "axes.*": {
                 funcName: "{that}.produceNavigation",
@@ -47,6 +51,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * TODO: Move the member variables used for the inter-navigation web page
              * features to the "inputMapper" component.
              */
+            // TODO: These should be expressed per control rather than per action, as we might bind an action to more than one control.
             intervalRecords: {
                 upwardScroll: null,
                 downwardScroll: null,
@@ -63,13 +68,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             currentTabIndex: 0,
             tabbableElements: null,
-            mutationObserverInstance: null
+            mutationObserverInstance: null,
+            // TODO: Ensure that there are sensible defaults somewhere.
+            prefs: {},
+            bindings: {}
         },
         // TODO: Make this configurable.
         // "Jitter" cutoff Value for analog thumb sticks.
-        cutoffValue: 0.40,
-        scrollInputMultiplier: 50,
+        cutoffValue: 0.40, // TODO: Make this a preference
+        scrollInputMultiplier: 50, // TODO: Make this a preference
+
         invokers: {
+            updateTabbables: {
+                funcName: "gamepad.inputMapper.base.updateTabbables",
+                args: ["{that}"]
+            },
             produceNavigation: {
                 funcName: "gamepad.inputMapper.base.produceNavigation",
                 args: ["{that}", "{arguments}.0"]
@@ -86,19 +99,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 "this": "{that}.mutationObserverInstance",
                 method: "disconnect"
             },
-            // TODO: Investigate, identify, and fix tab navigation issues.
-            tabindexSortFilter: {
-                funcName: "gamepad.inputMapper.base.tabindexSortFilter",
-                args: ["{arguments}.0", "{arguments}.1"]
+            vibrate: {
+                funcName: "gamepad.inputMapper.base.vibrate",
+                args: ["{that}"]
             },
-            /**
-             * TODO: Add tests for links and other elements that involve navigation
-             * between pages.
-             */
-            // Actions, these are called with: value, speedFactor, invert, background, oldValue, homepageURL
+
+            // Actions are called with value, oldValue, actionOptions
             click: {
                 funcName: "gamepad.inputMapperUtils.content.click",
-                args: ["{arguments}.0"]
+                args: ["{that}", "{arguments}.0"]
             },
             previousPageInHistory: {
                 funcName: "gamepad.inputMapperUtils.content.previousPageInHistory",
@@ -108,6 +117,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.nextPageInHistory",
                 args: ["{that}", "{arguments}.0"]
             },
+
             reverseTab: {
                 funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
                 args: ["{that}", "{arguments}.0", "reverseTab"]
@@ -116,21 +126,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
                 args: ["{that}", "{arguments}.0", "forwardTab"]
             },
+
             scrollLeft: {
                 funcName: "gamepad.inputMapperUtils.content.scrollLeft",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             scrollRight: {
                 funcName: "gamepad.inputMapperUtils.content.scrollRight",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             scrollUp: {
                 funcName: "gamepad.inputMapperUtils.content.scrollUp",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             scrollDown: {
                 funcName: "gamepad.inputMapperUtils.content.scrollDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             scrollHorizontally: {
                 funcName: "gamepad.inputMapperUtils.content.scrollHorizontally",
@@ -147,33 +158,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             // TODO: Add tests for when the number of tabbable elements changes.
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+                args: ["{that}", "{arguments}.0", "{arguments}.2"]
             },
+
+            sendKey: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
+            },
+
+            // TODO: Remove these once we are using the new bindings instead of the old "map".
             // Arrow actions for buttons
             sendArrowLeft: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{arguments}.0", "ArrowLeft"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowLeft" }] // value, actionOptions
             },
             sendArrowRight: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{arguments}.0", "ArrowRight"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowRight" }] // value, actionOptions
             },
             sendArrowUp: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{arguments}.0", "ArrowUp"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowUp" }] // value, actionOptions
             },
             sendArrowDown: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{arguments}.0", "ArrowDown"] // value, key
+                args: ["{that}", "{arguments}.0", { key: "ArrowDown" }] // value, actionOptions
             },
             // Arrow actions for axes
             thumbstickHorizontalArrows: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowRight", "ArrowLeft"] // value, speedFactor, invert, forwardKey, backwardKey
+                args: ["{that}", "{arguments}.0", "{arguments}.2", "ArrowRight", "ArrowLeft"] // value, actionOptions, forwardKey, backwardKey
             },
             thumbstickVerticalArrows: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowDown", "ArrowUp"] // value, speedFactor, invert, forwardKey, backwardKey
+                args: ["{that}", "{arguments}.0", "{arguments}.2", "ArrowDown", "ArrowUp"] // value, actionOptions, forwardKey, backwardKey
             }
         }
     });
@@ -189,46 +207,50 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * configured action map to produce a navigation effect.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Object} change - The recipt for the change in input values.
+     * @param {Object} change - The receipt for the change in input values.
      *
      */
     gamepad.inputMapper.base.produceNavigation = function (that, change) {
-        /**
-         * Check if input is generated by axis or button and which button/axes was
-         * disturbed.
-         */
-        var inputType = change.path[0],
-            index = change.path[1],
-            inputValue = change.value,
-            oldInputValue = change.oldValue || 0;
+        // Only respond to gamepad input if we are "in view".
+        if (that.model.pageInView) {
+            /**
+             * Check if input is generated by axis or button and which button/axes was
+             * disturbed.
+             */
+            var inputType = change.path[0], // i. e. "button", or "axis"
+                index = change.path[1], // i.e. 0, 1, 2
+                inputValue = change.value,
+                oldInputValue = change.oldValue || 0;
 
-        var inputProperties = that.model.map[inputType][index],
-            actionLabel = fluid.get(inputProperties, "currentAction") || fluid.get(inputProperties, "defaultAction"),
-            homepageURL = that.model.commonConfiguration.homepageURL;
+            // Look for a binding at map.axis.0, map.button.1, et cetera.
+            var binding = that.model.map[inputType][index];
+            // TODO: See how/whether we ever fail over using this structure.
+            var actionLabel = fluid.get(binding, "currentAction") || fluid.get(binding, "defaultAction");
 
-        /**
-         * TODO: Modify the action call in such a manner that the action gets triggered
-         * when the inputs are released.
-         * (To gain shortpress and longpress actions)
-         *
-         * Refer:
-         * https://github.com/fluid-lab/gamepad-navigator/pull/21#discussion_r453507050
-         */
+            /**
+             * TODO: Modify the action call in such a manner that the action gets triggered
+             * when the inputs are released.
+             * (To gain shortpress and longpress actions)
+             *
+             * Refer:
+             * https://github.com/fluid-lab/gamepad-navigator/pull/21#discussion_r453507050
+             */
 
-        // Execute the actions only if the action label is available.
-        if (actionLabel) {
-            var action = fluid.get(that, actionLabel);
+            // Execute the actions only if the action label is available.
+            if (actionLabel) {
+                var action = fluid.get(that, actionLabel);
 
-            // Trigger the action only if a valid function is found.
-            if (action) {
-                action(
-                    inputValue,
-                    inputProperties.speedFactor,
-                    inputProperties.invert,
-                    inputProperties.background,
-                    oldInputValue,
-                    homepageURL
-                );
+                // Trigger the action only if a valid function is found.
+                if (action) {
+                    var actionOptions = fluid.copy(binding);
+                    actionOptions.homepageURL = that.model.commonConfiguration.homepageURL;
+
+                    action(
+                        inputValue,
+                        oldInputValue,
+                        actionOptions
+                    );
+                }
             }
         }
     };
@@ -247,6 +269,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         });
     };
 
+    gamepad.inputMapper.base.updateTabbables = function (that) {
+        that.tabbableElements = ally.query.tabsequence({ strategy: "strict" });
+    };
+
+
     /**
      *
      * A listener to track DOM elements and update the list when the DOM is updated.
@@ -259,13 +286,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             MutationObserver = that.options.windowObject.MutationObserver;
 
         // Record the tabbable elements when the component is created.
-        that.tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
+        that.updateTabbables();
 
         // Create an instance of the mutation observer.
-        that.mutationObserverInstance = new MutationObserver(function () {
-            // Record the tabbable elements when the DOM mutates.
-            that.tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
-        });
+        that.mutationObserverInstance = new MutationObserver(that.updateTabbables);
 
         // Specify the mutations to be observed.
         var observerConfiguration = {
@@ -281,37 +305,25 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         that.mutationObserverInstance.observe(body, observerConfiguration);
     };
 
-    /**
-     *
-     * Filter for sorting the elements; to be used inside JavaScript's sort() method.
-     *
-     * @param {Object} elementOne - The DOM element.
-     * @param {Object} elementTwo - The DOM element.
-     * @return {Integer} - The value which will decide the order of the two elements.
-     *
-     */
-    gamepad.inputMapper.base.tabindexSortFilter = function (elementOne, elementTwo) {
-        var tabindexOne = parseInt(elementOne.getAttribute("tabindex")),
-            tabindexTwo = parseInt(elementTwo.getAttribute("tabindex"));
 
-        /**
-         * If both elements have tabindex greater than 0, arrange them in ascending order
-         * of the tabindex. Otherwise if only one of the elements have tabindex greater
-         * than 0, place it before the other element. And in case, no element has a
-         * tabindex attribute or both of them posses tabindex value equal to 0, keep them
-         * in the same order.
-         */
-        if (tabindexOne > 0 && tabindexTwo > 0) {
-            return tabindexOne - tabindexTwo;
-        }
-        else if (tabindexOne > 0) {
-            return -1;
-        }
-        else if (tabindexTwo > 0) {
-            return 1;
-        }
-        else {
-            return 0;
+    gamepad.inputMapper.base.vibrate = function (that) {
+        if (that.model.prefs.vibrate) {
+            var gamepads = that.options.windowObject.navigator.getGamepads();
+            var nonNullGamepads = gamepads.filter(function (gamepad) { return gamepad !== null; });
+
+            fluid.each(nonNullGamepads, function (gamepad) {
+                if (gamepad.vibrationActuator) {
+                    gamepad.vibrationActuator.playEffect(
+                        "dual-rumble",
+                        {
+                            duration: 250,
+                            startDelay: 0,
+                            strongMagnitude: 0.25,
+                            weakMagnitude: .75
+                        }
+                    );
+                }
+            });
         }
     };
 })(fluid);

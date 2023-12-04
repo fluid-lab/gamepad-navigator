@@ -1,6 +1,11 @@
+.hidden {
+    display: none;
+}
+
 .modal-outer-container {
     align-content: center;
     background-color: #000c;
+    font-family: inherit;
     height: 100%;
     left: 0;
     position: fixed;
@@ -12,6 +17,7 @@
 .modal-inner-container {
     background-color: white;
     border-radius: 1rem;
+    color: black;
     display: flex;
     flex-direction: column;
     height: 75%;
@@ -22,8 +28,25 @@
     z-index: 997;
 }
 
+@media (max-height: 400px) {
+    :host(.gamepad-navigator-modal-manager.modal-inner-container) {
+        height: 95%;
+        top: 2.5%;
+    }
+}
+
+@media (max-width: 600px) {
+    :host(.gamepad-navigator-modal-manager) .modal-inner-container {
+        left: 2.5%;
+        width: 95%;
+    }
+}
+
 .modal-header {
+    align-items: center;
     align-self: center;
+    display: flex;
+    flex-direction: row;
 }
 
 .modal-header h3 {
@@ -31,8 +54,14 @@
     font-weight: bold;
 }
 
+.modal-header .modal-icon svg {
+    height: 5rem;
+    width: 5rem;
+}
+
 .modal-body {
     border: 1px solid #ccc;
+    height: 100%;
     overflow-y: scroll;
 }
 
@@ -41,6 +70,11 @@
 }
 
 .modal-footer button {
+    background-color: #ccc;
+    border: 1px solid #999;
+    border-radius: 0.5rem;
+    color: black;
     font-size: 2rem;
     margin: 1rem;
+    padding: 0.5rem;
 }

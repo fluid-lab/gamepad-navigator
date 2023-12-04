@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -67,6 +67,18 @@ module.exports = function (grunt) {
                 flatten: true,
                 src: "node_modules/ally.js/ally.min.js",
                 dest: "dist/js/lib/ally/"
+            },
+            oskCss: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/fluid-osk/src/css/*",
+                dest: "dist/css/lib/fluid-osk"
+            },
+            oskJs: {
+                expand: true,
+                flatten: true,
+                src: "node_modules/fluid-osk/src/js/*",
+                dest: "dist/js/lib/fluid-osk"
             },
             source: {
                 expand: true,

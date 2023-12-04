@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -19,6 +19,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
+            // TODO: Figure out how this is used and how it differs from "in view";
             connected: false,
             axes: {},
             buttons: {}

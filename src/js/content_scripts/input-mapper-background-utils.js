@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -25,39 +25,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * when the user navigates back to the same tab.
      */
 
+    gamepad.inputMapperUtils.background.postMessageOnControlDown = function (that, value, oldValue, actionOptions) {
+        if (oldValue === 0 && value > that.model.prefs.analogCutoff) {
+            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
+        }
+    };
+
     /**
      *
-     * Sends message to the background script to perform the given action.
+     * Connect to the background script, send a message, and handle the response.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {String} actionName - The action to be performed.
-     * @param {Integer} value - The value of the gamepad input.
-     * @param {Integer} oldValue - The previous value of the gamepad input.
-     * @param {Boolean} background - Whether the new tab should open in background.
-     * @param {String} homepageURL - The URL for the new tab.
+     * @param {String} actionOptions - The action payload to be transmitted.
      *
      */
-    gamepad.inputMapperUtils.background.sendMessage = function (that, actionName, value, oldValue, background, homepageURL) {
-        if (value < oldValue && oldValue > that.options.cutoffValue) {
-            // Set the data object for the action.
-            var actionData = { actionName: actionName };
-
-            // Set active key if background parameter is passed as an argument.
-            if (background !== undefined) {
-                actionData.active = !background;
+    gamepad.inputMapperUtils.background.postMessage = async function (that, actionOptions) {
+        // We use this because chrome.runtime.sendMessage did not leave enough time to receive a response.
+        var port = chrome.runtime.connect();
+        port.onMessage.addListener(function (response) {
+            var vibrate = fluid.get(response, "vibrate");
+            if (vibrate) {
+                that.vibrate();
             }
-            if (homepageURL) {
-                actionData.homepageURL = homepageURL;
-            }
+        });
 
-            // Set the left pixel if the action is about changing "window size".
-            if (actionName === "maximizeWindow" || actionName === "restoreWindowSize") {
-                actionData.left = screen.availLeft;
-            }
+        var wrappedActionOptions = fluid.copy(actionOptions);
 
-            // Send the message to the background script with the action details.
-            chrome.runtime.sendMessage(actionData);
+        wrappedActionOptions.homepageURL = that.model.commonConfiguration.homepageURL;
+
+        // Set the left pixel if the action is about changing "window size".
+        if (actionOptions.actionName === "maximizeWindow" || actionOptions.actionName === "restoreWindowSize") {
+            wrappedActionOptions.left = screen.availLeft;
         }
+
+        port.postMessage(wrappedActionOptions);
     };
 
     /**
@@ -70,19 +71,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @param {Boolean} invert - Whether the zooming should be in opposite order.
      *
      */
-    gamepad.inputMapperUtils.background.thumbstickZoom = function (that, value, invert) {
-        // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1;
-        value = value * inversionFactor;
-        var zoomType = value > 0 ? "zoomOut" : "zoomIn",
-            actionData = { actionName: zoomType };
-        value = value * (value > 0 ? 1 : -1);
-
-        // Call the zoom changing invokers according to the input values.
+    gamepad.inputMapperUtils.background.thumbstickZoom = async function (that, value, invert) {
         clearInterval(that.intervalRecords.zoomIn);
         clearInterval(that.intervalRecords.zoomOut);
-        if (value > that.options.cutoffValue) {
-            that.intervalRecords[zoomType] = setInterval(chrome.runtime.sendMessage, that.options.frequency, actionData);
+
+        // Get the updated input value according to the configuration.
+        var inversionFactor = invert ? -1 : 1;
+        var polarisedValue = value * inversionFactor;
+        var zoomType = polarisedValue > 0 ? "zoomOut" : "zoomIn";
+        var actionOptions = { actionName: zoomType };
+
+        // Call the zoom changing invokers according to the input values.
+        if (Math.abs(value) > that.options.cutoffValue) {
+            that.intervalRecords[zoomType] = setInterval(function (actionOptions) {
+                gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
+            }, that.options.frequency, actionOptions);
         }
     };
 
@@ -98,23 +101,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.inputMapperUtils.background.thumbstickWindowSize = function (that, value, invert) {
         // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1,
-            windowSizeActionLabel = null;
-        value = value * inversionFactor;
-        if (value > 0) {
-            windowSizeActionLabel = "maximizeWindow";
-        }
-        else {
-            windowSizeActionLabel = "restoreWindowSize";
-            value = value * -1;
-        }
+        var inversionFactor = invert ? -1 : 1;
+        var polarisedValue = value * inversionFactor;
+
+        var actionName = polarisedValue > 0 ? "maximizeWindow" : "restoreWindowSize";
+
+        var actionOptions = {
+            actionName: actionName,
+            left: screen.availLeft
+        };
 
         // Call the window size changing invokers according to the input value.
-        if (value > that.options.cutoffValue) {
-            chrome.runtime.sendMessage({
-                actionName: windowSizeActionLabel,
-                left: screen.availLeft
-            });
+        if (Math.abs(value) > that.options.cutoffValue) {
+            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
         }
     };
 })(fluid);

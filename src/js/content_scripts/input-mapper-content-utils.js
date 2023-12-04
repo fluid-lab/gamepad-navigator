@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -12,12 +12,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 /* global gamepad, ally, chrome */
 
-(function (fluid, $) {
+(function (fluid) {
     "use strict";
 
     fluid.registerNamespace("gamepad.inputMapperUtils.content");
-
-    // TODO: Fix argument type in JSDoc comments, especially "value" and "speedFactor".
 
     /**
      * TODO: Fix the "speedFactor" usage in invokers to reduce the given interval loop
@@ -29,26 +27,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll horizontally across the webpage.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
-     * @param {Boolean} invert - Whether the scroll should be in opposite order.
+     * @param {Integer} value - The current value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor, invert).
      *
      */
-    gamepad.inputMapperUtils.content.scrollHorizontally = function (that, value, speedFactor, invert) {
-        // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1;
-        value = value * inversionFactor;
-        if (value > 0) {
-            clearInterval(that.intervalRecords.leftScroll);
-            that.scrollRight(value, speedFactor);
-        }
-        else if (value < 0) {
-            clearInterval(that.intervalRecords.rightScroll);
-            that.scrollLeft(-1 * value, speedFactor);
-        }
-        else {
-            clearInterval(that.intervalRecords.leftScroll);
-            clearInterval(that.intervalRecords.rightScroll);
+    gamepad.inputMapperUtils.content.scrollHorizontally = function (that, value, oldValue, actionOptions) {
+        if (that.model.pageInView) {
+            // Get the updated input value according to the configuration.
+            var inversionFactor = actionOptions.invert ? -1 : 1;
+            value = value * inversionFactor;
+            if (value > 0) {
+                clearInterval(that.intervalRecords.leftScroll);
+                that.scrollRight(value, oldValue, actionOptions);
+            }
+            else if (value < 0) {
+                clearInterval(that.intervalRecords.rightScroll);
+                that.scrollLeft(-1 * value, oldValue, actionOptions);
+            }
+            else {
+                clearInterval(that.intervalRecords.leftScroll);
+                clearInterval(that.intervalRecords.rightScroll);
+            }
         }
     };
 
@@ -57,11 +57,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in left direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Integer} value - The current value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.scrollLeft = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollLeft = function (that, value, oldValue, actionOptions) {
+        var speedFactor = actionOptions.speedFactor || 1;
+
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -72,11 +75,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Scroll the webpage towards the left only if the input value is more than the
          * cutoff value.
          */
-        if (value > that.options.cutoffValue) {
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
             // Scroll to the left according to the new input value.
             that.intervalRecords.leftScroll = setInterval(function () {
-                var xOffset = $(that.options.windowObject).scrollLeft();
-                $(that.options.windowObject).scrollLeft(xOffset - value * that.options.scrollInputMultiplier * speedFactor);
+                if (window.scrollX > 0) {
+                    window.scroll(window.scrollX - value * that.options.scrollInputMultiplier * speedFactor, window.scrollY);
+                }
+                else {
+                    clearInterval(that.intervalRecords.leftScroll);
+                    that.vibrate();
+                }
+
             }, that.options.frequency);
         }
     };
@@ -86,11 +95,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage towards the right direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Integer} value - The current value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.scrollRight = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollRight = function (that, value, oldValue, actionOptions) {
+        var speedFactor = actionOptions.speedFactor || 1;
+
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -101,11 +113,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Scroll the webpage towards the right only if the input value is more than the
          * cutoff value.
          */
-        if (value > that.options.cutoffValue) {
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
             // Scroll to the right according to the new input value.
             that.intervalRecords.rightScroll = setInterval(function () {
-                var xOffset = $(that.options.windowObject).scrollLeft();
-                $(that.options.windowObject).scrollLeft(xOffset + value * that.options.scrollInputMultiplier * speedFactor);
+                window.scroll(window.scrollX + value * that.options.scrollInputMultiplier * speedFactor, window.scrollY);
+
+                var documentWidth = document.body.scrollWidth;
+                var currentScrollX = window.scrollX + window.innerWidth;
+                if (currentScrollX >= documentWidth) {
+                    clearInterval(that.intervalRecords.rightScroll);
+                    that.vibrate();
+                }
             }, that.options.frequency);
         }
     };
@@ -115,26 +133,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll vertically across the webpage.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
-     * @param {Boolean} invert - Whether the scroll should be in opposite order.
+     * @param {Integer} value - The currrent value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.scrollVertically = function (that, value, speedFactor, invert) {
-        // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1;
-        value = value * inversionFactor;
-        if (value > 0) {
-            clearInterval(that.intervalRecords.upwardScroll);
-            that.scrollDown(value, speedFactor);
-        }
-        else if (value < 0) {
-            clearInterval(that.intervalRecords.downwardScroll);
-            that.scrollUp(-1 * value, speedFactor);
-        }
-        else {
-            clearInterval(that.intervalRecords.upwardScroll);
-            clearInterval(that.intervalRecords.downwardScroll);
+    gamepad.inputMapperUtils.content.scrollVertically = function (that, value, oldValue, actionOptions) {
+        var speedFactor = actionOptions.speedFactor || 1;
+
+        if (that.model.pageInView) {
+            // Get the updated input value according to the configuration.
+            var inversionFactor = actionOptions.invert ? -1 : 1;
+            value = value * inversionFactor;
+            if (value > 0) {
+                clearInterval(that.intervalRecords.upwardScroll);
+                that.scrollDown(value, oldValue, speedFactor);
+            }
+            else if (value < 0) {
+                clearInterval(that.intervalRecords.downwardScroll);
+                that.scrollUp(-1 * value, oldValue, speedFactor);
+            }
+            else {
+                clearInterval(that.intervalRecords.upwardScroll);
+                clearInterval(that.intervalRecords.downwardScroll);
+            }
         }
     };
 
@@ -143,11 +165,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in upward direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Integer} value - The current value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.scrollUp = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollUp = function (that, value, oldValue, actionOptions) {
+        var speedFactor = actionOptions.speedFactor || 1;
+
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -158,11 +183,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Scroll the webpage upward only if the input value is more than the cutoff
          * value.
          */
-        if (value > that.options.cutoffValue) {
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
             // Scroll upward according to the new input value.
             that.intervalRecords.upwardScroll = setInterval(function () {
-                var yOffset = $(that.options.windowObject).scrollTop();
-                $(that.options.windowObject).scrollTop(yOffset - value * that.options.scrollInputMultiplier * speedFactor);
+                if (window.scrollY > 0) {
+                    window.scroll(window.scrollX, window.scrollY - value * that.options.scrollInputMultiplier * speedFactor);
+                }
+                else {
+                    clearInterval(that.intervalRecords.upwardScroll);
+                    that.vibrate();
+                }
             }, that.options.frequency);
         }
     };
@@ -172,11 +202,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Scroll the webpage in downward direction.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input (in pixels).
-     * @param {Integer} speedFactor - Times by which the scroll speed should be increased.
+     * @param {Integer} value - The current value of the gamepad input.
+     * @param {Integer} oldValue - The previous value of the gamepad input.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.scrollDown = function (that, value, speedFactor) {
+    gamepad.inputMapperUtils.content.scrollDown = function (that, value, oldValue, actionOptions) {
+        var speedFactor = actionOptions.speedFactor || 1;
+
         /**
          * Stop scrolling for the previous input value. Also stop scrolling if the input
          * source (analog/button) is at rest.
@@ -187,11 +220,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * Scroll the webpage downward only if the input value is more than the cutoff
          * value.
          */
-        if (value > that.options.cutoffValue) {
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
             // Scroll upward according to the new input value.
             that.intervalRecords.downwardScroll = setInterval(function () {
-                var yOffset = $(that.options.windowObject).scrollTop();
-                $(that.options.windowObject).scrollTop(yOffset + value * that.options.scrollInputMultiplier * speedFactor);
+                window.scroll(window.scrollX, window.scrollY + value * that.options.scrollInputMultiplier * speedFactor);
+
+                // Adapted from:
+                // https://fjolt.com/article/javascript-check-if-user-scrolled-to-bottom
+                var documentHeight = document.body.scrollHeight;
+                var currentScroll = window.scrollY + window.innerHeight;
+                if (currentScroll >= documentHeight) {
+                    clearInterval(that.intervalRecords.downwardScroll);
+                    that.vibrate();
+                };
             }, that.options.frequency);
         }
     };
@@ -202,28 +243,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
-     * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
-     * @param {Boolean} invert - Whether the tabbing should be in opposite order.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      *
      */
-    gamepad.inputMapperUtils.content.thumbstickTabbing = function (that, value, speedFactor, invert) {
-        var inversionFactor = invert ? -1 : 1;
-        value = value * inversionFactor;
-        clearInterval(that.intervalRecords.forwardTab);
-        clearInterval(that.intervalRecords.reverseTab);
-        if (value > 0) {
-            that.intervalRecords.forwardTab = setInterval(
-                that.forwardTab,
-                that.options.frequency * speedFactor,
-                value
-            );
-        }
-        else if (value < 0) {
-            that.intervalRecords.reverseTab = setInterval(
-                that.reverseTab,
-                that.options.frequency * speedFactor,
-                -1 * value
-            );
+    gamepad.inputMapperUtils.content.thumbstickTabbing = function (that, value, actionOptions) {
+        if (that.model.pageInView) {
+            var speedFactor = actionOptions.speedFactor || 1;
+            var inversionFactor = actionOptions.invert ? -1 : 1;
+            value = value * inversionFactor;
+            clearInterval(that.intervalRecords.forwardTab);
+            clearInterval(that.intervalRecords.reverseTab);
+            if (value > 0) {
+                that.intervalRecords.forwardTab = setInterval(
+                    that.forwardTab,
+                    that.options.frequency * speedFactor,
+                    value
+                );
+            }
+            else if (value < 0) {
+                that.intervalRecords.reverseTab = setInterval(
+                    that.reverseTab,
+                    that.options.frequency * speedFactor,
+                    -1 * value
+                );
+            }
         }
     };
 
@@ -237,7 +280,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.inputMapperUtils.content.buttonTabNavigation = function (that, value, direction) {
-        if (value > that.options.cutoffValue) {
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
             var length = that.tabbableElements.length;
 
             // Tab only if at least one tabbable element is available.
@@ -247,7 +290,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                  * currently focused, shift the focus to the first element. Otherwise
                  * shift the focus to the next element.
                  */
-                var activeElement = document.activeElement;
+                var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
                 if (activeElement.nodeName === "BODY" || !activeElement) {
                     that.tabbableElements[0].focus();
                 }
@@ -262,20 +305,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         activeElementIndex = that.currentTabIndex;
                     }
 
+                    var increment = 0;
                     if (direction === "forwardTab") {
-                        that.currentTabIndex = (activeElementIndex + 1) % length;
+                        increment = 1;
                     }
                     else if (direction === "reverseTab") {
-                        /**
-                         * Move to the first element if the last element on the webpage
-                         * is focused.
-                         */
-                        if (activeElementIndex === 0) {
-                            activeElementIndex = length;
-                        }
-                        that.currentTabIndex = activeElementIndex - 1;
+                        increment = -1;
                     }
-                    that.tabbableElements[that.currentTabIndex].focus();
+
+                    activeElement.blur();
+
+                    that.currentTabIndex = (that.tabbableElements.length + (activeElementIndex + increment)) % that.tabbableElements.length;
+                    var elementToFocus = that.tabbableElements[that.currentTabIndex];
+                    elementToFocus.focus();
+
+                    // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
+                    if (!that.model.activeModal && elementToFocus !== document.activeElement) {
+                        that.currentTabIndex = (that.tabbableElements.length + (that.currentTabIndex + increment)) % that.tabbableElements.length;
+                        var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
+                        failoverElementToFocus.focus();
+                    }
                 }
             }
         }
@@ -285,57 +334,88 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * Click on the currently focused element.
      *
+     * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
      *
      */
-    gamepad.inputMapperUtils.content.click = function (value) {
-        if (value > 0) {
-            /**
-             * If SELECT element is currently focused, toggle its state. Otherwise perform
-             * the regular click operation.
-             */
-            if (document.activeElement.nodeName === "SELECT") {
-                var optionsLength = 0;
+    gamepad.inputMapperUtils.content.click = function (that, value) {
+        if (that.model.pageInView && (value > 0)) {
+            var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
-                // Compute the number of options and store it.
-                document.activeElement.childNodes.forEach(function (childNode) {
-                    if (childNode.nodeName === "OPTION") {
-                        optionsLength++;
+            if (activeElement) {
+                var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
+
+                // Open the new onscreen keyboard to input text.
+                if (isTextInput) {
+                    var lastExternalFocused = activeElement;
+                    that.applier.change("lastExternalFocused", lastExternalFocused);
+                    that.applier.change("textInputValue", lastExternalFocused.value);
+                    lastExternalFocused.blur();
+
+                    that.applier.change("activeModal", "onscreenKeyboard");
+                }
+                /**
+                 * If SELECT element is currently focused, toggle its state. Otherwise perform
+                 * the regular click operation.
+                 */
+                else if (activeElement.nodeName === "SELECT") {
+                    var optionsLength = 0;
+
+                    // Compute the number of options and store it.
+                    activeElement.childNodes.forEach(function (childNode) {
+                        if (childNode.nodeName === "OPTION") {
+                            optionsLength++;
+                        }
+                    });
+
+                    // Toggle the SELECT dropdown.
+                    if (!activeElement.getAttribute("size") || activeElement.getAttribute("size") === "1") {
+                        /**
+                         * Store the initial size of the dropdown in a separate attribute
+                         * (if specified already).
+                         */
+                        var initialSizeString = activeElement.getAttribute("size");
+                        if (initialSizeString) {
+                            activeElement.setAttribute("initialSize", parseInt(initialSizeString));
+                        }
+
+                        /**
+                         * Allow limited expansion to avoid an overflowing list, considering the
+                         * list could go as large as 100 or more (for example, a list of
+                         * countries).
+                         */
+                        var length = Math.min(15, optionsLength);
+                        activeElement.setAttribute("size", length);
                     }
-                });
+                    else {
+                        // Obtain the initial size of the dropdown.
+                        var sizeString = activeElement.getAttribute("initialSize") || "1";
 
-                // Toggle the SELECT dropdown.
-                if (!document.activeElement.getAttribute("size") || document.activeElement.getAttribute("size") === "1") {
-                    /**
-                     * Store the initial size of the dropdown in a separate attribute
-                     * (if specified already).
-                     */
-                    var initialSizeString = document.activeElement.getAttribute("size");
-                    if (initialSizeString) {
-                        document.activeElement.setAttribute("initialSize", parseInt(initialSizeString));
+                        // Restore the size of the dropdown.
+                        activeElement.setAttribute("size", parseInt(sizeString));
                     }
-
-                    /**
-                     * Allow limited expansion to avoid an overflowing list, considering the
-                     * list could go as large as 100 or more (for example, a list of
-                     * countries).
-                     */
-                    var length = Math.min(15, optionsLength);
-                    document.activeElement.setAttribute("size", length);
                 }
                 else {
-                    // Obtain the initial size of the dropdown.
-                    var sizeString = document.activeElement.getAttribute("initialSize") || "1";
-
-                    // Restore the size of the dropdown.
-                    document.activeElement.setAttribute("size", parseInt(sizeString));
+                    // Click on the focused element.
+                    activeElement.click();
                 }
             }
-            else {
-                // Click on the focused element.
-                document.activeElement.click();
+        }
+    };
+
+    gamepad.inputMapperUtils.content.isTextInput = function (element) {
+        if (element.nodeName === "INPUT") {
+            var allowedTypes = ["text", "search", "email", "password", "tel", "text", "url"];
+            var inputType = element.getAttribute("type");
+            if (!inputType || allowedTypes.includes(inputType)) {
+                return true;
             }
         }
+        else if (element.nodeName === "TEXTAREA") {
+            return true;
+        }
+
+        return false;
     };
 
     /**
@@ -344,19 +424,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
-     * @param {Boolean} invert - Whether the history navigation should be in opposite
-     *                           order.
+     * @param {Object} actionOptions - The action options (ex: invert).
      *
      */
-    gamepad.inputMapperUtils.content.thumbstickHistoryNavigation = function (that, value, invert) {
-        // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1;
-        value = value * inversionFactor;
-        if (value > 0) {
-            that.nextPageInHistory(value);
-        }
-        else if (value < 0) {
-            that.previousPageInHistory(-1 * value);
+    gamepad.inputMapperUtils.content.thumbstickHistoryNavigation = function (that, value, actionOptions) {
+        if (that.model.pageInView) {
+            // Get the updated input value according to the configuration.
+            var inversionFactor = actionOptions.invert ? -1 : 1;
+            value = value * inversionFactor;
+            if (value > 0) {
+                that.nextPageInHistory(value);
+            }
+            else if (value < 0) {
+                that.previousPageInHistory(-1 * value);
+            }
         }
     };
 
@@ -374,27 +455,32 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.inputMapperUtils.content.previousPageInHistory = function (that, value) {
-        if (value > that.options.cutoffValue) {
-            var activeElementIndex = null;
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
+            if (window.history.length > 1) {
+                var activeElementIndex = null;
 
-            // Get the index of the currently active element, if available.
-            if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
-                activeElementIndex = tabbableElements.indexOf(document.activeElement);
-            }
+                // Get the index of the currently active element, if available.
+                if (fluid.get(document, "activeElement")) {
+                    var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
+                    activeElementIndex = tabbableElements.indexOf(document.activeElement);
+                }
 
-            /**
-             * Store the index of the active element in local storage object with its key
-             * set to the URL of the webpage and navigate back in history.
-             */
-            var storageData = {},
-                pageAddress = that.options.windowObject.location.href;
-            if (activeElementIndex !== -1) {
-                storageData[pageAddress] = activeElementIndex;
+                /**
+                 * Store the index of the active element in local storage object with its key
+                 * set to the URL of the webpage and navigate back in history.
+                 */
+                var storageData = {},
+                    pageAddress = that.options.windowObject.location.href;
+                if (activeElementIndex !== -1) {
+                    storageData[pageAddress] = activeElementIndex;
+                }
+                chrome.storage.local.set(storageData, function () {
+                    that.options.windowObject.history.back();
+                });
             }
-            chrome.storage.local.set(storageData, function () {
-                that.options.windowObject.history.back();
-            });
+            else {
+                that.vibrate();
+            }
         }
     };
 
@@ -407,47 +493,61 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.inputMapperUtils.content.nextPageInHistory = function (that, value) {
-        if (value > that.options.cutoffValue) {
-            var activeElementIndex = null;
+        if (that.model.pageInView && (value > that.options.cutoffValue)) {
+            if (window.history.length > 1) {
+                var activeElementIndex = null;
 
-            // Get the index of the currently active element, if available.
-            if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabbable({ strategy: "strict" }).sort(that.tabindexSortFilter);
-                activeElementIndex = tabbableElements.indexOf(document.activeElement);
-            }
+                // Get the index of the currently active element, if available.
+                if (fluid.get(document, "activeElement")) {
+                    var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
+                    activeElementIndex = tabbableElements.indexOf(document.activeElement);
+                }
 
-            /**
-             * Store the index of the active element in local storage object with its key
-             * set to the URL of the webpage and navigate forward in history.
-             */
-            var storageData = {},
-                pageAddress = that.options.windowObject.location.href;
-            if (activeElementIndex !== -1) {
-                storageData[pageAddress] = activeElementIndex;
+                /**
+                 * Store the index of the active element in local storage object with its key
+                 * set to the URL of the webpage and navigate forward in history.
+                 */
+                var storageData = {},
+                    pageAddress = that.options.windowObject.location.href;
+                if (activeElementIndex !== -1) {
+                    storageData[pageAddress] = activeElementIndex;
+                }
+                chrome.storage.local.set(storageData, function () {
+                    that.options.windowObject.history.forward();
+                });
             }
-            chrome.storage.local.set(storageData, function () {
-                that.options.windowObject.history.forward();
-            });
+            else {
+                that.vibrate();
+            }
         }
     };
 
     /**
      *
      * Simulate a key press (down and up) on the current focused element.
+     * @param {Object} that - The inputMapper component.
      * @param {Number} value - The current value of the input (from 0 to 1).
-     * @param {String} key - The key (ex: `ArrowLeft`) to simulate.
+     * @param {Object} actionOptions - The options for this action.
+     * @property {String} key - The key (ex: `ArrowLeft`) to simulate.
      *
      */
-    gamepad.inputMapperUtils.content.sendKey = function (value, key) {
-        if (value > 0) {
-            var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
-            document.activeElement.dispatchEvent(keyDownEvent);
+    gamepad.inputMapperUtils.content.sendKey = function (that, value, actionOptions) {
+        var key = fluid.get(actionOptions, "key");
 
-            // TODO: Test with text inputs and textarea fields to see if
-            // beforeinput and input are needed.
+        // TODO: Make this use the "analogCutoff" preference.
+        if (that.model.pageInView && (value > that.options.cutoffValue) && (key !== undefined)) {
+            var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
-            var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
-            document.activeElement.dispatchEvent(keyUpEvent);
+            if (activeElement) {
+                var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
+                activeElement.dispatchEvent(keyDownEvent);
+
+                // TODO: Test with text inputs and textarea fields to see if
+                // beforeinput and input are needed.
+
+                var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
+                activeElement.dispatchEvent(keyUpEvent);
+            }
         }
     };
 
@@ -457,31 +557,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      * @param {Object} that - The inputMapper component.
      * @param {Integer} value - The value of the gamepad input.
-     * @param {Integer} speedFactor - Times by which the tabbing speed should be increased.
-     * @param {Boolean} invert - Whether the tabbing should be in opposite order.
+     * @param {Object} actionOptions - The action options (ex: speedFactor).
      * @param {String} forwardKey - The key/code for the forward arrow (right or down).
      * @param {String} backwardKey - The key/code for the backward arrow (left or up).
      *
      */
-    gamepad.inputMapperUtils.content.thumbstickArrows = function (that, value, speedFactor, invert, forwardKey, backwardKey) {
-        var inversionFactor = invert ? -1 : 1;
+    gamepad.inputMapperUtils.content.thumbstickArrows = function (that, value, actionOptions, forwardKey, backwardKey) {
+        var speedFactor = actionOptions.speedFactor || 1;
+        var inversionFactor = actionOptions.invert ? -1 : 1;
         value = value * inversionFactor;
         clearInterval(that.intervalRecords[forwardKey]);
         clearInterval(that.intervalRecords[backwardKey]);
         if (value > that.options.cutoffValue) {
             that.intervalRecords[forwardKey] = setInterval(
-                gamepad.inputMapperUtils.content.sendKey,
-                that.options.frequency * speedFactor,
-                value,
-                forwardKey
+                gamepad.inputMapperUtils.content.sendKey, // func
+                that.options.frequency * speedFactor, // delay
+                that, // arg 0
+                value, //arg 1
+                { key: forwardKey } // arg 2
             );
         }
         else if (value < (-1 * that.options.cutoffValue)) {
             that.intervalRecords[backwardKey] = setInterval(
                 gamepad.inputMapperUtils.content.sendKey,
                 that.options.frequency * speedFactor,
+                that,
                 -1 * value,
-                backwardKey
+                { key: backwardKey }
             );
         }
     };

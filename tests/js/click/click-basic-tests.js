@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 The Gamepad Navigator Authors
+Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
 https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
 
@@ -14,6 +14,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 (function (fluid, $) {
     "use strict";
+
+    /**
+     * TODO: Add tests for links and other elements that involve navigation
+     * between pages.
+     */
 
     $(document).ready(function () {
 

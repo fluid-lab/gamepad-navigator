@@ -1,10 +1,11 @@
 {
     "env": {
+        "es2017": true,
         "browser": true
     },
     "extends": "eslint-config-fluid",
     "rules": {
-        "indent": [
+        "@stylistic/js/indent": [
             "error",
             4,
             { "SwitchCase": 1}
