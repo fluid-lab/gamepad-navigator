@@ -426,16 +426,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     });
 
     // If the user's preferences allow us to, open the settings panel on startup.
-    chrome.runtime.onStartup.addListener(function () {
-        chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
-            var storedPrefs = storedObject && storedObject["gamepad-prefs"];
-            // If our prefs exactly match the defaults, nothing is stored.
-            // In this case, the default behaviour is to open a window, so if
-            // there are no stored settings, we do that.
-            if (!storedPrefs || storedPrefs["openWindowOnStartup"]) {
-                chrome.runtime.openOptionsPage();
-            }
-        });
+    chrome.runtime.onStartup.addListener(async function () {
+        var windowsArray = await chrome.windows.getAll({ populate: true});
+        // Filter to controllable windows.
+        var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+
+        if (filteredWindows.length === 0) {
+            chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
+                var storedPrefs = storedObject && storedObject["gamepad-prefs"];
+                // If our prefs exactly match the defaults, nothing is stored.
+                // In this case, the default behaviour is to open a window, so if
+                // there are no stored settings, we do that.
+                if (!storedPrefs || storedPrefs["openWindowOnStartup"]) {
+                    chrome.runtime.openOptionsPage();
+                }
+            });
+        }
     });
 
     // Open the settings panel when the icon is clicked.
