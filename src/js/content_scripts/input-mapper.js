@@ -51,13 +51,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
 
         listeners: {
-            // Old persistence.
-            // TODO: Remove
-            "onCreate.updateControls": {
-                funcName: "gamepad.inputMapper.updateControls",
-                args: ["{that}"]
-            },
-
             "onCreate.loadSettings": {
                 funcName: "gamepad.inputMapper.loadSettings",
                 args: ["{that}"]
@@ -100,78 +93,82 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         invokers: {
-            // Actions, these are called with: value, oldValue, actionOptions
+            // Actions, these are called with: actionOptions, inputType, index
             goToPreviousTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousTab" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToPreviousTab" }]
             },
             goToNextTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextTab"}]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToNextTab"}]
             },
             closeCurrentTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentTab"}]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}",{ action: "closeCurrentTab"}]
             },
             openNewTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewTab" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "openNewTab" }]
             },
             openNewWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "openNewWindow" }]
             },
             closeCurrentWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "closeCurrentWindow" }]
             },
             goToPreviousWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToPreviousWindow" }]
             },
             goToNextWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToNextWindow" }]
             },
             zoomIn: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomIn" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "zoomIn" }]
             },
             zoomOut: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomOut" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "zoomOut" }]
             },
-            thumbstickZoom: {
-                funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
-            },
+
+
             maximizeWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "maximizeWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "maximizeWindow" }]
             },
             restoreWindowSize: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "restoreWindowSize" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "restoreWindowSize" }]
+            },
+            reopenTabOrWindow: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "reopenTabOrWindow" }]
+            },
+
+            thumbstickZoom: {
+                funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             thumbstickWindowSize: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickWindowSize",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
             },
-            reopenTabOrWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "reopenTabOrWindow" }]
-            },
+
             openActionLauncher: {
                 funcName: "gamepad.inputMapper.openActionLauncher",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             },
             openSearchKeyboard: {
                 funcName: "gamepad.inputMapper.openSearchKeyboard",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             },
             openConfigPanel: {
                 funcName: "gamepad.inputMapper.openConfigPanel",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             }
         },
         components: {
@@ -202,17 +199,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapper.updateFormFieldText = function (that) {
         if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused)) {
             that.model.lastExternalFocused.value = that.model.textInputValue;
+
+            // TODO: Figure out a way to do this that doesn't require jQuery.
+            $(that.model.lastExternalFocused).trigger("change");
         }
     };
 
     gamepad.inputMapper.generateModalOpenFunction = function (modalKey) {
-        return function (that, value, oldValue) {
-            if (that.model.pageInView && value && !oldValue) {
-                // In this case we don't want to fail over to a modal's activeElement.
-                that.applier.change("lastExternalFocused", document.activeElement);
+        return function (that) {
+            // In this case we don't want to fail over to a modal's activeElement.
+            that.applier.change("lastExternalFocused", document.activeElement);
 
-                that.applier.change("activeModal", modalKey);
-            }
+            that.applier.change("activeModal", modalKey);
         };
     };
 
@@ -220,39 +218,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapper.openActionLauncher = gamepad.inputMapper.generateModalOpenFunction("actionLauncher");
     gamepad.inputMapper.openSearchKeyboard = gamepad.inputMapper.generateModalOpenFunction("searchKeyboard");
 
-    gamepad.inputMapper.openConfigPanel = function (that, value, oldValue) {
-        if (oldValue === 0 && value > that.model.prefs.analogCutoff) {
-            gamepad.inputMapperUtils.background.postMessage(that, { actionName: "openOptionsPage"});
-        }
+    gamepad.inputMapper.openConfigPanel = function (that) {
+        gamepad.inputMapperUtils.background.postMessage(that, { action: "openOptionsPage"});
     };
 
     gamepad.inputMapper.handlePageInViewChange = function (that) {
         if (that.model.pageInView) {
-            gamepad.inputMapper.updateControls(that);
+            gamepad.inputMapper.loadSettings(that);
         }
         else {
             that.applier.change("activeModal", false);
-        }
-    };
-
-    // TODO: Remove this once the new bindings are fully wired up.
-    /**
-     *
-     * (Re)load the gamepad configuration from local storage.
-     *
-     * @param {Object} that - The inputMapper component.
-     *
-     */
-    gamepad.inputMapper.updateControls = function (that) {
-        if (that.model.pageInView) {
-            chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
-                var gamepadConfig = configWrapper.gamepadConfiguration;
-
-                // Update the gamepad configuration only if it's available.
-                if (gamepadConfig) {
-                    that.applier.change("map", gamepadConfig);
-                }
-            });
         }
     };
 
@@ -262,7 +237,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gamepad.inputMapper.loadBindings(that);
 
         /*
-            The two params for the onChanged listener callbak are "changes" and "areaName".  In our case, "areaName" is
+            The two params for the onChanged listener callback are "changes" and "areaName".  In our case, "areaName" is
             always "local", so we ignore it. "changes" is an object with an entry for each changed key, as in:
 
             { "gamepad-prefs": newValue: {}}

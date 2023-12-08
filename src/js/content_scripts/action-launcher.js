@@ -29,6 +29,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     });
 
+    // Simulate gamepad input as though all keys and axes were held.
     fluid.defaults("gamepad.actionLauncher.action", {
         gradeNames: ["gamepad.templateRenderer"],
 
@@ -38,16 +39,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         model: {
             row: -1,
-            value: 1,
-            oldValue: 0,
-            commonConfiguration: {
-                homepageURL: "https://www.google.com/"
-            },
+
+            axes: {},
+            // Our all-powerful button that is always depressed.
+            buttons: { 0: 1 },
+
             actionOptions: {
-                speedFactor: 1,
+                scrollFactor: 1,
                 invert: false,
                 background: false,
-                frequency: 100
+                repeatRate: 0
             }
         },
 
@@ -114,27 +115,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         var actionFn = fluid.get(inputMapperComponent, actionComponent.model.actionKey);
         if (actionFn) {
-            // Simulate a button press and release so that all actions are
-            // triggered appropriately.
+            // Simulate a button press so that actions that care about the input value (like scroll) will work.
+            // We use one that is not ordinarily possible to trigger to avoid any possible conflict with bindings.
+            inputMapperComponent.applier.change(["buttons", "999"], 1);
 
-            // All actions are called with:
-            // value, oldValue, actionOptions
-
-            // Simulate button down
+            // Call the action with our simulated button. All actions are called with: actionOptions, inputType, index
             actionFn(
-                1,
-                0,
-                actionComponent.model.actionOptions
+                actionComponent.model.actionOptions,
+                "buttons",
+                "999"
             );
 
-            // Simulate button up after a delay (100ms by default)
+            // Remove our fake button press after a delay (100ms by default)
             setTimeout(function () {
-                actionFn(
-                    0,
-                    1,
-                    actionComponent.model.actionOptions
-                );
-            }, actionComponent.model.frequency);
+                var transaction = inputMapperComponent.applier.initiate();
+                transaction.fireChangeRequest({ path: ["buttons", "999"], type: "DELETE"});
+                transaction.commit();
+            }, actionComponent.model.repeatRate);
         }
     };
 
@@ -154,111 +151,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         model: {
             focusedRow: 0,
             // TODO: Add support for controlling `backgroundOption` in the `openNewTab` and `openNewWindow` actions.
-            actionDefs: [
-                // All button-driven actions, except for the action launcher itself, ordered by subjective "usefulness".
-                {
-                    key: "openConfigPanel",
-                    description: "Configure Gamepad Navigator"
-                },
-                {
-                    key: "openSearchKeyboard",
-                    description: "Search"
-                },
-                {
-                    key: "openNewWindow",
-                    description: "Open a new browser window"
-                },
-                {
-                    key: "openNewTab",
-                    description: "Open a new tab"
-                },
-                {
-                    key: "goToPreviousWindow",
-                    description: "Switch to the previous browser window"
-                },
-                {
-                    key: "goToNextWindow",
-                    description: "Switch to the next browser window"
-                },
-                {
-                    key: "goToPreviousTab",
-                    description: "Switch to the previous browser tab"
-                },
-                {
-                    key: "goToNextTab",
-                    description: "Switch to the next browser tab"
-                },
-                {
-                    key: "closeCurrentTab",
-                    description: "Close current browser tab"
-                },
-                {
-                    key: "closeCurrentWindow",
-                    description: "Close current browser window"
-                },
-                {
-                    key: "reopenTabOrWindow",
-                    description: "Re-open the last closed tab or window"
-                },
-                {
-                    key: "previousPageInHistory",
-                    description: "History back button"
-                },
-                {
-                    key: "nextPageInHistory",
-                    description: "History next button"
-                },
-                {
-                    key: "maximizeWindow",
-                    description: "Maximize the current browser window"
-                },
-                {
-                    key: "restoreWindowSize",
-                    description: "Restore the size of current browser window"
-                },
-                // These should nearly always already be bound.
-                {
-                    key: "click",
-                    description: "Click"
-                },
-                {
-                    key: "reverseTab",
-                    description: "Focus on the previous element"
-                },
-                {
-                    key: "forwardTab",
-                    description: "Focus on the next element"
-                },
-                // Here for completeness, but IMO less likely to be used.
-                {
-                    key: "scrollLeft",
-                    description: "Scroll left",
-                    frequency: 250
-                },
-                {
-                    key: "scrollRight",
-                    description: "Scroll right",
-                    frequency: 250
-                },
-                {
-                    key: "scrollUp",
-                    description: "Scroll up",
-                    frequency: 250
-                },
-                {
-                    key: "scrollDown",
-                    description: "Scroll down",
-                    frequency: 250
-                },
-                {
-                    key: "zoomIn",
-                    description: "Zoom-in on the active web page"
-                },
-                {
-                    key: "zoomOut",
-                    description: "Zoom-out on the active web page"
-                }
-            ]
+            actionDefs: gamepad.actions.launchable
         },
 
         dynamicComponents: {
@@ -273,10 +166,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         actionKey: "{source}.key",
                         description: "{source}.description",
                         actionOptions: {
-                            speedFactor: "{source}.speedFactor",
+                            scrollFactor: "{source}.scrollFactor",
                             invert: "{source}.invert",
                             background: "{source}.background",
-                            frequency: "{source}.frequency"
+                            repeatRate: "{source}.repeatRate"
                         }
                     }
                 }

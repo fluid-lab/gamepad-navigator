@@ -29,6 +29,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         analogCutoff: 0.25,
         newTabOrWindowURL: "https://www.google.com/",
         openWindowOnStartup: true,
+        pollingFrequency: 50,
         vibrate: true
     };
 })(fluid);

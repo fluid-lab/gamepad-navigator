@@ -6,3 +6,7 @@
 * {
     font-family: ubuntu, sans-serif;
 }
+
+.hidden {
+    display: none;
+}

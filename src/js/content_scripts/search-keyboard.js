@@ -69,7 +69,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         if (that.model.textInputValue && that.model.textInputValue.trim().length) {
             var actionOptions = {
-                actionName: "search",
+                action: "search",
                 // See: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search/query
                 disposition: "NEW_TAB",
                 text: that.model.textInputValue.trim()

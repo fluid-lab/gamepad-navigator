@@ -23,7 +23,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             checked: true
         },
         markup: {
-            container: "<div class='gamepad-toggle-outer-container'><div class='gamepad-toggle-header'>%label</div><div tabindex='0' role='switch' class='gamepad-toggle'><div class='gamepad-toggle-slider'></div></div></div>"
+            container: "<div class='gamepad-toggle-outer-container'><div class='gamepad-toggle-header'>%label</div><div class='gamepad-toggle-body'><div class='gamepad-toggle-description'>%description</div><div tabindex='0' role='switch' class='gamepad-toggle'><div class='gamepad-toggle-slider'></div></div></div></div>"
         },
         selectors: {
             toggle: ".gamepad-toggle"

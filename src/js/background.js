@@ -22,11 +22,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Open a new tab in the current window.
      *
      * @param {Boolean} active - Whether the new tab should be focused when created.
-     * @param {String} homepageURL - The URL for the new tab.
+     * @param {String} newTabOrWindowURL - The URL for the new tab.
      *
      */
-    gamepad.messageListenerUtils.openNewTab = function (active, homepageURL) {
-        chrome.tabs.create({ active: active, url: homepageURL });
+    gamepad.messageListenerUtils.openNewTab = function (active, newTabOrWindowURL) {
+        chrome.tabs.create({ active: active, url: newTabOrWindowURL });
     };
 
     /**
@@ -78,12 +78,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Open a new window.
      *
      * @param {Boolean} active - Whether the new window should be focused when created.
-     * @param {String} homepageURL - The URL for the new window.
+     * @param {String} newTabOrWindowURL - The URL for the new window.
      *
      */
-    gamepad.messageListenerUtils.openNewWindow = function (active, homepageURL) {
+    gamepad.messageListenerUtils.openNewWindow = function (active, newTabOrWindowURL) {
         var windowConfig = {
-            url: homepageURL,
+            url: newTabOrWindowURL,
             focused: active
         };
         if (active) {
@@ -346,7 +346,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // On the client side, we check the control state before triggering
         // these, so the method signature is simply `action(actionOptions)`.
         openNewTab: async function (actionOptions) {
-            return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.homepageURL);
+            return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.newTabOrWindowURL);
         },
         closeCurrentTab: async function (actionOptions) {
             if (actionOptions.tabId) {
@@ -363,7 +363,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         openNewWindow: async function (actionOptions) {
-            return await gamepad.messageListenerUtils.openNewWindow(actionOptions.active, actionOptions.homepageURL);
+            return await gamepad.messageListenerUtils.openNewWindow(actionOptions.active, actionOptions.newTabOrWindowURL);
         },
 
         maximizeWindow: async function (actionOptions) {
@@ -406,8 +406,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     chrome.runtime.onConnect.addListener(function (port) {
         port.onMessage.addListener(async function (actionOptions) {
             // Execute the actions only if the action data is available.
-            if (actionOptions.actionName) {
-                var action = messageListener[actionOptions.actionName];
+            if (actionOptions.action) {
+                var action = messageListener[actionOptions.action];
 
                 // Trigger the action only if a valid action is found.
                 if (action) {

@@ -24,7 +24,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.inputMapper.base", {
         gradeNames: ["gamepad.configMaps", "gamepad.navigator"],
         model: {
-            pageInView: true
+            pageInView: true,
+            prefs: {},
+            bindings: {}
         },
         modelListeners: {
             "axes.*": {
@@ -40,43 +42,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
             "onCreate.trackDOM": "{that}.trackDOM",
             "onDestroy.stopTrackingDOM": "{that}.stopTrackingDOM",
-            /**
-             * TODO: Adjust the gamepaddisconnected event so that the other gamepad's
-             * navigation doesn't break.
-             */
             "onGamepadDisconnected.clearIntervalRecords": "{that}.clearIntervalRecords"
         },
         members: {
-            /**
-             * TODO: Move the member variables used for the inter-navigation web page
-             * features to the "inputMapper" component.
-             */
-            // TODO: These should be expressed per control rather than per action, as we might bind an action to more than one control.
-            intervalRecords: {
-                upwardScroll: null,
-                downwardScroll: null,
-                leftScroll: null,
-                rightScroll: null,
-                forwardTab: null,
-                reverseTab: null,
-                zoomIn: null,
-                zoomOut: null,
-                ArrowLeft: null,
-                ArrowRight: null,
-                ArrowUp: null,
-                ArrowDown: null
-            },
+            intervalRecords: {},
             currentTabIndex: 0,
             tabbableElements: null,
-            mutationObserverInstance: null,
-            // TODO: Ensure that there are sensible defaults somewhere.
-            prefs: {},
-            bindings: {}
+            mutationObserverInstance: null
         },
-        // TODO: Make this configurable.
-        // "Jitter" cutoff Value for analog thumb sticks.
-        cutoffValue: 0.40, // TODO: Make this a preference
-        scrollInputMultiplier: 50, // TODO: Make this a preference
 
         invokers: {
             updateTabbables: {
@@ -89,7 +62,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             clearIntervalRecords: {
                 funcName: "gamepad.inputMapper.base.clearIntervalRecords",
-                args: ["{that}.intervalRecords"]
+                args: ["{that}"]
             },
             trackDOM: {
                 funcName: "gamepad.inputMapper.base.trackDOM",
@@ -104,27 +77,27 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 args: ["{that}"]
             },
 
-            // Actions are called with value, oldValue, actionOptions
+            // Actions are called with actionOptions, inputType, index
             click: {
                 funcName: "gamepad.inputMapperUtils.content.click",
-                args: ["{that}", "{arguments}.0"]
+                args: ["{that}"]
             },
             previousPageInHistory: {
                 funcName: "gamepad.inputMapperUtils.content.previousPageInHistory",
-                args: ["{that}", "{arguments}.0"]
+                args: ["{that}"]
             },
             nextPageInHistory: {
                 funcName: "gamepad.inputMapperUtils.content.nextPageInHistory",
-                args: ["{that}", "{arguments}.0"]
+                args: ["{that}"]
             },
 
-            reverseTab: {
+            tabBackward: {
                 funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
-                args: ["{that}", "{arguments}.0", "reverseTab"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
-            forwardTab: {
+            tabForward: {
                 funcName: "gamepad.inputMapperUtils.content.buttonTabNavigation",
-                args: ["{that}", "{arguments}.0", "forwardTab"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
 
             scrollLeft: {
@@ -153,104 +126,101 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             thumbstickHistoryNavigation: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             // TODO: Add tests for when the number of tabbable elements changes.
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
 
             sendKey: {
                 funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
+                args: ["{that}", "{arguments}.0"] // actionOptions
             },
 
-            // TODO: Remove these once we are using the new bindings instead of the old "map".
-            // Arrow actions for buttons
-            sendArrowLeft: {
-                funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", { key: "ArrowLeft" }] // value, actionOptions
-            },
-            sendArrowRight: {
-                funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", { key: "ArrowRight" }] // value, actionOptions
-            },
-            sendArrowUp: {
-                funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", { key: "ArrowUp" }] // value, actionOptions
-            },
-            sendArrowDown: {
-                funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0", { key: "ArrowDown" }] // value, actionOptions
-            },
             // Arrow actions for axes
             thumbstickHorizontalArrows: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
-                args: ["{that}", "{arguments}.0", "{arguments}.2", "ArrowRight", "ArrowLeft"] // value, actionOptions, forwardKey, backwardKey
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowRight", "ArrowLeft"] // actionOptions, inputType, index, forwardKey, backwardKey
             },
             thumbstickVerticalArrows: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickArrows",
-                args: ["{that}", "{arguments}.0", "{arguments}.2", "ArrowDown", "ArrowUp"] // value, actionOptions, forwardKey, backwardKey
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2", "ArrowDown", "ArrowUp"] // actionOptions, inputType, index, forwardKey, backwardKey
             }
         }
     });
 
     /**
-     * TODO: Replace the "inputMapper" with "inputMapper.base" in the JSDoc comments for
-     * the invokers of "inputMapper.base" component.
-     */
-
-    /**
      *
-     * Calls the invoker methods when axes/button is disturbed according to the
-     * configured action map to produce a navigation effect.
+     * Respond when the value of a bound button/axis changes. This function is now the sole arbiter of "discrete" vs.
+     * "continuous" actions, and is also the sole enforcer of the "analog cutoff".
      *
      * @param {Object} that - The inputMapper component.
      * @param {Object} change - The receipt for the change in input values.
      *
      */
     gamepad.inputMapper.base.produceNavigation = function (that, change) {
-        // Only respond to gamepad input if we are "in view".
-        if (that.model.pageInView) {
-            /**
-             * Check if input is generated by axis or button and which button/axes was
-             * disturbed.
-             */
-            var inputType = change.path[0], // i. e. "button", or "axis"
-                index = change.path[1], // i.e. 0, 1, 2
-                inputValue = change.value,
-                oldInputValue = change.oldValue || 0;
+        var inputType = change.path[0], // i. e. "button", or "axis"
+            index = change.path[1], // i.e. 0, 1, 2
+            inputValue = change.value,
+            oldInputValue = change.oldValue || 0;
 
-            // Look for a binding at map.axis.0, map.button.1, et cetera.
-            var binding = that.model.map[inputType][index];
-            // TODO: See how/whether we ever fail over using this structure.
-            var actionLabel = fluid.get(binding, "currentAction") || fluid.get(binding, "defaultAction");
+        var binding = fluid.get(that.model, ["bindings", inputType, index]);
+        if (binding) {
+            var action = fluid.get(binding, "action");
+            var actionFn = fluid.get(that, action);
 
-            /**
-             * TODO: Modify the action call in such a manner that the action gets triggered
-             * when the inputs are released.
-             * (To gain shortpress and longpress actions)
-             *
-             * Refer:
-             * https://github.com/fluid-lab/gamepad-navigator/pull/21#discussion_r453507050
-             */
+            var actionOptions = fluid.copy(binding);
 
-            // Execute the actions only if the action label is available.
-            if (actionLabel) {
-                var action = fluid.get(that, actionLabel);
+            // Trigger the action only if a valid function is found.
+            if (actionFn) {
+                var intervalKey = gamepad.inputMapper.base.getIntervalKey(actionOptions, inputType, index);
 
-                // Trigger the action only if a valid function is found.
-                if (action) {
-                    var actionOptions = fluid.copy(binding);
-                    actionOptions.homepageURL = that.model.commonConfiguration.homepageURL;
+                if (that.model.pageInView) {
+                    if (action === "openNewTab" || action === "openNewWindow") {
+                        actionOptions.newTabOrWindowURL = that.model.prefs.newTabOrWindowURL;
+                    }
 
-                    action(
-                        inputValue,
-                        oldInputValue,
-                        actionOptions
-                    );
+                    var valueIsAboveCutoff = Math.abs(inputValue) > that.model.prefs.analogCutoff;
+
+                    if (valueIsAboveCutoff) {
+                        // In response to the initial "down" event,  perform the action immediately.
+                        if (Math.abs(oldInputValue) < that.model.prefs.analogCutoff) {
+                            // Always the first time.
+                            actionFn(
+                                actionOptions,
+                                inputType,
+                                index
+                            );
+                        }
+
+                        var repeatRate = fluid.get(actionOptions, "repeatRate") || 0;
+                        if (repeatRate) {
+                            var repeatRateMs = repeatRate * 1000;
+                            // For analog controls that fluctuate, we only want to start polling when they first
+                            // cross the analog cutoff threshold.
+                            if (!that.intervalRecords[intervalKey]) {
+                                that.intervalRecords[intervalKey] = setInterval(
+                                    actionFn,
+                                    repeatRateMs,
+                                    actionOptions, inputType, index
+                                );
+                            }
+                        }
+                    }
+                    // clear the interval on button release.
+                    else {
+                        gamepad.inputMapper.base.clearInterval(that, intervalKey);
+                    }
                 }
+                // clear the interval if our page is not in view.
+                else {
+                    gamepad.inputMapper.base.clearInterval(that, intervalKey);
+                }
+            }
+            else {
+                fluid.log(fluid.logLevel.WARN, "Invalid binding for input type " + inputType + ", index " + index + ", no handler found for action '" + action + "'");
             }
         }
     };
@@ -260,13 +230,27 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * A listener for the input mapper component to clear the connectivity interval when
      * the instance of the component is destroyed.
      *
-     * @param {Object} records - The interval records object.
+     * @param {Object} that - The component whose interval records need to be cleared.
      *
      */
-    gamepad.inputMapper.base.clearIntervalRecords = function (records) {
-        fluid.each(records, function (record) {
-            clearInterval(record);
+    gamepad.inputMapper.base.clearIntervalRecords = function (that) {
+        fluid.each(that.intervalRecords, function (intervalNumber, intervalKey) {
+            clearInterval(intervalNumber);
+            delete that.intervalRecords[intervalKey];
         });
+    };
+
+    gamepad.inputMapper.base.getIntervalKey = function (actionOptions, inputType, index) {
+        var action = fluid.get(actionOptions, "action");
+        var intervalKey = [inputType, index, action].join("-");
+        return intervalKey;
+    };
+
+    gamepad.inputMapper.base.clearInterval = function (that, intervalKey) {
+        if (that.intervalRecords[intervalKey]) {
+            clearInterval(that.intervalRecords[intervalKey]);
+            delete that.intervalRecords[intervalKey];
+        }
     };
 
     gamepad.inputMapper.base.updateTabbables = function (that) {
