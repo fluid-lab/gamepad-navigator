@@ -69,7 +69,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 options: {
                     model: {
                         label: "Open Settings on Startup",
-                        description: "Open this configuration panel on startup if no other controllable windows are open.",
+                        description: "Open this settings panel on startup if no other controllable windows are open.",
                         checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.openWindowOnStartup"
                     }
                 }

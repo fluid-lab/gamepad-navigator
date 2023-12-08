@@ -67,7 +67,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         var value = fluid.get(that.model, [inputType, index]);
 
-        // Get the updated input value according to the configuration.
         var polarisedValue = value * inversionFactor;
         var zoomType = polarisedValue > 0 ? "zoomOut" : "zoomIn";
 
@@ -93,7 +92,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         var value = fluid.get(that.model, [inputType, index]);
 
-        // Get the updated input value according to the configuration.
         var inversionFactor = invert ? -1 : 1;
         var polarisedValue = value * inversionFactor;
 
