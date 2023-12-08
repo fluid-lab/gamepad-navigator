@@ -129,10 +129,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    // Exclude tabs whose URL begins with `chrome://`, which do not contain
-    // our scripts and cannot be controlled using a gamepad.
+    // Exclude tabs which do not contain our scripts and cannot be controlled using a gamepad.
     gamepad.messageListenerUtils.filterControllableTabs = function (tabElement) {
-        return tabElement.url && !tabElement.url.startsWith("chrome://");
+        return tabElement.url && !tabElement.url.startsWith("chrome://") && !tabElement.url.startsWith("edge://");
     };
 
     // Exclude windows that do not contain controllable tabs (see above).
