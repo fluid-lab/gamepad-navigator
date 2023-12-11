@@ -57,6 +57,11 @@
     row-gap: 0.5rem;
 }
 
+.gamepad-toggle-description {
+    font-style: italic;
+    justify-content: center;
+}
+
 .gamepad-toggle {
     background-color: #999;
     border: 2px solid black;
@@ -67,13 +72,8 @@
     width: 5rem;
 }
 
-.gamepad-toggle-description {
-    font-style: italic;
-    justify-content: center;
-}
-
 .gamepad-toggle:focus {
-    border: 5px solid black;
+    box-shadow: 0 0 0 5px #000;
     outline: none;
 }
 
@@ -111,6 +111,13 @@
     height: 3rem;
 }
 
+.gamepad-settings-draft-button:focus {
+    box-shadow:
+        0 0 0 3px white,
+        0 0 0 5px black;
+    outline: none;
+}
+
 .gamepad-range-input-outer-container {
     column-gap: 1rem;
     display: flex;
@@ -120,6 +127,7 @@
 .gamepad-range-input-vertical-container {
     display: flex;
     flex-direction: column;
+    row-gap: 0.75rem;
     width: 100%;
 }
 
@@ -130,9 +138,18 @@
 }
 
 .gamepad-range-input {
+    margin-left: 1rem;
+    margin-right: 1rem;
     padding-bottom: 1rem;
     padding-top: 1rem;
     width: 100%;
+}
+
+.gamepad-range-input:focus {
+    box-shadow:
+        0 0 0 3px #fff,
+        0 0 0 6px #000;
+    outline: none;
 }
 
 .gamepad-range-summary {
@@ -148,7 +165,7 @@
 .gamepad-text-input-container {
     display: flex;
     flex-direction: column;
-    row-gap: 0.5rem;
+    row-gap: 1rem;
 }
 
 .gamepad-text-input-description {
@@ -157,8 +174,17 @@
 }
 
 .gamepad-text-input {
+    border-style: solid;
     font-size: 1.5rem;
-    height: 2rem;
+    height: 3rem;
+    padding: 0.5rem;
+}
+
+.gamepad-text-input:focus {
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 5px #000;
+    outline: none;
 }
 
 .gamepad-select-input-container {
@@ -175,6 +201,13 @@
 .gamepad-select-input-input {
     font-size: 1.5rem;
     height: 3rem;
+}
+
+.gamepad-select-input-input:focus {
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 5px #000;
+    outline: none;
 }
 
 .gamepad-settings-binding-params .gamepad-select-input-input {
@@ -228,13 +261,8 @@ button.gamepad-settings-params-icon {
 
 button.gamepad-settings-params-icon:focus:not([disabled]),
 button.gamepad-settings-params-icon:hover:not([disabled]) {
+    box-shadow: 0 0 0 3px black;
     outline: none;
-}
-
-button.gamepad-settings-params-icon:focus:not([disabled]) svg path,
-button.gamepad-settings-params-icon:hover:not([disabled]) svg path {
-    fill: blue;
-    stroke: blue;
 }
 
 .gamepad-settings-params-icon svg {
@@ -276,6 +304,14 @@ button.gamepad-settings-params-icon:hover:not([disabled]) svg path {
 
 .gamepad-settings-binding-removeButton {
     align-self: flex-start;
+}
+
+.gamepad-settings-add-binding-addButton:focus,
+.gamepad-settings-binding-removeButton:focus {
+    box-shadow:
+        0 0 0 3px white,
+        0 0 0 5px black;
+    outline: none;
 }
 
 .gamepad-settings-params-select-input-container {
@@ -330,9 +366,32 @@ button.gamepad-settings-params-icon:hover:not([disabled]) svg path {
         color: white;
     }
 
-    .gamepad-settings-params-icon svg path {
+    .gamepad-toggle:focus,
+    .gamepad-range-input:focus,
+    .gamepad-select-input-input:focus,
+    .gamepad-select-text-input:focus,
+    .gamepad-settings-draft-button:focus,
+    .gamepad-settings-add-binding-addButton:focus,
+    .gamepad-settings-binding-removeButton:focus {
+        box-shadow:
+            0 0 0 2px #000,
+            0 0 0 5px #fff;
+    }
+
+    .gamepad-text-input {
+        background-color: black;
+        border-color: #666;
+        color: white;
+    }
+
+    button.gamepad-settings-params-icon svg path {
         fill: white;
         stroke: white;
+    }
+
+    button.gamepad-settings-params-icon:focus:not([disabled]),
+    button.gamepad-settings-params-icon:hover:not([disabled]) {
+        box-shadow: 0 0 0 3px white;
     }
 
     .gamepad-settings-binding-params {
