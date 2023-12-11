@@ -68,9 +68,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 var isHidden = childNode.getAttribute("hidden") !== null ? true : false;
                 var disabled = childNode.getAttribute("disabled") !== null ? true : false;
                 if (childNode.nodeName === "OPTION" && !isHidden && !disabled) {
-                    generatedItems[nodeIndex] = {
-                        description: childNode.textContent
-                    };
+                    generatedItems[nodeIndex] = childNode.textContent;
                 }
             }
 

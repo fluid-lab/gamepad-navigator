@@ -5,6 +5,11 @@
     row-gap: 1rem;
 }
 
+.gamepad-list-selector-description {
+    font-size: 1.5rem;
+    text-align: center;
+}
+
 .gamepad-list-selector-items {
     border: 1px solid #999;
     border-radius: 0.25rem;

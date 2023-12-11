@@ -17,43 +17,51 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     gamepad.actions.axis = {
         thumbstickHistoryNavigation: {
+            action: "thumbstickHistoryNavigation",
             description: "Navigate through history with a stick input",
             repeatRate: 0,
             invert:false
         },
         thumbstickHorizontalArrows: {
+            action: "thumbstickHorizontalArrows",
             description: "Send left or right arrows with a stick input",
             repeatRate: 0,
             invert:false
         },
         thumbstickTabbing: {
+            action: "thumbstickTabbing",
             description: "Move through the focusable elements using a stick input",
             repeatRate: 0,
             invert:false
         },
         scrollHorizontally: {
+            action: "scrollHorizontally",
             description: "Scroll horizontally with a stick input",
             repeatRate: 0.1,
             scrollFactor: 10,
             invert:false
         },
         scrollVertically: {
+            action: "scrollVertically",
             description: "Scroll vertically with a stick input",
             repeatRate: 0.1,
             scrollFactor: 10,
             invert:false
         },
         thumbstickVerticalArrows: {
+            action: "thumbstickVerticalArrows",
             description: "Send up or down arrows with a stick input",
             repeatRate: 0.5,
             invert:false
         },
         thumbstickWindowSize: {
+            action: "thumbstickWindowSize",
             description: "Change the window size with a stick input",
             repeatRate: 0,
             invert:false
         },
         thumbstickZoom: {
+            action: "thumbstickZoom",
             description: "Zoom in or out of the window with a stick input",
             repeatRate: 1,
             invert:false
@@ -62,99 +70,101 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     gamepad.actions.button = {
         click: {
+            action: "click",
             description: "Click the focused element"
         },
         closeCurrentTab: {
+            action: "closeCurrentTab",
             description: "Close the current tab"
         },
         closeCurrentWindow: {
+            action: "closeCurrentWindow",
             description: "Close the current window"
         },
         goToNextTab: {
+            action: "goToNextTab",
             description: "Switch to the next tab",
             repeatRate: 1
         },
         goToNextWindow: {
+            action: "goToNextWindow",
             description: "Switch to the next window",
             repeatRate: 1
         },
         goToPreviousTab: {
+            action: "goToPreviousTab",
             description: "Switch to the previous tab",
             repeatRate: 1
         },
         goToPreviousWindow: {
+            action: "goToPreviousWindow",
             description: "Switch to the previous window",
             repeatRate: 1
         },
         maximizeWindow: {
+            action: "maximizeWindow",
             description: "Maximise the window"
         },
         nextPageInHistory: {
+            action: "nextPageInHistory",
             description: "Switch to the next page in history"
         },
         openNewTab: {
+            action: "openNewTab",
             description: "Open a new tab",
             background: false
         },
         openNewWindow: {
+            action: "openNewWindow",
             description: "Open a new window",
             background: false
         },
         openActionLauncher: {
+            action: "openActionLauncher",
             description: "Open the action launcher"
         },
         openSearchKeyboard: {
+            action: "openSearchKeyboard",
             description: "Start a search"
         },
         openConfigPanel: {
+            action: "openConfigPanel",
             description: "Open the settings panel"
         },
         previousPageInHistory: {
+            action: "previousPageInHistory",
             description: "Switch to the previous page in history"
         },
         reopenTabOrWindow: {
+            action: "reopenTabOrWindow",
             description: "Reopen the most recently closed tab or window"
         },
         restoreWindowSize: {
+            action: "restoreWindowSize",
             description: "Restore the window to its previous size."
         },
-        scrollDown: {
-            description: "Scroll down",
-            repeatRate: 0.1,
-            scrollFactor: 10
-        },
-        scrollLeft: {
-            description: "Scroll left",
-            repeatRate: 0.1,
-            scrollFactor: 10
-        },
-        scrollRight: {
-            description: "Scroll right",
-            repeatRate: 0.1,
-            scrollFactor: 10
-        },
-        scrollUp: {
-            description: "Scroll up",
-            repeatRate: 0.1,
-            scrollFactor: 10
-        },
         sendKey: {
+            action: "sendKey",
             description: "Send a key to the focused element",
             repeatRate: 0
         },
         tabBackward: {
+            action: "tabBackward",
             description: "Focus on the previous focusable element",
             repeatRate: 0.4
         },
         tabForward: {
+            action: "tabForward",
             description: "Focus on the next focusable element",
             repeatRate: 0.4
         },
         zoomIn: {
+            action: "zoomIn",
             description: "Zoom in to the current window",
             repeatRate: 0.5
         },
         zoomOut: {
+            action: "zoomOut",
             description: "Zoom out of the current window",
             repeatRate: 0.5
         }
@@ -182,10 +192,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "click",
         "tabBackward",
         "tabForward",
-        "scrollLeft",
-        "scrollRight",
-        "scrollUp",
-        "scrollDown",
         "zoomIn",
         "zoomOut"
     ];
@@ -194,9 +200,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.actions.launchable = (function () {
         var originalLaunchableDefs = fluid.filterKeys(gamepad.actions.button, gamepad.actions.keys.launchable);
         var reworkedDefs = [];
-        fluid.each(originalLaunchableDefs, function (launchDef, key) {
-            var reworkedDef = fluid.copy(launchDef);
-            reworkedDef.key = key;
+
+        // The list of launchable actions also controls the order in which they're displayed in the launcher.
+        fluid.each(gamepad.actions.keys.launchable, function (actionKey) {
+            var reworkedDef = fluid.copy(originalLaunchableDefs[actionKey]);
+            reworkedDef.key = actionKey;
 
             // launcher actions should never repeat.
             if (reworkedDef.repeatRate) {
@@ -205,6 +213,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
             reworkedDefs.push(reworkedDef);
         });
+
         return reworkedDefs;
     })();
 

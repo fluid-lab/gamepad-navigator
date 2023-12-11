@@ -17,8 +17,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.ui.listSelector", {
         gradeNames: ["gamepad.templateRenderer"],
         markup: {
-            container: "<div class='gamepad-list-selector'><p>%description</p><div class='gamepad-list-selector-items'></div></div>",
-            item: "<div class='gamepad-list-selector-item' tabindex=0>%description</div>"
+            container: "<div class='gamepad-list-selector'><p class='gamepad-list-selector-description'>%description</p><div class='gamepad-list-selector-items'></div></div>",
+            item: "<div class='gamepad-list-selector-item gamepad-list-selector-active-item' tabindex=0>%description</div>"
         },
         selectors: {
             items: ".gamepad-list-selector-items",
@@ -67,12 +67,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     });
 
+    /**
+     *
+     * Render a list of items as focusable/clickable/keyboard operable elements.
+     * @param {Object} that - The listSelector component.
+     * @param {selectElement} enclosingElement - The select element to populate.
+     * @param {Object.<String,Object|String>} items - A hash of items.  Each property can either be a string (description) or an object with a description property.
+     *
+     */
     gamepad.ui.listSelector.renderItems = function (that, enclosingElement, items) {
         enclosingElement.empty();
 
         fluid.each(items, function (item, itemIndex) {
             var template = that.options.markup.item;
-            var itemMarkup = fluid.stringTemplate(template, item);
+
+            var itemObject = typeof item === "string" ? { description: item } : item;
+            var itemMarkup = fluid.stringTemplate(template, itemObject);
             var itemElement = $(itemMarkup);
 
             itemElement.on("click", function (event) {
@@ -82,7 +92,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             });
 
             itemElement.on("keydown", function (event) {
-                if (["Enter", " "].includes(event.code)) {
+                if (["Enter", "Space"].includes(event.code)) {
                     event.preventDefault();
                     that.handleItemClick(itemIndex, event);
                 }
