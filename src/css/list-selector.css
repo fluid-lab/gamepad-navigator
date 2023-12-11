@@ -5,9 +5,9 @@
     row-gap: 1rem;
 }
 
-.gamepad-list-selector-items{
+.gamepad-list-selector-items {
     border: 1px solid #999;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     display: flex;
     flex-direction: column;
     row-gap: 0;
