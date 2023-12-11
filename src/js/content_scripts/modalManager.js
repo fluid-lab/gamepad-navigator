@@ -66,6 +66,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         hidden: "{gamepad.modalManager}.model.hideSearchKeyboard"
                     }
                 }
+            },
+            selectOperator: {
+                container: "{that}.model.shadowElement",
+                type: "gamepad.selectOperator",
+                createOnEvent: "onShadowReady",
+                options: {
+                    model: {
+                        hidden: "{gamepad.modalManager}.model.hideSelectOperator",
+                        selectElement: "{gamepad.modalManager}.model.selectElement"
+                    }
+                }
             }
         },
         listeners: {
@@ -106,6 +117,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         var hideSearchKeyboard = that.model.activeModal !== "searchKeyboard";
         transaction.fireChangeRequest({ path: "hideSearchKeyboard", value: hideSearchKeyboard });
+
+        var hideSelectOperator = that.model.activeModal !== "selectOperator";
+        transaction.fireChangeRequest({ path: "hideSelectOperator", value: hideSelectOperator });
 
         transaction.commit();
     };

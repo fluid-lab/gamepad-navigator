@@ -12,6 +12,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
 /* global gamepad */
 
+// TODO: Make this use the list selector.
+
 (function (fluid) {
     "use strict";
 
@@ -19,6 +21,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gradeNames: ["gamepad.modal"],
         model: {
             classNames: " actionLauncher-modal",
+            closeButtonLabel: "Cancel",
             label: "Gamepad Navigator: Launch Action"
         },
         components: {
@@ -39,11 +42,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         model: {
             row: -1,
-
-            axes: {},
-            // Our all-powerful button that is always depressed.
-            buttons: { 0: 1 },
-
             actionOptions: {
                 scrollFactor: 1,
                 invert: false,

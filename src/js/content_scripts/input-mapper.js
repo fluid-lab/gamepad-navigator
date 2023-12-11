@@ -181,7 +181,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                         lastExternalFocused: "{gamepad.inputMapper}.model.lastExternalFocused",
                         shadowElement: "{gamepad.inputMapper}.model.shadowElement",
                         textInputValue: "{gamepad.inputMapper}.model.textInputValue",
-                        textInputType: "{gamepad.inputMapper}.model.textInputType"
+                        textInputType: "{gamepad.inputMapper}.model.textInputType",
+                        selectElement: "{gamepad.inputMapper}.model.selectElement"
                     }
                 }
             }

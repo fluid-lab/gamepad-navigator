@@ -218,7 +218,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * shift the focus to the next element.
              */
             var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
-            if (activeElement.nodeName === "BODY" || !activeElement) {
+            if (!activeElement || activeElement.nodeName === "BODY") {
                 that.tabbableElements[0].focus();
             }
             else {
@@ -267,7 +267,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         if (activeElement) {
             var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
 
-            // Open the new onscreen keyboard to input text.
+            // Open the onscreen keyboard to input text.
             if (isTextInput) {
                 var lastExternalFocused = activeElement;
                 that.applier.change("lastExternalFocused", lastExternalFocused);
@@ -276,50 +276,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
                 that.applier.change("activeModal", "onscreenKeyboard");
             }
-            /**
-             * If SELECT element is currently focused, toggle its state. Otherwise perform
-             * the regular click operation.
-             */
+            // Open our "select operator".
             else if (activeElement.nodeName === "SELECT") {
-                // TODO: Replace this with a new modal.
-                var optionsLength = 0;
-
-                // Compute the number of options and store it.
-                activeElement.childNodes.forEach(function (childNode) {
-                    if (childNode.nodeName === "OPTION") {
-                        optionsLength++;
-                    }
-                });
-
-                // Toggle the SELECT dropdown.
-                if (!activeElement.getAttribute("size") || activeElement.getAttribute("size") === "1") {
-                    /**
-                     * Store the initial size of the dropdown in a separate attribute
-                     * (if specified already).
-                     */
-                    var initialSizeString = activeElement.getAttribute("size");
-                    if (initialSizeString) {
-                        activeElement.setAttribute("initialSize", parseInt(initialSizeString));
-                    }
-
-                    /**
-                     * Allow limited expansion to avoid an overflowing list, considering the
-                     * list could go as large as 100 or more (for example, a list of
-                     * countries).
-                     */
-                    var length = Math.min(15, optionsLength);
-                    activeElement.setAttribute("size", length);
-                }
-                else {
-                    // Obtain the initial size of the dropdown.
-                    var sizeString = activeElement.getAttribute("initialSize") || "1";
-
-                    // Restore the size of the dropdown.
-                    activeElement.setAttribute("size", parseInt(sizeString));
-                }
+                that.applier.change("lastExternalFocused", activeElement);
+                that.applier.change("selectElement", activeElement);
+                that.applier.change("activeModal", "selectOperator");
             }
+            // Click on the focused element.
             else {
-                // Click on the focused element.
                 activeElement.click();
             }
         }
