@@ -52,12 +52,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.inputMapperUtils.content.scrollLeft = function (that, actionOptions, inputType, index) {
-        var value = fluid.get(that.model, [inputType, index]);
+        var value = Math.abs(fluid.get(that.model, [inputType, index]) || 0);
         var scrollFactor = fluid.get(actionOptions, "scrollFactor") || 1;
 
         // Scroll to the left according to the new input value.
         if (window.scrollX > 0) {
-            window.scroll(window.scrollX - value * that.options.scrollInputMultiplier * scrollFactor, window.scrollY);
+            window.scroll(window.scrollX - value * scrollFactor, window.scrollY);
         }
         else {
             var intervalKey = gamepad.inputMapper.base.getIntervalKey(actionOptions, inputType, index);
@@ -78,12 +78,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.inputMapperUtils.content.scrollRight = function (that, actionOptions, inputType, index) {
+        var value = Math.abs(fluid.get(that.model, [inputType, index]) || 0);
         var scrollFactor = fluid.get(actionOptions, "scrollFactor") || 1;
-        var value = fluid.get(that.model, [inputType, index]);
-
 
         // Scroll to the right according to the new input value.
-        window.scroll(window.scrollX + value * that.options.scrollInputMultiplier * scrollFactor, window.scrollY);
+        window.scroll(window.scrollX + value * scrollFactor, window.scrollY);
 
         var documentWidth = document.body.scrollWidth;
         var currentScrollX = window.scrollX + window.innerWidth;
@@ -206,7 +205,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      */
     gamepad.inputMapperUtils.content.buttonTabNavigation = function (that, actionOptions, inputType, index) {
         var inversionFactor = fluid.get(actionOptions, "invert") ? -1 : 1;
-        var value = fluid.get(that.model, [inputType, index]);
+        var value = Math.abs(fluid.get(that.model, [inputType, index]));
 
         var length = that.tabbableElements.length;
 
@@ -239,14 +238,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 var fullyWeightedValue = value * actionPolarity * inversionFactor;
                 var increment = fullyWeightedValue > 0 ? 1 : -1;
 
-
-                that.currentTabIndex = (that.tabbableElements.length + (activeElementIndex + increment)) % that.tabbableElements.length;
+                // 7 elements, at position 6, forward by one would be (7 + 6 + 1) % 7 or 0.
+                // 7 elements, at position 0, add -1 would be (7 + 0 -1) % 7, or 6
+                that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
                 var elementToFocus = that.tabbableElements[that.currentTabIndex];
                 elementToFocus.focus();
 
                 // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
                 if (!that.model.activeModal && elementToFocus !== document.activeElement) {
-                    that.currentTabIndex = (that.tabbableElements.length + (that.currentTabIndex + increment)) % that.tabbableElements.length;
+                    that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
                     var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
                     failoverElementToFocus.focus();
                 }

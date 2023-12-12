@@ -143,6 +143,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             action: "restoreWindowSize",
             description: "Restore the window to its previous size."
         },
+        scrollDown: {
+            action: "scrollDown",
+            description: "Scroll down",
+            repeatRate: 0.1,
+            scrollFactor: 10
+        },
+        scrollLeft: {
+            action: "scrollLeft",
+            description: "Scroll left",
+            repeatRate: 0.1,
+            scrollFactor: 10
+        },
+        scrollRight: {
+            action: "scrollRight",
+            description: "Scroll right",
+            repeatRate: 0.1,
+            scrollFactor: 10
+        },
+        scrollUp: {
+            action: "scrollUp",
+            description: "Scroll up",
+            repeatRate: 0.1,
+            scrollFactor: 10
+        },
         sendKey: {
             action: "sendKey",
             description: "Send a key to the focused element",
@@ -192,6 +216,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "click",
         "tabBackward",
         "tabForward",
+        "scrollLeft",
+        "scrollRight",
+        "scrollUp",
+        "scrollDown",
         "zoomIn",
         "zoomOut"
     ];
@@ -201,7 +229,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         var originalLaunchableDefs = fluid.filterKeys(gamepad.actions.button, gamepad.actions.keys.launchable);
         var reworkedDefs = [];
 
-        // The list of launchable actions also controls the order in which they're displayed in the launcher.
+        // The list of launchable actions also controls the order in which they're displayed in the
         fluid.each(gamepad.actions.keys.launchable, function (actionKey) {
             var reworkedDef = fluid.copy(originalLaunchableDefs[actionKey]);
             reworkedDef.key = actionKey;

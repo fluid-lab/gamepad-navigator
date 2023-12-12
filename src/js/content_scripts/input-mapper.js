@@ -27,8 +27,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             textInputValue: "",
             textInputType: "",
 
-            bindings: gamepad.bindings.defaults,
-            prefs: gamepad.prefs.defaults
+            bindings: gamepad.bindings.defaults
         },
         modelListeners: {
             pageInView: {

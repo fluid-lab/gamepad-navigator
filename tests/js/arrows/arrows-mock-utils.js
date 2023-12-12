@@ -27,13 +27,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         model: {
-            map: {
+            bindings: {
                 buttons: {
-                    // D-Pad Buttons.
-                    12: { currentAction: "sendArrowUp" },
-                    13: { currentAction: "sendArrowDown" },
-                    14: { currentAction: "sendArrowLeft" },
-                    15: { currentAction: "sendArrowRight" }
+                    // D-Pad Buttons.  No custom options, so use the default definitions.
+                    12: { action: "sendKey", key: "ArrowUp"},
+                    13: { action: "sendKey", key: "ArrowDown"},
+                    14: { action: "sendKey", key: "ArrowLeft"},
+                    15: { action: "sendKey", key: "ArrowRight"}
                 }
             }
         }
@@ -45,10 +45,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         invert: false,
         members: { count: 2 },
         model: {
-            map: {
+            bindings: {
                 axes: {
-                    0: { currentAction: "thumbstickHorizontalArrows", invert: "{that}.options.invert" },
-                    1: { currentAction: "thumbstickVerticalArrows", invert: "{that}.options.invert" }
+                    0: { action: "thumbstickHorizontalArrows", scrollFactor: 50, invert: "{that}.options.invert", repeatRate: 0.4 },
+                    1: { action: "thumbstickVerticalArrows", scrollFactor: 50, invert: "{that}.options.invert", repeatRate: 0.4 }
                 }
             }
         }

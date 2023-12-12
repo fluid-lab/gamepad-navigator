@@ -20,16 +20,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         fluid.registerNamespace("gamepad.tests");
 
         var counter;
-        var windowMock;
         jqUnit.module("Gamepad Navigator Arrow Tests", {
             setup: function () {
                 counter = gamepad.tests.utils.arrows.counter("body");
-                windowMock = gamepad.test.window();
-
             },
             teardown: function () {
                 counter.destroy();
-                windowMock.destroy();
             }
         });
 
@@ -43,27 +39,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         fluid.each(arrowButtons, function (keyCode, button) {
             jqUnit.test("Arrow button tests: " + keyCode, function () {
                 counter.focus();
-                var inputMapper = gamepad.tests.arrows.buttonInputMapper({
-                    windowObject: windowMock
-                });
+                var inputMapper = gamepad.tests.arrows.buttonInputMapper();
 
-                inputMapper.pollGamepads();
                 var initialKeydownValue = fluid.get(counter, ["model", "eventCount", "keydown", keyCode ]);
                 jqUnit.assertUndefined("There should be no initial keydown counter value for " + keyCode, initialKeydownValue);
 
                 var initialKeyupValue = fluid.get(counter, ["model", "eventCount", "keyup", keyCode ]);
                 jqUnit.assertUndefined("There should be no initial keyup counter value for " + keyCode, initialKeyupValue);
 
-                windowMock.applier.change(["gamepads", "0", "buttons", button], 1);
-                inputMapper.pollGamepads();
+                inputMapper.applier.change(["buttons", button], 1);
 
                 var updatedKeydownValue = fluid.get(counter, ["model", "eventCount", "keydown", keyCode ]);
                 jqUnit.assertEquals("The keydown counter value should have been updated for " + keyCode, 1, updatedKeydownValue);
 
                 var updatedKeyupValue = fluid.get(counter, ["model", "eventCount", "keyup", keyCode ]);
                 jqUnit.assertEquals("The keydown counter value should have been updated for " + keyCode, 1, updatedKeyupValue);
-
-                inputMapper.destroy();
             });
         });
 
@@ -101,10 +91,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
                 counter.focus();
                 var inputMapper = gamepad.tests.axisInputMapper({
-                    windowObject: windowMock,
                     invert: testDef.invert
                 });
-                inputMapper.pollGamepads();
 
                 var initialNegativeValue = fluid.get(counter, negativeModelPath);
                 jqUnit.assertUndefined("There should be no initial keydown counter value for the negative side of the axis.", initialNegativeValue);
@@ -112,10 +100,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 var initialPositiveValue = fluid.get(counter, positiveModelPath);
                 jqUnit.assertUndefined("There should be no initial keydown counter value for the positive side of the axis.", initialPositiveValue);
 
-                windowMock.applier.change(["gamepads", "0", "axes", testDef.axis], -1);
-                inputMapper.pollGamepads();
+                inputMapper.applier.change(["axes", testDef.axis], -1);
 
-                // Because the gamepad is driven by polling, we have to wait at least a polling cycle (50ms * speed factor (1)).
                 jqUnit.stop();
                 setTimeout(function () {
                     jqUnit.start();
@@ -125,28 +111,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                     var secondPositiveValue = fluid.get(counter, positiveModelPath);
                     jqUnit.assertUndefined("An arrow should not have been sent from the positive side of the axis.", secondPositiveValue);
 
+                    inputMapper.applier.change(["axes", testDef.axis], 0);
+                    inputMapper.applier.change(["axes", testDef.axis], 1);
+
                     jqUnit.stop();
                     setTimeout(function () {
                         jqUnit.start();
-                        inputMapper.pollGamepads();
                         var thirdNegativeValue = fluid.get(counter, negativeModelPath);
-                        jqUnit.assertEquals("A second arrow should have been sent from the negative side of the axis.", 2, thirdNegativeValue);
+                        jqUnit.assertEquals("No additional arrows should have been sent from the negative side of the axis.", 1, thirdNegativeValue);
 
-                        windowMock.applier.change(["gamepads", "0", "axes", testDef.axis], 1);
-                        inputMapper.pollGamepads();
-
-                        jqUnit.stop();
-                        setTimeout(function () {
-                            jqUnit.start();
-                            var finalPositiveValue = fluid.get(counter, positiveModelPath);
-                            jqUnit.assertEquals("An arrow should have been sent from the positive side of the axis.", 1, finalPositiveValue);
-
-                            var finalNegativeValue = fluid.get(counter, negativeModelPath);
-                            jqUnit.assertEquals("No additional arrows should have been sent from the negative side of the axis.", 2, finalNegativeValue);
-
-                            inputMapper.destroy();
-
-                        }, 50);
+                        var finalPositiveValue = fluid.get(counter, positiveModelPath);
+                        jqUnit.assertEquals("An arrow should have been sent from the positive side of the axis.", 1, finalPositiveValue);
                     }, 50);
                 }, 50);
             });

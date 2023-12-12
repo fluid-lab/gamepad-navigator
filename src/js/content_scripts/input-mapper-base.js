@@ -25,7 +25,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gradeNames: ["gamepad.configMaps", "gamepad.navigator"],
         model: {
             pageInView: true,
-            prefs: {},
+            prefs: gamepad.prefs.defaults,
             bindings: {}
         },
         modelListeners: {
