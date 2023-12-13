@@ -8,7 +8,7 @@ There are a few user-configurable "preferences" that are persisted to local stor
 | `newTabOrWindowURL`   | The URL to open when creating a new tab or window. | Any controllable URL (see below). | `https://www.google.com/` |
 | `openWindowOnStartup` | If no "safe" windows (see below) are open on startup, open one automatically. | `true` or `false` | `true` |
 | `pollingFrequency`    | How often (in milliseconds) to check gamepad inputs. | A number value. | `50` |
-| `vibrate`             | Whether to vibrate when we cannot complete an action (for example, if we attempt to scroll down and we are already at the bottom of the page). | `true` or `false` | `true` |
+| `vibrate`             | Whether to vibrate when an action cannot be completed (for example, if the user attempts to scroll down and they are already at the bottom of the page). | `true` or `false` | `true` |
 
 ## "Safe" Windows
 

@@ -114,12 +114,12 @@ window using buttons and triggers. Vibrates the gamepad if there are no other co
 ### `{inputMapper}.zoomIn`
 
 Sends a message to the background script to zoom in on the current web page
-using buttons and triggers. Vibrates the gamepad if we are already zoomed in as far as possible.
+using buttons and triggers. Vibrates the gamepad if the page is already zoomed in as far as possible.
 
 ### `{inputMapper}.zoomOut`
 
 Sends a message to the background script to zoom out on the current web page
-using buttons and triggers. Vibrates the gamepad if we are already zoomed out as far as possible.
+using buttons and triggers. Vibrates the gamepad if the page is already zoomed out as far as possible.
 
 ### `{inputMapper}.thumbstickZoom`
 
