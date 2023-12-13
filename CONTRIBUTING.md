@@ -1,22 +1,23 @@
 <!--
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 -->
 
 # Contributing to the Gamepad Navigator
 
 Thank you for your interest in contributing to this project. As the core values and principles of this project align
 with the [Fluid Project](https://wiki.fluidproject.org/pages/viewpage.action?pageId=3900010), a first good step would
-be to get acquainted with the Fluid Community (see [Get Involved](https://tinyurl.com/yxgwccdr)), and understanding how
-[Infusion](http://docs.fluidproject.org/infusion/) works. The next step should be reviewing the project's
-[documentation](docs) and looking into the [source code](src).
+be to get acquainted with the Fluid Community (see [Get Involved](https://tinyurl.com/yxgwccdr)). You should also
+read about [Infusion](http://docs.fluidproject.org/infusion/), which most of the extension is written in.
+
+The next step should be reviewing the project's [documentation](docs) and looking at the [source code](src).
 
 ## Code of Conduct
 
