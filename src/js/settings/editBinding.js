@@ -299,26 +299,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
     // Here are the individual grade names directly correlated with action names.
 
-    /*
-
-        * Actions with no additional parameters:  *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `click`                       |              |             |         |                |      |
-        | `closeCurrentTab`             |              |             |         |                |      |
-        | `closeCurrentWindow`          |              |             |         |                |      |
-        | `maximizeWindow`              |              |             |         |                |      |
-        | `nextPageInHistory`           |              |             |         |                |      |
-        | `openActionLauncher`          |              |             |         |                |      |
-        | `openConfigPanel`             |              |             |         |                |      |
-        | `openSearchKeyboard`          |              |             |         |                |      |
-        | `previousPageInHistory`       |              |             |         |                |      |
-        | `restoreWindowSize`           |              |             |         |                |      |
-        | `reopenTabOrWindow`           |              |             |         |                |      |
-
-    */
-
+    // Actions with no additional parameters:
     fluid.defaults("gamepad.settings.ui.editBinding.click", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
@@ -331,17 +312,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.settings.ui.editBinding.restoreWindowSize", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.reopenTabOrWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
 
-    /*
-
-        * Actions that only support the `background` parameter: *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ---------- | ----------- | ------- | -------------- | ---- |
-        | `openNewTab`                  |            | Yes         |         |                |      |
-        | `openNewWindow`               |            | Yes         |         |                |      |
-
-    */
-
+    //Actions that only support the `background` parameter:
     fluid.defaults("gamepad.settings.ui.editBinding.openNewTab", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsBackground"],
         model: gamepad.actions.button.openNewTab
@@ -352,23 +323,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         model: gamepad.actions.button.openNewWindow
     });
 
-    /*
-
-        * Actions that only support the `repeatRate` parameter: *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `goToNextTab`                 | Yes          |             |         |                |      |
-        | `goToNextWindow`              | Yes          |             |         |                |      |
-        | `goToPreviousTab`             | Yes          |             |         |                |      |
-        | `goToPreviousWindow`          | Yes          |             |         |                |      |
-        | `tabForward`                  | Yes          |             |         |                |      |
-        | `tabBackward`                 | Yes          |             |         |                |      |
-        | `zoomIn`                      | Yes          |             |         |                |      |
-        | `zoomOut`                     | Yes          |             |         |                |      |
-
-    */
-
+    //Actions that only support the `repeatRate` parameter:
     fluid.defaults("gamepad.settings.ui.editBinding.tabForward", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.tabForward
@@ -410,36 +365,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
 
 
-    /*
-
-        * `repeatRate` and `key` *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `sendKey`                     | Yes          |             |         |                | Yes  |
-
-    */
-
+    // Actions that support `repeatRate` and `key`:
     fluid.defaults("gamepad.settings.ui.editBinding.sendKey", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsKey"],
         model: gamepad.actions.button.sendKey
     });
 
-    /*
-
-        * `repeatRate` and `invert` *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `thumbstickHistoryNavigation` | Yes          |             | Yes     |                |      |
-        | `thumbstickHorizontalArrows`  | Yes          |             | Yes     |                |      |
-        | `thumbstickTabbing`           | Yes          |             | Yes     |                |      |
-        | `thumbstickVerticalArrows`    | Yes          |             | Yes     |                |      |
-        | `thumbstickWindowSize`        | Yes          |             | Yes     |                |      |
-        | `thumbstickZoom`              | Yes          |             | Yes     |                |      |
-
-    */
-
+    // Actions that support `repeatRate` and `invert`:
     fluid.defaults("gamepad.settings.ui.editBinding.thumbstickHistoryNavigation", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickHistoryNavigation
@@ -470,17 +402,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         model: gamepad.actions.axis.thumbstickZoom
     });
 
-    /*
-        * `repeatRate` and `scrollFactor` *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `scrollDown`                  | Yes          |             |         | Yes            |      |
-        | `scrollLeft`                  | Yes          |             |         | Yes            |      |
-        | `scrollRight`                 | Yes          |             |         | Yes            |      |
-        | `scrollUp`                    | Yes          |             |         | Yes            |      |
-    */
-
+    // Actions that support `repeatRate` and `scrollFactor`:
     fluid.defaults("gamepad.settings.ui.editBinding.scrollDown", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.button.scrollDown
@@ -501,17 +423,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         model: gamepad.actions.button.scrollUp
     });
 
-    /*
-
-        * `repeatRate`, `invert`, and `scrollFactor` *
-
-        || Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-        | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
-        | `scrollHorizontally'          | Yes          |             | Yes     | Yes            |      |
-        | `scrollVertically`            | Yes          |             | Yes     | Yes            |      |
-
-    */
-
+    // Actions that support `repeatRate`, `invert`, and `scrollFactor`:
     fluid.defaults("gamepad.settings.ui.editBinding.scrollHorizontally", {
         gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.axis.scrollHorizontally

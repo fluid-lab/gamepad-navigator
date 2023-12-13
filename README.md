@@ -12,146 +12,133 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
 # Gamepad Navigator
 
-Gamepads are popular devices, and a lot of work has been done to extend its usefulness to a wide variety of people.
-Some of the game controllers, such as the
-[Xbox Adaptive controller](https://www.microsoft.com/en-us/p/xbox-adaptive-controller/8nsdbhz1n3d8?rtc=1), the
-[Logitech G Adaptive Gaming Kit](https://www.logitechg.com/en-us/products/gamepads/adaptive-gaming-kit-accessories.html),
-and the [one-handed controllers](https://www.evilcontrollers.com/ps4-one-handed-controller), strive to include a
-broader range of people in traditional PC and console gaming.
+## What is this extension?
 
-The Gamepad Navigator is a Chrome extension that allows the users to navigate Chromium-based browsers using a game
-controller and an alternative to a keyboard or mouse for browser navigation. The various buttons and analog sticks on
-the gamepad will serve as inputs for the different types of navigation features or actions of the browser. These inputs
-are read from the gamepads using the [HTML5 Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API)
-and processed via [Infusion](https://fluidproject.org/infusion.html). The navigation features or operations can be
-reconfigured from the application to redefine what each d-pad, thumbstick, button, and trigger does.
+The Gamepad Navigator is a Chrome extension that allows a user to control Chromium-based browsers (Chrome, Edge,
+Brave, et cetera) using a game controller. Any controller supported by the
+[HTML5 Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API) can be used with this extension.
+
+Although it should work with any controller, it is particularly intended to be usable with solutions such as:
+
+- The [Xbox Adaptive controller](https://www.microsoft.com/en-us/p/xbox-adaptive-controller/8nsdbhz1n3d8)
+- [The Logitech Adaptive Gaming Kit](https://www.logitechg.com/en-us/products/gamepads/adaptive-gaming-kit-accessories.html),
+  which provides accessible inputs for the Xbox Adaptive Controller
+- The [Playstation Access Controller](https://www.playstation.com/accessories/access-controller/)
+- The [Logitech Adaptive Gaming Kit for Access Controller](https://www.logitechg.com/nl-nl/products/gamepads/adaptive-gaming-kit-for-access-controller.943-001254.html)
+- The [HORI Flex controller for Nintendo Switch](https://stores.horiusa.com/flex-controller-for-nintendo-switch/)
+- Various modified controllers such as [one-handed controllers](https://www.evilcontrollers.com/ps4-one-handed-controller)
+
+This extension was written in collaboration with members of the [Fluid Community](https://fluidproject.org/), an "open,
+collaborative project to improve the user experience and inclusiveness of open source software". Most of this extension
+is written using [Infusion](https://fluidproject.org/infusion.html), a framework created and supported by that
+community.
+
+## What can this extension do?
+
+This extension listens for gamepad inputs, and waits until an configured input is pressed. It then launches the
+associated "action". Most of these "actions" are focused around navigation, such as moving focus between clickable
+onscreen elements, clicking an element, or scrolling the page up or down. See below for the full list of supported
+actions.
+
+The settings panel provided by this extension can be used to control which actions are "bound" to which inputs. By
+default, the following controls are available:
+
+| Action                                                          | Xbox             | Playstation             | Switch          |
+| --------------------------------------------------------------- | ---------------- | ----------------------- | --------------- |
+| Click the focused element (see below).                          | "A" Button       | "X" Button              | B Button        |
+| Send 'Escape' to the focused element.                           | "B" Button       | "Circle" Button         | A Button        |
+| Navigate to the previous focusable element (repeats when held). | Left Bumper      | Left Bumper             | Left Bumper     |
+| Navigate to the next focusable element (repeats when held).     | Right Bumper     | Right Bumper            | Right Bumper    |
+| Start a search with the onscreen keyboard.                      | Back Button      | Share Button            | Minus Button    |
+| Open the "action launcher".                                     | Start Button     | Options Button          | Plus Button     |
+| Open the configuration panel.                                   | Xbox Logo Button | Playstation Logo Button | Share Button    |
+| Send arrow keys to the focused element (repeats when held).     | D-pad            | D-pad                   | D-pad           |
+| Scroll Up and Down in the current page (repeats when held).     | Left Thumbstick  | Left Thumbstick         | Left Thumbstick |
+
+In most cases, clicking on a focused element will open links and menus, just as a mouse click would. However, there are
+a couple of special cases:
+
+1. Clicking on a text input will open an onscreen keyboard that can be controlled using the gamepad. This will allow you
+   to enter text in forms, including searches.
+
+2. Clicking on a drop-down or multi-select list will open a dialog to help you choose an item using the gamepad.
+
+## What can't this extension do?
+
+This extension cannot operate on browser internal pages such as browser preferences, or the default "new page" opened
+by clicking "New Window" in the "File" menu or by hitting control+n (command-n on OS X).  This extension provides a
+"safe" means of opening new windows and tabs so that the extension can continue working on new windows.
+
+This extension can only work well on pages that allow you to
+[operate all the controls with a keyboard](https://www.w3.org/WAI/WCAG21/Understanding/keyboard.html). Unfortunately,
+there are many pages that are not written with this in mind.
+
+Although we aim to support anything that can be done with a keyboard, some controls have complex javascript that we're
+not able to operate. Wherever possible, we [create an issue](https://github.com/fluid-lab/gamepad-navigator/issues)
+to document these problems, and work to resolve as many problems as we can.
 
 ## Installation
 
-The Gamepad Navigator Chrome Extension is available for free on the
+The latest released version of the Gamepad Navigator is available for free on the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd).
 
-[![Chrome Web Store](https://developer-chrome-com.imgix.net/image/BrQidfK9jaQyIHwdw91aVpkPiib2/LclHxMxqoswLNRcUW3m5.png)](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd)
+The extension can also be installed on any Chromium-based browser using the source code (see below) as follows:
 
-The extension can also be installed on other Chromium-based browsers using the source code (see below).
+1. Clone or download this repository.
 
-1. Clone or download the repository.
+2. Install all the dependencies, using a command like `npm install`.
 
-2. Install [grunt-cli](https://gruntjs.com/) globally:
+3. Build the unpacked chrome extension files using the command `npm run build`.
 
-   ```bash
-   npm install -g grunt-cli
-   ```
+   This will generate a `dist` directory in the root of the project directory which contains the unpacked extension.
 
-3. Install all the dependencies:
+4. Navigate to the address `chrome://extensions/` in your Chromium-based browser and check the `Developer mode` in the
+   top right corner.
 
-   ```bash
-   npm install
-   ```
-
-4. Build the unpacked chrome extension files:
-
-   ```bash
-   grunt
-   ```
-
-   This will generate a `dist` directory at the root of the project which contains the unpacked chrome extension files.
-
-5. Navigate to the address `chrome://extensions/` in your Chromium-based browser and check the `Developer mode` in the
-   top right.
-
-6. Click on the `Load unpacked` button on the top left of the same window and navigate into the `dist` directory to
+5. Click on the `Load unpacked` button on the top left of the same window, navigate into the `dist` directory, and
    open it. This will load the extension into your Chromium-based browser.
-
-_**NOTE**: The new tabs opened using the gamepad navigator will use [Google](https://www.google.com/) as the homepage and
-override the default new tab page. However, it can be configured to open any other website instead of Google._
 
 ## Supported Actions
 
 The Gamepad Navigator currently supports the following actions for buttons and triggers:
 
-| Action | Description | Invoker Documentation |
-| :--- | :--- | :--- |
-| **Click** | Click on the focused element. | [click](docs/components/inputMapper.base.md#inputmapperbaseclickvalue) |
-| **Focus on the previous element** | Change the focus from the currently focused element to the previous tabbable element. | [reverseTab](docs/components/inputMapper.base.md#inputmapperbasereversetabvalue) |
-| **Focus on the next element** | Change the focus from the currently focused element to the previous tabbable element. | [forwardTab](docs/components/inputMapper.base.md#inputmapperbaseforwardtabvalue) |
-| **Scroll left** | Scroll the web page left. | [scrollLeft](docs/components/inputMapper.base.md#inputmapperbasescrollleftvalue-speedfactor) |
-| **Scroll right** | Scroll the web page right. | [scrollRight](docs/components/inputMapper.base.md#inputmapperbasescrollrightvalue-speedfactor) |
-| **Scroll up** | Scroll the web page up. | [scrollUp](docs/components/inputMapper.base.md#inputmapperbasescrollupvalue-speedfactor) |
-| **Scroll down** | Scroll the web page down. | [scrollDown](docs/components/inputMapper.base.md#inputmapperbasescrolldownvalue-speedfactor) |
-| **Zoom-in on the active web page** | Zoom in on the current tab in the active browser window. | [zoomIn](docs/messageListener.md#messagelistenerzoomin) |
-| **Zoom-out on the active web page** | Zoom out on the current tab in the active browser window. | [zoomOut](docs/messageListener.md#messagelistenerzoomout) |
-| **Open a new tab** | Open a new tab in the current browser window. | [openNewTab](docs/messageListener.md#messagelisteneropennewtabactive-homepageurl) |
-| **Close current browser tab** | Close the current tab in the active browser window. | [closeCurrentTab](docs/messageListener.md#messagelistenerclosecurrenttabtabid) |
-| **Switch to the previous browser tab** | Switch from the current tab to the previous tab in the active browser window. | [goToPreviousTab](docs/messageListener.md#messagelistenergotoprevioustab) |
-| **Switch to the next browser tab** | Switch from the current tab to the next tab in the active browser window. | [goToNextTab](docs/messageListener.md#messagelistenergotonexttab) |
-| **Open a new browser window** | Opens a new window. | [openNewWindow](docs/messageListener.md#messagelisteneropennewwindowactive-homepageurl) |
-| **Close current browser window** | Close the currently active browser window. | [closeCurrentWindow](docs/messageListener.md#messagelistenerclosecurrentwindow) |
-| **Switch to the previous browser window** | Switch from the currently active browser window to the previous browser window. | [goToPreviousWindow](docs/messageListener.md#messagelistenergotopreviouswindow) |
-| **Switch to the next browser window** | Switch from the currently active browser window to the next browser window. | [goToNextWindow](docs/messageListener.md#messagelistenergotonextwindow) |
-| **Back (history)** | Navigate to the previous page in history. | [previousPageInHistory](docs/components/inputMapper.base.md#inputmapperbasepreviouspageinhistoryvalue) |
-| **Next (history)** | Navigate to the next page in history. | [nextPageInHistory](docs/components/inputMapper.base.md#inputmapperbasenextpageinhistoryvalue) |
-| **Maximize the current browser window** | Maximize the current browser window. | [maximizeWindow](docs/messageListener.md#messagelistenermaximizewindowleft) |
-| **Restore the size of current browser window** | Restore the size of the currently active browser window. | [restoreWindowSize](docs/messageListener.md#messagelistenerrestorewindowsizeleft) |
-| **Reopen the last closed tab or window** | Reopen the last closed browser tab or window. | [reopenTabOrWindow](docs/messageListener.md#messagelistenerreopentaborwindow) |
-| **Send left arrow to the focused element.** | Send left arrow to the focused element. | [sendArrowLeft](docs/components/inputMapper.md#inputmappersendarrowleftvalue) |
-| **Send right arrow to the focused element.** | Send right arrow to the focused element. | [sendArrowRight](docs/components/inputMapper.md#inputmappersendarrowrightvalue) |
-| **Send up arrow to the focused element.** | Send up arrow to the focused element. | [sendArrowUp](docs/components/inputMapper.md#inputmappersendarrowupvalue) |
-| **Send down arrow to the focused element.** | Send down arrow to the focused element. | [sendArrowDown](docs/components/inputMapper.md#inputmappersendarrowdownvalue) |
+1. Click the focused element
+2. Close the current tab
+3. Close the current window
+4. Switch to the next tab
+5. Switch to the next window
+6. Switch to the previous tab
+7. Switch to the previous window
+8. Maximise the window
+9. Switch to the next page in history
+10. Open a new tab
+11. Open a new window
+12. Open the action launcher
+13. Start a search
+14. Open the settings panel
+15. Switch to the previous page in history
+16. Reopen the most recently closed tab or window
+17. Restore the window to its previous size
+18. Scroll down
+19. Scroll left
+20. Scroll right
+21. Scroll up
+22. Send a key to the focused element
+23. Focus on the previous focusable element
+24. Focus on the next focusable element
+25. Zoom in to the current window
+26. Zoom out of the current window
 
-In case of thumbsticks, the following actions are supported:
+The following actions are supported for a thumb stick axis:
 
-| Action | Description | Invoker Documentation |
-| :--- | :--- | :--- |
-| **Scroll horizontally** | Scroll the web page left and right. | [scrollHorizontally](docs/components/inputMapper.base.md#inputmapperbasescrollhorizontallyvalue-speedfactor-invert) |
-| **Scroll vertically** | Scroll the web page up and down. | [scrollVertically](docs/components/inputMapper.base.md#inputmapperbasescrollverticallyvalue-speedfactor-invert) |
-| **History navigation** | Navigate to the previous and the next page in history. | [thumbstickHistoryNavigation](docs/components/inputMapper.base.md#inputmapperbasethumbstickhistorynavigationvalue-invert) |
-| **Focus on the previous/next element** | Change the focus from the currently focused element to the previous or next tabbable element. | [thumbstickTabbing](docs/components/inputMapper.base.md#inputmapperbasethumbsticktabbingvalue-speedfactor-invert) |
-| **Zoom in or out on the active web page** | Zoom in or out on the current tab in the active browser window. | [thumbstickZoom](docs/components/inputMapper.md#inputmapperthumbstickzoomvalue-invert) |
-| **Maximize/restore the size of current browser window** | Change the size of the current browser window, i.e. maximize or restore. | [thumbstickWindowSize](docs/components/inputMapper.md#inputmapperthumbstickwindowsizevalue-invert) |
-| **Send left/right arrows to the current focused element.** | Send left/right arrows to the current focused element. | [thumbstickHorizontalArrows](docs/components/inputMapper.md#inputmapperthumbstickhorizontalarrowsvalue-speedfactor-invert) |
-| **Send up/down arrows to the current focused element.** | Send up/down arrows to the current focused element. | [thumbstickVerticalArrows](docs/components/inputMapper.md#inputmapperthumbstickverticalarrowsvalue-speedfactor-invert) |
-
-## Default Controls
-
-<p align="center">
-   <img src="src/images/gamepad.svg">
-   <i>
-      <p align="center">
-         Image Source: <a href="https://tinyurl.com/y2wvtldg">W3C Gamepad API Documentation</a>
-      </p>
-   </i>
-</p>
-
-Although the gamepad inputs are reconfigurable, the extension provides a default configuration for each gamepad input.
-The default action for each gamepad input is as follows.  
-(_Please refer to the above diagram for gamepad inputs_)
-
-| Gamepad Input | Default Action | Speed Factor | Invert Action / Open a new tab or window in background |
-| :--- | :--- | :---: | :---: |
-| `Button 0` | Click | - | - |
-| `Button 1` | None | - | - |
-| `Button 2` | History back button | - | - |
-| `Button 3` | History next button | - | - |
-| `Button 4: Left Bumper` | Focus on the previous element | `2.5` | - |
-| `Button 5: Right Bumper` | Focus on the next element | `2.5` | - |
-| `Button 6: Left Trigger` | Scroll left | `1` | - |
-| `Button 7: Right Trigger` | Scroll right | `1` | - |
-| `Button 8` | Close current browser tab | - | - |
-| `Button 9` | Open a new tab | - | `false` |
-| `Button 10: Left Thumbstick Button` | Close current browser window | - | - |
-| `Button 11: Right Thumbstick Button` | Open a new window | - | `false` |
-| `Button 12: D-Pad Up Button` | Switch to the previous browser window | - | - |
-| `Button 13: D-Pad Down Button` | Switch to the next browser window | - | - |
-| `Button 14: D-Pad Left Button` | Switch to the previous browser tab | - | - |
-| `Button 15: D-Pad Right Button` | Switch to the next browser tab | - | - |
-| `Left Thumbstick Horizontal Direction` | Scroll horizontally | `1` | `false` |
-| `Left Thumbstick Vertical Direction` | Scroll vertically | `1` | `false` |
-| `Right Thumbstick Horizontal Direction` | History navigation | - | `false` |
-| `Right Thumbstick Vertical Direction` | Focus on the previous/next element | `2.5` | `false` |
-
-The configuration panel can be opened by clicking on the Gamepad Navigator pop-up icon. You can also use the keyboard
-shortcut `Alt + Shift + G` to open the configuration panel.
+1. Navigate through the history of the current tab/window
+2. Move through the focusable elements
+3. Scroll horizontally
+4. Scroll vertically
+5. Send left or right arrows
+6. Send up or down arrows
+7. Change the window size
+8. Zoom in or out of the window
 
 ## Demo
 
@@ -165,9 +152,4 @@ You can check out the recorded demo to see how the navigator works.
 
 ## Contributing
 
-See [CONTRIBUTING](CONTRIBUTING.md) for detailed information.
-
-## Publishing
-
-For the steps to publish the extension to the Chrome Web Store, please refer to the [PUBLISHING](docs/PUBLISHING.md)
-doc.
+If you are interested in contributing to this project, please see our [page for contributors](CONTRIBUTING.md).
