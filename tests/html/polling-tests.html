@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Gamepad Navigator Click Tests</title>
+        <title>Gamepad Navigator Polling Tests</title>
 
         <link rel="stylesheet" media="screen" href="../../node_modules/infusion/tests/lib/qunit/css/qunit.css" />
         <link rel="stylesheet" href="../../node_modules/infusion/tests/lib/qunit/addons/composite/qunit-composite.css">
@@ -14,38 +14,21 @@
 
         <script type="text/javascript" src="../../src/js/shared/prefs.js"></script>
         <script type="text/javascript" src="../../src/js/shared/utils.js"></script>
- 
+
         <script type="text/javascript" src="../../src/js/content_scripts/gamepad-navigator.js"></script>
         <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-content-utils.js"></script>
         <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-base.js"></script>
 
-        <script type="text/javascript" src="../js/click/click-mock-utils.js"></script>
-        <script type="text/javascript" src="../js/click/click-basic-tests.js"></script>
+        <script type="text/javascript" src="../js/lib/gamepad-mock.js"></script>
+        <script type="text/javascript" src="../js/lib/mocked-window.js"></script>
+        <script type="text/javascript" src="../js/polling/gamepad-polling-tests.js"></script>
+        <script type="text/javascript" src="../js/polling/action-repeat-tests.js"></script>
     </head>
     <body id="body">
-        <h1 id="qunit-header">Gamepad Navigator Click Tests</h1>
+        <h1 id="qunit-header">Gamepad Navigator Polling Tests</h1>
         <h2 id="qunit-banner"></h2>
         <div id="qunit-testrunner-toolbar"></div>
         <h2 id="qunit-userAgent"></h2>
         <ol id="qunit-tests"></ol>
-
-        <!-- Test HTML -->
-        <div class="test-elements">
-            <br>
-            <button type="button">Sample Button</button>
-            <br><br>
-            <fieldset id="radios">
-                <input type="radio" id="radio-one" name="group1" value="Radio One"><label for="radio-one">Radio One</label><br>
-                <input type="radio" id="radio-two" name="group1" value="Radio Two"><label for="radio-two">Radio Two</label>
-            </fieldset><br>
-            <fieldset id="checkboxes">
-                <input type="checkbox" id="checkbox-one" name="group1">
-                <label for="checkbox-one"> Checkbox One</label><br>
-                <input type="checkbox" id="checkbox-two" name="group1">
-                <label for="checkbox-two"> Checkbox Two</label><br>
-                <input type="checkbox" id="checkbox-three" name="group1">
-                <label for="checkbox-three"> Checkbox Three</label>
-            </fieldset><br>
-        </div>
     </body>
 </html>

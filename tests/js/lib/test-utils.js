@@ -17,6 +17,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     fluid.registerNamespace("gamepad.tests.utils");
 
+    // TODO: This can probably be safely removed now.
     /**
      *
      * Returns a dummy gamepad input model which represents that no button/axes is

@@ -16,13 +16,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
-    // TODO: Fairly sure none of these are required.
-    // fluid.registerNamespace("gamepad.configMaps");
-    // fluid.registerNamespace("gamepad.inputMapper.base");
-    // fluid.registerNamespace("gamepad.inputMapperUtils.content");
 
     fluid.defaults("gamepad.inputMapper.base", {
-        gradeNames: ["gamepad.configMaps", "gamepad.navigator"],
+        gradeNames: ["gamepad.navigator"],
         model: {
             pageInView: true,
             prefs: gamepad.prefs.defaults,

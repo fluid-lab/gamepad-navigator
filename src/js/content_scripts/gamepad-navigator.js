@@ -19,7 +19,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
-            // TODO: Figure out how this is used and how it differs from "in view";
             connected: false,
             axes: {},
             buttons: {},
@@ -136,26 +135,29 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Combine the inputs from all the gamepads.
         for (var index = 0; index < gamepadsList.length; index++) {
-            // Look for the gamepad data if it is connected.
-            if (gamepadsList[index]) {
-                // Set the connected status to true if any gamepad is available.
-                combinedGamepadData.connected = true;
+            var singleGamepad = gamepadsList[index];
+            if (singleGamepad) {
+                var connected = fluid.get(singleGamepad, "connected") || false;
+                if (connected) {
+                    // Set the connected status to true if any gamepad is available.
+                    combinedGamepadData.connected = true;
 
-                // Combine the axes values from the gamepad currently scanned.
-                fluid.each(gamepadsList[index].axes, function (axesValue, axesIndex) {
-                    if (!combinedGamepadData.axes[axesIndex]) {
-                        combinedGamepadData.axes[axesIndex] = 0;
-                    }
-                    combinedGamepadData.axes[axesIndex] += axesValue;
-                });
+                    // Combine the axes values from the gamepad currently scanned.
+                    fluid.each(gamepadsList[index].axes, function (axesValue, axesIndex) {
+                        if (!combinedGamepadData.axes[axesIndex]) {
+                            combinedGamepadData.axes[axesIndex] = 0;
+                        }
+                        combinedGamepadData.axes[axesIndex] += axesValue;
+                    });
 
-                // Combine the button values from the gamepad currently scanned.
-                fluid.each(gamepadsList[index].buttons, function (buttonObject, buttonIndex) {
-                    if (!combinedGamepadData.buttons[buttonIndex]) {
-                        combinedGamepadData.buttons[buttonIndex] = 0;
-                    }
-                    combinedGamepadData.buttons[buttonIndex] += buttonObject.value;
-                });
+                    // Combine the button values from the gamepad currently scanned.
+                    fluid.each(gamepadsList[index].buttons, function (buttonObject, buttonIndex) {
+                        if (!combinedGamepadData.buttons[buttonIndex]) {
+                            combinedGamepadData.buttons[buttonIndex] = 0;
+                        }
+                        combinedGamepadData.buttons[buttonIndex] += buttonObject.value;
+                    });
+                }
             }
         }
 
@@ -185,7 +187,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Check if any other gamepad is already connected.
         for (var index = 0; index < that.options.windowObject.navigator.getGamepads().length; index++) {
-            if (that.options.windowObject.navigator.getGamepads()[index] !== null) {
+            var singleGamepad = that.options.windowObject.navigator.getGamepads()[index];
+            if ( singleGamepad !== null && singleGamepad.connected) {
                 isGamepadAvailable = true;
             }
         }
@@ -200,7 +203,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         modelUpdateTransaction.fireChangeRequest({ path: "connected", value: isGamepadAvailable });
 
         if (!isGamepadAvailable) {
+            modelUpdateTransaction.fireChangeRequest({ path: "axes", type: "DELETE" });
             modelUpdateTransaction.fireChangeRequest({ path: "axes", value: {} });
+            modelUpdateTransaction.fireChangeRequest({ path: "buttons", type: "DELETE" });
             modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: {} });
         }
 
