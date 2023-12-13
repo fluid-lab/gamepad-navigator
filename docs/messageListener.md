@@ -12,8 +12,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
 # `gamepad.messageListener`
 
-This object is passed to the Chrome extension runtime and executes actions based on messages sent by the
-[`inputMapper`](components/inputMapper.md) component.
+This object sits in a service worker.  It receives message from the
+[`inputMapper`](components/inputMapper.md) component on a controllable page,
+and takes action based on the content of the message.  All messages from the
+client side are sent using `gamepad.inputMapperUtils.background.postMessage`.
 
 ## Non-navigation Methods
 
@@ -45,47 +47,50 @@ from the `actionData` object recieved from the content scripts. Below is an exam
 
 ## Navigation Methods
 
-### `{messageListener}.openNewTab([tabId], [invert], active, homepageURL, [left])`
+### `{messageListener}.openNewTab(actionOptions)`
 
-- `active {Boolean}` Whether a new browser tab should be focused when opened.
-- `homepageURL {String}` The URL that a new browser tab should load when opened.
+- `actionOptions {Object}`
+  - `active {Boolean}` Whether a new browser tab should be focused when opened.
+  - `newTabOrWindowURL {String}` The URL that a new browser tab should load when opened.
 - Returns: Nothing.
 
-Opens a new tab in the current browser window using the
-[`chrome.tabs.create`](https://developer.chrome.com/extensions/tabs#method-create) method.
+Opens a new tab in the current browser window using
+[`chrome.tabs.create`](https://developer.chrome.com/extensions/tabs#method-create).
 
-### `{messageListener}.closeCurrentTab(tabId, [invert], [active], [homepageURL], [left])`
+### `{messageListener}.closeCurrentTab(actionOptions)`
 
-- `tabId {Number}` ID of the currently active tab.
+- `actionOptions {Object}`
+  - `tabId {Number}` The ID of the tab to close.
 - Returns: Nothing.
 
 Closes the current tab in the active browser window using the
 [`chrome.tabs.remove`](https://developer.chrome.com/extensions/tabs#method-remove) method.
 
-### `{messageListener}.goToPreviousTab([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.goToPreviousTab()`
 
 - Returns: Nothing.
 
 Switches from the current tab to the previous tab in the active browser window. If the active tab is the first tab in
 the list, then the focus will move to the last tab.
 
-### `{messageListener}.goToNextTab([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.goToNextTab()`
 
 - Returns: Nothing.
 
 Switches from the current tab to the next tab in the active browser window. If the active tab is the last tab in the
 list, then the focus will move to the first tab.
 
-### `{messageListener}.openNewWindow([tabId], [invert], active, homepageURL, [left])`
+### `{messageListener}.openNewWindow(actionOptions)`
 
-- `active {Boolean}` Whether a new browser window should be focused when opened.
-- `homepageURL {String}` The URL that a new browser window should load when opened.
+- `actionOptions {Object}`
+  - `active {Boolean}` Whether a new browser tab should be focused when opened.
+  - `newTabOrWindowURL {String}` The URL that a new browser tab should load when opened.
 - Returns: Nothing.
 
 Opens a new browser window using the
 [`chrome.windows.create`](https://developer.chrome.com/extensions/windows#method-create) method.
 
-### `{messageListener}.closeCurrentWindow([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.closeCurrentWindow()`
 
 - Returns: Nothing.
 
@@ -93,21 +98,21 @@ Closes the currently active browser window using the
 [`chrome.windows.getCurrent`](https://developer.chrome.com/extensions/windows#method-getCurrent) and
 [`chrome.windows.remove`](https://developer.chrome.com/extensions/windows#method-remove) methods.
 
-### `{messageListener}.goToPreviousWindow([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.goToPreviousWindow()`
 
 - Returns: Nothing.
 
 Switches from the currently active browser window to the previous browser window. If the active window is the first
 window in the list, then the focus will move to the last window.
 
-### `{messageListener}.goToNextWindow([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.goToNextWindow()`
 
 - Returns: Nothing.
 
 Switches from the currently active browser window to the next browser window. If the active window is the last window in
 the list, then the focus will move to the first window.
 
-### `{messageListener}.zoomIn([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.zoomIn()`
 
 - Returns: Nothing.
 
@@ -116,7 +121,7 @@ Zoom in on the current tab in the active browser window using the
 [`chrome.tabs.getZoom`](https://developer.chrome.com/extensions/tabs#method-getZoom), and
 [`chrome.tabs.setZoom`](https://developer.chrome.com/extensions/tabs#method-setZoom) methods.
 
-### `{messageListener}.zoomOut([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.zoomOut()`
 
 - Returns: Nothing.
 
@@ -125,24 +130,26 @@ Zoom out on the current tab in the active browser window using the
 [`chrome.tabs.getZoom`](https://developer.chrome.com/extensions/tabs#method-getZoom), and
 [`chrome.tabs.setZoom`](https://developer.chrome.com/extensions/tabs#method-setZoom) methods.
 
-### `{messageListener}.maximizeWindow([tabId], [invert], [active], [homepageURL], left)`
+### `{messageListener}.maximizeWindow(actionOptions)`
 
-- `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
+- `actionOptions {Object}`
+  - `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
 - Returns: Nothing.
 
 Maximize the current browser window. Saves the browser window's position and dimensions inside the `windowProperties`
 member variable before the window is maximized.
 
-### `{messageListener}.restoreWindowSize([tabId], [invert], [active], [homepageURL], left)`
+### `{messageListener}.restoreWindowSize(actionOptions)`
 
-- `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
+- `actionOptions {Object}`
+  - `left {Number}` Position of the current browser window from the screen's left edge (in pixels).
 - Returns: Nothing.
 
 Restores the size of the currently active browser window. The previous dimensions and positions are taken from the
 `windowProperties` member variable if stored previously. Otherwise, a set of default values are used for the window's
 position and dimensions.
 
-### `{messageListener}.reopenTabOrWindow([tabId], [invert], [active], [homepageURL], [left])`
+### `{messageListener}.reopenTabOrWindow()`
 
 - Returns: Nothing.
 

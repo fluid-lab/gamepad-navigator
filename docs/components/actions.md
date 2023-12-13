@@ -27,7 +27,7 @@ Currently, the following parameters are used by one or more actions:
 
 #### Actions with no additional parameters:
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `click`                       |              |             |         |                |      |
 | `closeCurrentTab`             |              |             |         |                |      |
@@ -43,14 +43,14 @@ Currently, the following parameters are used by one or more actions:
 
 #### Actions that only support the `background` parameter:
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
-| ----------------------------- | ---------- | ----------- | ------- | -------------- | ---- |
-| `openNewTab`                  |            | Yes         |         |                |      |
-| `openNewWindow`               |            | Yes         |         |                |      |
+| Action Key                    | Repeat Rate | Background | Invert | Scroll Factor | Key |
+| ----------------------------- | ----------- | ---------- | ------ | ------------- | --- |
+| `openNewTab`                  |             | Yes        |        |               |     |
+| `openNewWindow`               |             | Yes        |        |               |     |
 
 #### Actions that only support the `repeatRate` parameter:
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `goToNextTab`                 | Yes          |             |         |                |      |
 | `goToNextWindow`              | Yes          |             |         |                |      |
@@ -63,13 +63,13 @@ Currently, the following parameters are used by one or more actions:
 
 #### Actions that support `repeatRate` and `key`
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `sendKey`                     | Yes          |             |         |                | Yes  |
 
 #### Actions that support `repeatRate` and `invert`
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `thumbstickHistoryNavigation` | Yes          |             | Yes     |                |      |
 | `thumbstickHorizontalArrows`  | Yes          |             | Yes     |                |      |
@@ -80,7 +80,7 @@ Currently, the following parameters are used by one or more actions:
 
 #### Actions that support `repeatRate` and `scrollFactor`
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `scrollDown`                  | Yes          |             |         | Yes            |      |
 | `scrollLeft`                  | Yes          |             |         | Yes            |      |
@@ -89,7 +89,7 @@ Currently, the following parameters are used by one or more actions:
 
 #### Actions that support `repeatRate`, `invert`, and `scrollFactor`
 
-|| Action Key                  || Repeat Rate || Background || Invert || Scroll Factor || Key ||
+| Action Key                    | Repeat Rate  | Background  | Invert  | Scroll Factor  | Key  |
 | ----------------------------- | ------------ | ----------- | ------- | -------------- | ---- |
 | `scrollHorizontally`          | Yes          |             | Yes     | Yes            |      |
 | `scrollVertically`            | Yes          |             | Yes     | Yes            |      |

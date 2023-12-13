@@ -21,7 +21,7 @@ Brave, et cetera) using a game controller. Any controller supported by the
 Although it should work with any controller, it is particularly intended to be usable with solutions such as:
 
 - The [Xbox Adaptive controller](https://www.microsoft.com/en-us/p/xbox-adaptive-controller/8nsdbhz1n3d8)
-- [The Logitech Adaptive Gaming Kit](https://www.logitechg.com/en-us/products/gamepads/adaptive-gaming-kit-accessories.html),
+- The [Logitech Adaptive Gaming Kit](https://www.logitechg.com/en-us/products/gamepads/adaptive-gaming-kit-accessories.html),
   which provides accessible inputs for the Xbox Adaptive Controller
 - The [Playstation Access Controller](https://www.playstation.com/accessories/access-controller/)
 - The [Logitech Adaptive Gaming Kit for Access Controller](https://www.logitechg.com/nl-nl/products/gamepads/adaptive-gaming-kit-for-access-controller.943-001254.html)
