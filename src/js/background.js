@@ -395,9 +395,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             return await gamepad.messageListenerUtils.switchTab("nextTab");
         },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
-        openActionLauncher: async function () {
-            return await gamepad.messageListenerUtils.openActionLauncher();
-        },
         search: gamepad.messageListenerUtils.search,
         openOptionsPage: gamepad.messageListenerUtils.openOptionsPage
     };
