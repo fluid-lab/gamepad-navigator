@@ -267,7 +267,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         transaction.commit();
 
         // Since the user was on the "remove" button of the component, move to the same button on the previous
-        // binding (or the first binding if there is now only one).
+        // binding (or the first binding if there is now only one).  Even if it takes too long for the model change to
+        // result in the editBinding component and its markup being removed from the DOM, focus will not change again.
         var removeButtons = that.locate("removeButton");
         var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
         if (removeButtonToFocus) {
