@@ -20,7 +20,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         selectors: {
             add: ".gamepad-settings-add-binding-container",
-            dynamic: ".dynamic-binding-components"
+            dynamic: ".dynamic-binding-components",
+            removeButton: ".gamepad-settings-binding-removeButton"
         },
         model: {
             label: "Bindings",
@@ -248,12 +249,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.settings.ui.bindingsPanel.removeBinding = function (that, bindingComponentModel) {
+        var focusIndexAfterRemove = 0;
+        // bindingComponentSources is keyed by a constructed key rather than number, but we only care about the count.
+        var sourceIndex = 0;
+        fluid.each(that.model.bindingComponentSources, function (bindingComponentSource) {
+            if (bindingComponentSource.index === bindingComponentModel.index) {
+                focusIndexAfterRemove = sourceIndex > 1 ? sourceIndex - 1 : 0;
+            }
+            sourceIndex++;
+        });
+
         var transaction = that.applier.initiate();
         var newDraftBindings = fluid.copy(that.model.draftBindings);
         delete newDraftBindings[bindingComponentModel.index];
         transaction.fireChangeRequest({ path: "draftBindings", type: "DELETE"});
         transaction.fireChangeRequest({ path: "draftBindings", value: newDraftBindings });
         transaction.commit();
+
+        // Since the user was on the "remove" button of the component, move to the same button on the previous
+        // binding (or the first binding if there is now only one).
+        var removeButtons = that.locate("removeButton");
+        var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
+        if (removeButtonToFocus) {
+            removeButtonToFocus.focus();
+        }
     };
 
     // Although there are joysticks with less buttons, the "standard" number of axes/buttons is described at:
