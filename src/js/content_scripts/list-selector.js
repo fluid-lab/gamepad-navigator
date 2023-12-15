@@ -18,7 +18,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         gradeNames: ["gamepad.templateRenderer"],
         markup: {
             container: "<div class='gamepad-list-selector'><p class='gamepad-list-selector-description'>%description</p><div class='gamepad-list-selector-items'></div></div>",
-            item: "<div class='gamepad-list-selector-item gamepad-list-selector-active-item' tabindex=0>%description</div>"
+            item: "<div class='gamepad-list-selector-item gamepad-list-selector-active-item%classNames' tabindex=0>%description</div>"
         },
         selectors: {
             items: ".gamepad-list-selector-items",
@@ -82,6 +82,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             var template = that.options.markup.item;
 
             var itemObject = typeof item === "string" ? { description: item } : item;
+            itemObject.classNames = itemObject.selected ? " gamepad-list-selector-item--selected" : "";
             var itemMarkup = fluid.stringTemplate(template, itemObject);
             var itemElement = $(itemMarkup);
 

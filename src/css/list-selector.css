@@ -39,3 +39,11 @@
     font-size: 1.4rem;
     outline: none;
 }
+
+.gamepad-list-selector-item--selected {
+    font-weight: bold;
+}
+
+.gamepad-list-selector-item--selected::after {
+    content: " (selected)";
+}

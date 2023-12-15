@@ -66,9 +66,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             for (var nodeIndex = 0; nodeIndex < selectElement.children.length; nodeIndex++) {
                 var childNode = selectElement.children.item(nodeIndex);
                 var isHidden = childNode.getAttribute("hidden") !== null ? true : false;
-                var disabled = childNode.getAttribute("disabled") !== null ? true : false;
-                if (childNode.nodeName === "OPTION" && !isHidden && !disabled) {
-                    generatedItems[nodeIndex] = childNode.textContent;
+                var isDisabled = childNode.getAttribute("disabled") !== null ? true : false;
+                var isSelected = childNode.getAttribute("selected") !== null ? true : false;
+
+                if (childNode.nodeName === "OPTION" && !isHidden && !isDisabled) {
+                    generatedItems[nodeIndex] = {
+                        description: childNode.textContent,
+                        selected: isSelected
+                    };
                 }
             }
 
@@ -79,27 +84,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
-    gamepad.selectOperator.handleItemClick = function (that, nodeIndex, event) {
+    gamepad.selectOperator.handleItemClick = function (that, nodeIndexString, event) {
+        var nodeIndex = parseInt(nodeIndexString);
+
         var selectElement = fluid.get(that, "model.selectElement");
         if (selectElement) {
-            var optionElement = selectElement.children[nodeIndex];
             if (selectElement.multiple) {
-                if (optionElement.selected) {
-                    optionElement.removeAttribute("selected");
+                // Toggle the clicked option without affecting any other selected values.
+                var clickedOptionElement = selectElement.children[nodeIndex];
+                if (clickedOptionElement.selected) {
+                    clickedOptionElement.removeAttribute("selected");
                 }
                 else {
-                    optionElement.setAttribute("selected", "");
+                    clickedOptionElement.setAttribute("selected", "");
                 }
-
             }
             else {
-                var optionValue = optionElement.value;
+                for (var optionIndex = 0; optionIndex < selectElement.children.length; optionIndex++) {
+                    var optionElement = selectElement.children[optionIndex];
+                    // Only select the option that was clicked.
+                    if (optionIndex === nodeIndex) {
+                        var optionValue = optionElement.value;
 
-                // Just setting the value doesn't property trigger a change.
-                $(selectElement).val(optionValue);
+                        // Just setting the value doesn't property trigger a change.
+                        $(selectElement).val(optionValue);
 
-                optionElement.setAttribute("selected", "");
+                        optionElement.setAttribute("selected", "");
+                    }
+                    // Clear the selected attribute for the rest.
+                    else {
+                        optionElement.removeAttribute("selected");
+                    }
+                }
             }
+            selectElement.dispatchEvent(new Event("change"));
         }
 
         var transaction = that.applier.initiate();
