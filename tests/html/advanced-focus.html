@@ -6,7 +6,7 @@
     <script src="../../src/js/content_scripts/templateRenderer.js"></script>
 
     <!-- TODO: Remove this once we are done with manual testing. -->
-    <script src="../../node_modules/ally.js/dist/ally.js"></script>
+    <script src="../../node_modules/ally.js/ally.min.js"></script>
 </head>
 <body>
     <h2>Advanced Focus Tester</h2>
@@ -85,7 +85,7 @@
 
     <p>There are also &lt;iframe&gt; elements, which present their own challenges.</p>
 
-    <iframe src="iframe.html"></iframe>
+    <iframe id="iframe" src="iframe.html"></iframe>
 
     <script type="text/javascript">
         var gamepad = fluid.registerNamespace("gamepad");
