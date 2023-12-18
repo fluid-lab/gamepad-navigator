@@ -309,6 +309,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.settings.ui.editBinding.openConfigPanel", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.openSearchKeyboard", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.previousPageInHistory", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
+    fluid.defaults("gamepad.settings.ui.editBinding.reloadTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.restoreWindowSize", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.reopenTabOrWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
 

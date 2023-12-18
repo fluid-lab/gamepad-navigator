@@ -135,6 +135,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             action: "previousPageInHistory",
             description: "Switch to the previous page in history"
         },
+        reloadTab: {
+            action: "reloadTab",
+            description: "Reload the current active tab"
+        },
         reopenTabOrWindow: {
             action: "reopenTabOrWindow",
             description: "Reopen the most recently closed tab or window"
@@ -208,6 +212,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "goToNextTab",
         "closeCurrentTab",
         "closeCurrentWindow",
+        "reloadTab",
         "reopenTabOrWindow",
         "previousPageInHistory",
         "nextPageInHistory",

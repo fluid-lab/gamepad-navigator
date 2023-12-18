@@ -149,6 +149,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 args: ["{that}", { action: "reopenTabOrWindow" }]
             },
 
+            reloadTab: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "reloadTab" }]
+            },
+
             thumbstickZoom: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]

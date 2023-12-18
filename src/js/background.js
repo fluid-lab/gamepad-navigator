@@ -396,7 +396,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
         search: gamepad.messageListenerUtils.search,
-        openOptionsPage: gamepad.messageListenerUtils.openOptionsPage
+        openOptionsPage: gamepad.messageListenerUtils.openOptionsPage,
+        reloadTab: async function () {
+            var currentTab = await chrome.tabs.query({ currentWindow: true, active: true });
+
+            if (currentTab) {
+                await chrome.tabs.reload(currentTab.id);
+            }
+        }
     };
 
     chrome.runtime.onConnect.addListener(function (port) {
