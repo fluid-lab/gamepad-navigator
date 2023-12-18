@@ -52,28 +52,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             }
         },
         components: {
-            vibrate: {
-                container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
-                options: {
-                    model: {
-                        label: "Vibrate",
-                        description: "Vibrate when an action cannot be completed.",
-                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.vibrate"
-                    }
-                }
-            },
-            openWindowOnStartup: {
-                container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
-                options: {
-                    model: {
-                        label: "Open Settings on Startup",
-                        description: "Open this settings panel on startup if no other controllable windows are open.",
-                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.openWindowOnStartup"
-                    }
-                }
-            },
             analogCutoff: {
                 container: "{that}.dom.body",
                 type: "gamepad.ui.rangeInput",
@@ -89,14 +67,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     }
                 }
             },
-            newTabOrWindowURL: {
+            vibrate: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.textInput",
+                type: "gamepad.ui.toggle",
                 options: {
                     model: {
-                        label: "New Page/Tab URL",
-                        description: "This URL will be used when opening new tabs or windows.",
-                        value: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.newTabOrWindowURL"
+                        label: "Vibrate",
+                        description: "Vibrate when an action cannot be completed.",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.vibrate"
                     }
                 }
             },
@@ -112,6 +90,39 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         step: 10,
                         max: 250,
                         value: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.pollingFrequency"
+                    }
+                }
+            },
+            openWindowOnStartup: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.toggle",
+                options: {
+                    model: {
+                        label: "Open Settings on Startup",
+                        description: "Open this settings panel on startup if no other controllable windows are open.",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.openWindowOnStartup"
+                    }
+                }
+            },
+            newTabOrWindowURL: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.textInput",
+                options: {
+                    model: {
+                        label: "New Page/Tab URL",
+                        description: "This URL will be used when opening new tabs or windows.",
+                        value: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.newTabOrWindowURL"
+                    }
+                }
+            },
+            controlsOnAllMedia: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.toggle",
+                options: {
+                    model: {
+                        label: "Controls on All Media",
+                        description: "The gamepad navigator can only operate media (audio, videos) that have controls.  This toggle enables controls for all media elements.",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.controlsOnAllMedia"
                     }
                 }
             }

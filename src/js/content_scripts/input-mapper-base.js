@@ -32,11 +32,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             "buttons.*": {
                 funcName: "{that}.produceNavigation",
                 args: "{change}"
+            },
+            "prefs.controlsOnAllMedia": {
+                func: "{that}.updateMediaControls",
+                args: [true] // performFullUpdate
             }
         },
         listeners: {
             "onDestroy.clearIntervalRecords": "{that}.clearIntervalRecords",
-            "onCreate.trackDOM": "{that}.trackDOM",
+            "onCreate.startTrackingDOM": {
+                funcName: "gamepad.inputMapper.base.startTrackingDOM",
+                args: ["{that}"]
+            },
             "onDestroy.stopTrackingDOM": "{that}.stopTrackingDOM",
             "onGamepadDisconnected.clearIntervalRecords": "{that}.clearIntervalRecords"
         },
@@ -52,6 +59,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 funcName: "gamepad.inputMapper.base.updateTabbables",
                 args: ["{that}"]
             },
+            updateMediaControls: {
+                funcName: "gamepad.inputMapper.base.updateMediaControls",
+                args: ["{that}", "{arguments}.0"] // performFullUpdate
+            },
             produceNavigation: {
                 funcName: "gamepad.inputMapper.base.produceNavigation",
                 args: ["{that}", "{arguments}.0"]
@@ -60,8 +71,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 funcName: "gamepad.inputMapper.base.clearIntervalRecords",
                 args: ["{that}"]
             },
-            trackDOM: {
-                funcName: "gamepad.inputMapper.base.trackDOM",
+            handleDOMMutation: {
+                funcName: "gamepad.inputMapper.base.handleDOMMutation",
                 args: ["{that}"]
             },
             stopTrackingDOM: {
@@ -261,17 +272,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * @param {Object} that - The inputMapper component.
      *
      */
-    gamepad.inputMapper.base.trackDOM = function (that) {
+    gamepad.inputMapper.base.startTrackingDOM = function (that) {
         var body = document.querySelector("body"),
             MutationObserver = that.options.windowObject.MutationObserver;
 
-        // Record the tabbable elements when the component is created.
-        that.updateTabbables();
+        // Do whatever we need to with the initial DOM before there are changes.
+        that.handleDOMMutation();
 
         // Create an instance of the mutation observer.
-        that.mutationObserverInstance = new MutationObserver(that.updateTabbables);
+        that.mutationObserverInstance = new MutationObserver(that.handleDOMMutation);
 
         // Specify the mutations to be observed.
+        // TODO: We could probably safely remove `characterData`, `attributeOldValue` and `characterDataOldValue` here.
         var observerConfiguration = {
             childList: true,
             attributes: true,
@@ -285,6 +297,61 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         that.mutationObserverInstance.observe(body, observerConfiguration);
     };
 
+    gamepad.inputMapper.base.handleDOMMutation = function (that) {
+        that.updateMediaControls();
+
+        // Because we need to consider the order of elements, this method can't benefit from any insight into what has
+        // changed. Run this after any potential changes that would make media elements "tabbable".
+        that.updateTabbables();
+    };
+
+
+    gamepad.inputMapper.base.updateMediaControls = function (that, performFullUpdate) {
+        if (that.model.prefs.controlsOnAllMedia) {
+            // If we are working based on a change to the DOM, we can just focus on added elements.
+            if (!performFullUpdate && that.mutationObserverInstance) {
+                fluid.each(that.mutationObserverInstance.takeRecords(), function (mutationRecord) {
+                    for (var addedNodeIndex = 0; addedNodeIndex < mutationRecord.addedNodes.length; addedNodeIndex++) {
+                        var addedNode = mutationRecord.addedNodes[addedNodeIndex];
+                        var isMediaElement = gamepad.inputMapperUtils.content.isMediaElement(addedNode);
+                        if (isMediaElement) {
+                            addedNode.setAttribute("controls", true);
+                        }
+                    }
+                });
+            }
+            // Fall back to updating the entire DOM if we're not yet working with a mutation observer.
+            else {
+                gamepad.inputMapper.base.enableControls();
+            }
+        }
+        else if (performFullUpdate) {
+            gamepad.inputMapper.base.disableControls();
+        }
+    };
+
+    gamepad.inputMapper.base.enableControls = function () {
+        var mediaElements = document.querySelectorAll("video,audio");
+
+        for (var mediaElementIndex = 0; mediaElementIndex < mediaElements.length; mediaElementIndex++) {
+            var mediaElementToEnable = mediaElements[mediaElementIndex];
+            if (!mediaElementToEnable.hasAttribute("controls")) {
+                mediaElementToEnable.setAttribute("controls-off-by-default", true);
+                mediaElementToEnable.setAttribute("controls", true);
+            }
+        }
+    };
+
+    gamepad.inputMapper.base.disableControls = function () {
+        var mediaElements = document.querySelectorAll("video,audio");
+        for (var mediaElementIndex = 0; mediaElementIndex < mediaElements.length; mediaElementIndex++) {
+            var mediaElement = mediaElements[mediaElementIndex];
+            if (mediaElement.hasAttribute("controls-off-by-default")) {
+                mediaElement.removeAttribute("controls");
+                mediaElement.removeAttribute("controls-off-by-default");
+            }
+        }
+    };
 
     gamepad.inputMapper.base.vibrate = function (that) {
         if (that.model.prefs.vibrate) {

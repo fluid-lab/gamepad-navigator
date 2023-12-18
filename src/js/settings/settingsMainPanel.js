@@ -87,7 +87,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     gamepad.settings.loadPrefs = async function (that) {
         var storedPrefs = await gamepad.utils.getStoredKey("gamepad-prefs");
-        var prefsToSave = storedPrefs || gamepad.prefs.defaults;
+        var prefsToSave = fluid.extend({}, gamepad.prefs.defaults, storedPrefs);
 
         var transaction = that.applier.initiate();
 

@@ -46,7 +46,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             onWindowFocus: null,
             onWindowBlur: null,
             onPageShow: null,
-            onPageHide: null
+            onPageHide: null,
+            onSettingsLoaded: null
         },
 
         listeners: {
@@ -232,9 +233,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapper.loadSettings = async function (that) {
-        gamepad.inputMapper.loadPrefs(that);
+        await gamepad.inputMapper.loadPrefs(that);
 
-        gamepad.inputMapper.loadBindings(that);
+        await gamepad.inputMapper.loadBindings(that);
 
         /*
             The two params for the onChanged listener callback are "changes" and "areaName".  In our case, "areaName" is
@@ -252,28 +253,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 gamepad.inputMapper.loadBindings(that);
             }
         });
+
+        that.events.onSettingsLoaded.fire();
     };
 
     gamepad.inputMapper.loadPrefs = async function (that) {
         var storedPrefs = await gamepad.utils.getStoredKey("gamepad-prefs");
-        var prefsToSave = storedPrefs || gamepad.prefs.defaults;
+        var prefsToApply = fluid.extend({}, gamepad.prefs.defaults, storedPrefs);
 
         var transaction = that.applier.initiate();
 
         transaction.fireChangeRequest({ path: "prefs", type: "DELETE"});
-        transaction.fireChangeRequest({ path: "prefs", value: prefsToSave });
+        transaction.fireChangeRequest({ path: "prefs", value: prefsToApply });
 
         transaction.commit();
     };
 
     gamepad.inputMapper.loadBindings = async function (that) {
         var storedBindings = await gamepad.utils.getStoredKey("gamepad-bindings");
-        var bindingsToSave = storedBindings || gamepad.bindings.defaults;
+        var bindingsToApply = storedBindings || gamepad.bindings.defaults;
 
         var transaction = that.applier.initiate();
 
         transaction.fireChangeRequest({ path: "bindings", type: "DELETE"});
-        transaction.fireChangeRequest({ path: "bindings", value: bindingsToSave });
+        transaction.fireChangeRequest({ path: "bindings", value: bindingsToApply });
 
         transaction.commit();
     };

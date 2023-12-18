@@ -266,6 +266,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
         if (activeElement) {
             var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
+            var isMediaElement = gamepad.inputMapperUtils.content.isMediaElement(activeElement);
 
             // Open the onscreen keyboard to input text.
             if (isTextInput) {
@@ -275,6 +276,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 lastExternalFocused.blur();
 
                 that.applier.change("activeModal", "onscreenKeyboard");
+            }
+            else if (isMediaElement) {
+                if (activeElement.paused) {
+                    activeElement.play();
+                }
+                else {
+                    activeElement.pause();
+                }
             }
             // Open our "select operator".
             else if (activeElement.nodeName === "SELECT") {
@@ -287,6 +296,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 activeElement.click();
             }
         }
+    };
+
+    gamepad.inputMapperUtils.content.isMediaElement = function (element) {
+        return element.nodeName === "AUDIO" || element.nodeName === "VIDEO";
     };
 
     gamepad.inputMapperUtils.content.isTextInput = function (element) {
