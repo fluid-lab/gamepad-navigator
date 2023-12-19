@@ -111,34 +111,4 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             fluid.log("Invalid range input: '" + newValue + "'.");
         }
     };
-
-    // gamepad.ui.rangeInput.handleKeydown = function (that, event) {
-    //     var isTrusted = fluid.get(event, "originalEvent.isTrusted");
-    //     if (!isTrusted) {
-    //         // Arrow navigation handling
-    //         if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].indexOf(event.code) !== -1) {
-    //             event.preventDefault();
-
-    //             var inputElement = that.locate("input");
-    //             var inputDomElement = inputElement[0];
-
-    //             if (event.code === "ArrowLeft") {
-    //                 inputDomElement.stepDown();
-    //             }
-    //             else if (event.code === "ArrowRight") {
-    //                 inputDomElement.stepUp();
-    //             }
-    //             else if (event.code === "ArrowUp") {
-    //                 inputDomElement.stepDown();
-    //             }
-    //             else if (event.code === "ArrowDown") {
-    //                 inputDomElement.stepUp();
-    //             }
-
-    //             // Simulate a change so that any differences we input will get picked up.
-    //             // TODO: Figure out how to do this without jQuery
-    //             inputElement.trigger("change");
-    //         }
-    //     }
-    // };
 })(fluid);
