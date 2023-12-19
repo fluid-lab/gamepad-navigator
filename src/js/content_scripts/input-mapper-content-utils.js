@@ -317,6 +317,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         return false;
     };
 
+    gamepad.inputMapperUtils.content.isNumberInput = function (element) {
+        return element.nodeName === "INPUT" && element.getAttribute("type") === "number";
+    };
+
     /**
      *
      * Navigate to the previous/next page in history using thumbsticks.
@@ -428,14 +432,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
         if (activeElement) {
-            var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
-            activeElement.dispatchEvent(keyDownEvent);
+            if (gamepad.inputMapperUtils.content.isNumberInput(activeElement)) {
+                switch (key) {
+                    case "ArrowLeft":
+                    case "ArrowDown":
+                        activeElement.stepDown();
+                        activeElement.dispatchEvent(new Event("change"));
+                        break;
+                    case "ArrowRight":
+                    case "ArrowUp":
+                        activeElement.stepUp();
+                        activeElement.dispatchEvent(new Event("change"));
+                        break;
+                }
+            }
+            else {
+                var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
+                activeElement.dispatchEvent(keyDownEvent);
 
-            // TODO: Test with text inputs and textarea fields to see if
-            // beforeinput and input are needed.
+                // TODO: Test with text inputs and textarea fields to see if
+                // beforeinput and input are needed.
 
-            var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
-            activeElement.dispatchEvent(keyUpEvent);
+                var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
+                activeElement.dispatchEvent(keyUpEvent);
+            }
         }
     };
 
