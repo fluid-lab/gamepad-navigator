@@ -12,8 +12,8 @@
     <h2>Advanced Focus Tester</h2>
 
     <p>
-        This page demonstrates a range of advanced elements to ensure that we
-        can navigate to and control them.
+        This page demonstrates a range of advanced elements to confirm whether
+        we can navigate to and control them.
     </p>
 
     <h3 id="non-shadow">Simple Elements</h3>
@@ -41,24 +41,19 @@
     <h3>Media</h3>
 
     <p>
-        Media elements like &lt;video&gt; elements also make use of a
-        shadow root, but do not expose their internals.  Here are some test
-        elements, one with controls enabled, the other without.
-    </p>
-
-    <h2>Video, with Controls</h2>
-
-    <p>
         Specialised controls like &lt;video&gt; elements also make use of a
-        shadow root, but do not expose their internals.  This page also tests
-        our special handling for these elements.
+        shadow root, but do not expose their internals.  We have a preference
+        (enabled by default) to expose controls automatically.  Clicking a
+        media element with its controls exposed should play or pause.
     </p>
+
+    <h2>Video, Controls Enabled by Default</h2>
 
     <video id="video-with-controls" height="400" width="auto" controls>
         <source src="../video/cursor.webm"/>
     </video>
 
-    <h2>Video, no Controls</h2>
+    <h2>Video, Controls Disabled by Default</h2>
 
     <video id="video-without-controls" height="400" width="auto">
         <source src="../video/cursor.webm"/>
