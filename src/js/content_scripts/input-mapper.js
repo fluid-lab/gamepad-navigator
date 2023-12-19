@@ -206,8 +206,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused)) {
             that.model.lastExternalFocused.value = that.model.textInputValue;
 
+            that.model.lastExternalFocused.dispatchEvent(new Event("change"));
             // TODO: Figure out a way to do this that doesn't require jQuery.
-            $(that.model.lastExternalFocused).trigger("change");
+            // $(that.model.lastExternalFocused).trigger("change");
         }
     };
 
