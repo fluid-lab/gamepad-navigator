@@ -321,6 +321,41 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         return element.nodeName === "INPUT" && ["number", "range"].includes(element.getAttribute("type"));
     };
 
+    gamepad.inputMapperUtils.content.isRadioInput = function (element) {
+        return element.nodeName === "INPUT" && element.getAttribute("type") === "radio";
+    };
+
+    gamepad.inputMapperUtils.content.changeRadioInput = function (currentRadioButton, increment) {
+        var groupName = currentRadioButton.getAttribute("name");
+        var allButtons = document.querySelectorAll("input[type='radio'][name='" + groupName + "']");
+
+        var currentButtonIndex;
+
+        for (var index = 0; index < allButtons.length; index++) {
+            var buttonAtIndex = allButtons[index];
+            if (buttonAtIndex === currentRadioButton) {
+                currentButtonIndex = index;
+                break;
+            }
+        }
+
+        if (currentButtonIndex !== undefined) {
+            // Ensure that we "wrap" in both directions.
+            var buttonToFocusIndex = (allButtons.length + (currentButtonIndex + increment)) % allButtons.length;
+            var buttonToFocus = allButtons[buttonToFocusIndex];
+            buttonToFocus.focus();
+            buttonToFocus.click();
+        }
+    };
+
+    gamepad.inputMapperUtils.content.nextRadioInput = function (currentRadioButton) {
+        gamepad.inputMapperUtils.content.changeRadioInput(currentRadioButton, 1);
+    };
+
+    gamepad.inputMapperUtils.content.previousRadioInput = function (currentRadioButton) {
+        gamepad.inputMapperUtils.content.changeRadioInput(currentRadioButton, -1);
+    };
+
     /**
      *
      * Navigate to the previous/next page in history using thumbsticks.
@@ -443,6 +478,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     case "ArrowUp":
                         activeElement.stepUp();
                         activeElement.dispatchEvent(new Event("change"));
+                        break;
+                }
+            }
+            else if (gamepad.inputMapperUtils.content.isRadioInput(activeElement)) {
+                switch (key) {
+                    case "ArrowLeft":
+                    case "ArrowUp":
+                        gamepad.inputMapperUtils.content.previousRadioInput(activeElement);
+                        // activeElement.dispatchEvent(new Event("change"));
+                        break;
+                    case "ArrowRight":
+                    case "ArrowDown":
+                        gamepad.inputMapperUtils.content.nextRadioInput(activeElement);
+                        // activeElement.dispatchEvent(new Event("change"));
                         break;
                 }
             }
