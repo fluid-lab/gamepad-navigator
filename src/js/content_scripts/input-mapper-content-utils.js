@@ -318,7 +318,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapperUtils.content.isNumberInput = function (element) {
-        return element.nodeName === "INPUT" && element.getAttribute("type") === "number";
+        return element.nodeName === "INPUT" && ["number", "range"].includes(element.getAttribute("type"));
     };
 
     /**

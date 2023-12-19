@@ -80,10 +80,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             handleInputChange: {
                 funcName: "gamepad.ui.rangeInput.handleInputChange",
                 args: ["{that}", "{arguments}.0"] // event
-            },
-            handleKeydown: {
-                funcName: "gamepad.ui.rangeInput.handleKeydown",
-                args: ["{that}", "{arguments}.0"] // event
             }
         },
         listeners: {
@@ -91,13 +87,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 this: "{that}.dom.input",
                 method: "change",
                 args: ["{that}.handleInputChange"]
-            },
-            // Bind to the outer container to let the range input prevent default on keys it responds to, but handle
-            // ones it ignores.
-            "onCreate.bindKeydown": {
-                this: "{that}.container",
-                method: "keydown",
-                args: ["{that}.handleKeydown"]
             }
         }
     });
@@ -123,33 +112,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
-    gamepad.ui.rangeInput.handleKeydown = function (that, event) {
-        var isTrusted = fluid.get(event, "originalEvent.isTrusted");
-        if (!isTrusted) {
-            // Arrow navigation handling
-            if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].indexOf(event.code) !== -1) {
-                event.preventDefault();
+    // gamepad.ui.rangeInput.handleKeydown = function (that, event) {
+    //     var isTrusted = fluid.get(event, "originalEvent.isTrusted");
+    //     if (!isTrusted) {
+    //         // Arrow navigation handling
+    //         if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].indexOf(event.code) !== -1) {
+    //             event.preventDefault();
 
-                var inputElement = that.locate("input");
-                var inputDomElement = inputElement[0];
+    //             var inputElement = that.locate("input");
+    //             var inputDomElement = inputElement[0];
 
-                if (event.code === "ArrowLeft") {
-                    inputDomElement.stepDown();
-                }
-                else if (event.code === "ArrowRight") {
-                    inputDomElement.stepUp();
-                }
-                else if (event.code === "ArrowUp") {
-                    inputDomElement.stepDown();
-                }
-                else if (event.code === "ArrowDown") {
-                    inputDomElement.stepUp();
-                }
+    //             if (event.code === "ArrowLeft") {
+    //                 inputDomElement.stepDown();
+    //             }
+    //             else if (event.code === "ArrowRight") {
+    //                 inputDomElement.stepUp();
+    //             }
+    //             else if (event.code === "ArrowUp") {
+    //                 inputDomElement.stepDown();
+    //             }
+    //             else if (event.code === "ArrowDown") {
+    //                 inputDomElement.stepUp();
+    //             }
 
-                // Simulate a change so that any differences we input will get picked up.
-                // TODO: Figure out how to do this without jQuery
-                inputElement.trigger("change");
-            }
-        }
-    };
+    //             // Simulate a change so that any differences we input will get picked up.
+    //             // TODO: Figure out how to do this without jQuery
+    //             inputElement.trigger("change");
+    //         }
+    //     }
+    // };
 })(fluid);
