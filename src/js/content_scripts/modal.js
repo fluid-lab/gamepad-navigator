@@ -46,12 +46,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             innerContainer: ".modal-inner-container",
             modalBody: ".modal-body",
             modalFooter: ".modal-footer",
+            modalButton: ".modal-button",
             modalCloseButton: ".modal-close-button",
             leadingFocusTrap: ".modal-focus-trap-leading",
             trailingFocusTrap: ".modal-focus-trap-trailing"
         },
         markup: {
-            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>%closeButtonLabel</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
+            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-button modal-close-button'>%closeButtonLabel</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
         },
         invokers: {
             closeModal: {
@@ -60,6 +61,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             handleKeydown: {
                 funcName: "gamepad.modal.handleKeydown",
+                args: ["{that}", "{arguments}.0"] // event
+
+            },
+            handleModalButtonKeydown: {
+                funcName: "gamepad.modal.handleModalButtonKeydown",
                 args: ["{that}", "{arguments}.0"] // event
 
             },
@@ -106,6 +112,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 this: "{that}.dom.modalCloseButton",
                 method: "click",
                 args: "{that}.closeModal"
+            },
+            "onCreate.bindModalButtonKeydown": {
+                this: "{that}.dom.modalButton",
+                method: "keydown",
+                args: "{that}.handleModalButtonKeydown"
             }
         }
     });
@@ -129,6 +140,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             if (!targetInsideContainer) {
                 event.preventDefault();
             }
+        }
+    };
+
+    gamepad.modal.allowedModalButtonKeys = ["Space", "Enter", "Tab", "Escape"];
+
+    // Make sure that arrows, page up/down are not passed on.
+    gamepad.modal.handleModalButtonKeydown = function (that, event) {
+        if (!gamepad.modal.allowedModalButtonKeys.includes(event.key)) {
+            event.preventDefault();
         }
     };
 

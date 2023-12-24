@@ -44,7 +44,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         description: "Select an option from the list below or hit &quot;Cancel&quot; to close this modal.  Only selectable items are displayed.",
-                        items: "{gamepad.selectOperator}.model.items"
+                        items: "{gamepad.selectOperator}.model.items",
+                        prefs: "{gamepad.selectOperator}.model.prefs"
                     },
                     invokers: {
                         handleItemClick: {

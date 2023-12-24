@@ -15,6 +15,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.registerNamespace("gamepad.prefs");
     gamepad.prefs.defaults = {
         analogCutoff: 0.25,
+        arrowModals: true,
         controlsOnAllMedia: true,
         newTabOrWindowURL: "https://www.google.com/",
         openWindowOnStartup: true,

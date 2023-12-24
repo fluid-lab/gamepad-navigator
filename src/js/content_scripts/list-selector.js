@@ -52,6 +52,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 func: "{that}.renderItems"
             },
             focusedItemIndex: {
+                excludeSource: "init",
                 func: "{that}.handleFocusChange"
             }
         },
@@ -100,11 +101,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             });
 
             enclosingElement.append(itemElement);
+
+            that.handleFocusChange();
         });
     };
 
     gamepad.ui.listSelector.handleFocusChange = function (that) {
         var activeItems = that.locate("activeItems");
+
+        var useArrows = fluid.get(that, "model.prefs.arrowModals") || false;
+
+        for (var itemIndex = 0; itemIndex < activeItems.length; itemIndex++) {
+            var itemElement = activeItems[itemIndex];
+            if (useArrows && itemIndex !== that.model.focusedItemIndex) {
+                itemElement.setAttribute("tabindex", -1);
+            }
+            else {
+                itemElement.setAttribute("tabindex", 0);
+            }
+        }
+
         var toFocus = fluid.get(activeItems, that.model.focusedItemIndex);
         if (toFocus) {
             toFocus.focus();

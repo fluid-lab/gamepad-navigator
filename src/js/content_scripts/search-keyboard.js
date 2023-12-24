@@ -39,6 +39,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 container: "{that}.dom.modalFooter",
                 type: "gamepad.searchKeyboard.searchButton",
                 options: {
+                    model: {
+                        arrowNav: "{gamepad.searchKeyboard.modal}.model.prefs.arrowModals"
+                    },
                     listeners: {
                         "onCreate.bindClick": {
                             this: "{searchButton}.container",

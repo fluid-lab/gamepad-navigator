@@ -42,7 +42,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 createOnEvent: "onShadowReady",
                 options: {
                     model: {
-                        hidden: "{gamepad.modalManager}.model.hideActionLauncher"
+                        hidden: "{gamepad.modalManager}.model.hideActionLauncher",
+                        prefs: "{gamepad.modalManager}.model.prefs"
                     }
                 }
             },
@@ -53,6 +54,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         hidden: "{gamepad.modalManager}.model.hideOnscreenKeyboard",
+                        prefs: "{gamepad.modalManager}.model.prefs",
                         textInputValue: "{gamepad.modalManager}.model.textInputValue"
                     }
                 }
@@ -63,7 +65,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 createOnEvent: "onShadowReady",
                 options: {
                     model: {
-                        hidden: "{gamepad.modalManager}.model.hideSearchKeyboard"
+                        hidden: "{gamepad.modalManager}.model.hideSearchKeyboard",
+                        prefs: "{gamepad.modalManager}.model.prefs"
                     }
                 }
             },
@@ -74,6 +77,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         hidden: "{gamepad.modalManager}.model.hideSelectOperator",
+                        prefs: "{gamepad.modalManager}.model.prefs",
                         selectElement: "{gamepad.modalManager}.model.selectElement"
                     }
                 }

@@ -125,6 +125,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.controlsOnAllMedia"
                     }
                 }
+            },
+            arrowModals: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.toggle",
+                options: {
+                    model: {
+                        label: "Arrow Navigation",
+                        description: "Menus like the action launcher, onscreen keyboard, and select helper use arrows to move between options.",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.arrowModals"
+                    }
+                }
             }
         }
     });

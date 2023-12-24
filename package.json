@@ -29,7 +29,7 @@
     },
     "dependencies": {
         "ally.js": "1.4.1",
-        "fluid-osk": "0.1.0-dev.20231120T090252Z.d23b7cd.GH-1",
+        "fluid-osk": "0.1.0-dev.20231224T071757Z.a7d1871.GH-1",
         "infusion": "4.6.0"
     },
     "devDependencies": {

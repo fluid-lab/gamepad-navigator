@@ -44,6 +44,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 container: "{that}.dom.modalBody",
                 type: "gamepad.osk.keyboard",
                 options: {
+                    model: {
+                        arrowNav: "{gamepad.osk.modal}.model.prefs.arrowModals"
+                    },
                     listeners: {
                         "onAction.updateInput": {
                             priority: "before:handleLatches",

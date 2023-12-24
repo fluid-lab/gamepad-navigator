@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
-/* global chrome */
+/* global chrome, ally */
 
 (function (fluid) {
     "use strict";
@@ -89,6 +89,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             "onPageHide": {
                 funcName: "gamepad.inputMapper.handleBlurred",
+                args: ["{that}"]
+            },
+
+            "onDestroy.stopObservingShadows": {
+                funcName: "gamepad.inputMapper.stopObservingShadows",
                 args: ["{that}"]
             }
         },
@@ -184,10 +189,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     model: {
                         activeModal: "{gamepad.inputMapper}.model.activeModal",
                         lastExternalFocused: "{gamepad.inputMapper}.model.lastExternalFocused",
+                        prefs: "{gamepad.inputMapper}.model.prefs",
+                        selectElement: "{gamepad.inputMapper}.model.selectElement",
                         shadowElement: "{gamepad.inputMapper}.model.shadowElement",
                         textInputValue: "{gamepad.inputMapper}.model.textInputValue",
-                        textInputType: "{gamepad.inputMapper}.model.textInputType",
-                        selectElement: "{gamepad.inputMapper}.model.selectElement"
+                        textInputType: "{gamepad.inputMapper}.model.textInputType"
+                    },
+                    listeners: {
+                        "onShadowReady.startObserving": {
+                            funcName: "gamepad.inputMapper.startObservingShadows",
+                            args: ["{gamepad.inputMapper}"]
+                        }
                     }
                 }
             }
@@ -207,8 +219,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             that.model.lastExternalFocused.value = that.model.textInputValue;
 
             that.model.lastExternalFocused.dispatchEvent(new Event("change"));
-            // TODO: Figure out a way to do this that doesn't require jQuery.
-            // $(that.model.lastExternalFocused).trigger("change");
         }
     };
 
@@ -286,6 +296,24 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
         transaction.commit();
     };
+
+    gamepad.inputMapper.startObservingShadows = function (that) {
+        that.shadowMutationObserver = ally.observe.shadowMutations({
+            context: ".gamepad-navigator-modal-manager",
+            callback: that.updateTabbables,
+            config: {
+                attributes: true,
+                subtree: true
+            }
+        });
+    };
+
+    gamepad.inputMapper.stopObservingShadows = function (that) {
+        if (that.shadowMutationObserver) {
+            that.shadowMutationObserver.disengage();
+        }
+    };
+
 
     gamepad.inputMapperInstance = gamepad.inputMapper("body");
 })(fluid, jQuery);

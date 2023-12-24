@@ -32,7 +32,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         description: "Select an action to launch from the list below, or hit &quot;Cancel&quot; to close this modal.",
-                        items: "{gamepad.actionLauncher}.model.actions"
+                        items: "{gamepad.actionLauncher}.model.actions",
+                        prefs: "{gamepad.actionLauncher}.model.prefs"
                     },
                     invokers: {
                         handleItemClick: {
