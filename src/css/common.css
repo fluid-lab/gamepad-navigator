@@ -10,3 +10,7 @@
 .hidden {
     display: none;
 }
+
+.no-focus-indicator {
+    outline: none;
+}

@@ -56,6 +56,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 args: ["{that}"]
             },
 
+            "onCreate.focusPageAnchor": {
+                funcName: "gamepad.inputMapper.focusPageAnchor",
+                args: []
+            },
+
             // Wire up event listeners to window.
             "onCreate.handleWindowFocus": {
                 funcName: "window.addEventListener",
@@ -314,6 +319,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
+
+    gamepad.inputMapper.focusPageAnchor = function () {
+        var internalPageAnchor = gamepad.inputMapperUtils.content.getInternalPageAnchor(document.URL);
+        if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
+            var linkedElement = document.querySelector(internalPageAnchor);
+            if (linkedElement) {
+                gamepad.inputMapperUtils.content.addTemporaryFocus(linkedElement);
+            }
+        }
+    };
 
     gamepad.inputMapperInstance = gamepad.inputMapper("body");
 })(fluid, jQuery);

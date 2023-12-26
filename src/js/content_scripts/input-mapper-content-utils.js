@@ -291,6 +291,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 that.applier.change("selectElement", activeElement);
                 that.applier.change("activeModal", "selectOperator");
             }
+            // Special handling for links.
+            else if (activeElement.nodeName === "A") {
+                var internalPageAnchor = gamepad.inputMapperUtils.content.getInternalPageAnchor(activeElement.getAttribute("href"));
+                if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
+                    var linkedElement = document.querySelector(internalPageAnchor);
+                    if (linkedElement) {
+                        gamepad.inputMapperUtils.content.addTemporaryFocus(linkedElement);
+                    }
+                }
+                else {
+                    activeElement.click();
+                }
+            }
             // Click on the focused element.
             else {
                 activeElement.click();
@@ -486,12 +499,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     case "ArrowLeft":
                     case "ArrowUp":
                         gamepad.inputMapperUtils.content.previousRadioInput(activeElement);
-                        // activeElement.dispatchEvent(new Event("change"));
+                        activeElement.dispatchEvent(new Event("change"));
                         break;
                     case "ArrowRight":
                     case "ArrowDown":
                         gamepad.inputMapperUtils.content.nextRadioInput(activeElement);
-                        // activeElement.dispatchEvent(new Event("change"));
+                        activeElement.dispatchEvent(new Event("change"));
                         break;
                 }
             }
@@ -532,6 +545,48 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
         else {
             gamepad.inputMapperUtils.content.sendKey(that, { key: backwardKey });
+        }
+    };
+
+    /**
+     *
+     * Update an element to ensure that it can temporarily receive focus. If an
+     * element already is focusable, we do nothing.
+     *
+     * If an element is not already focusable, we set a `tabindex` and add a
+     * listener to reset the `tabindex` on blur.  We also add our own class to
+     * prevent the display of the default outline on focus.
+     *
+     * @param {HTMLElement} element - The DOM element to manipulate.
+     */
+    gamepad.inputMapperUtils.content.addTemporaryFocus = function (element) {
+        if (!ally.is.focusable(element)) {
+            var oldTabIndex = element.getAttribute("tabindex");
+
+            element.setAttribute("tabindex", 0);
+
+            element.classList.toggle("no-focus-indicator", true);
+
+            element.addEventListener("blur", function () {
+                if (oldTabIndex !== null) {
+                    element.setAttribute("tabindex", oldTabIndex);
+                }
+                else {
+                    element.removeAttribute("tabindex");
+                }
+
+                element.classList.toggle("no-focus-indicator", false);
+            });
+
+            element.focus();
+        }
+    };
+
+    gamepad.inputMapperUtils.content.getInternalPageAnchor = function (checkURL) {
+        var baseURLObject = new URL(document.URL);
+        var checkURLObject = new URL(checkURL, document.URL);
+        if (checkURLObject.origin === baseURLObject.origin && checkURLObject.path === baseURLObject.path && checkURLObject.hash && checkURLObject.hash.length) {
+            return checkURLObject.hash;
         }
     };
 })(fluid, jQuery);

@@ -165,6 +165,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         transaction.fireChangeRequest({ path: "draftClean", value: true});
 
         transaction.commit();
+
+        var addBindingPanel = that.locate("add");
+        gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
     };
 
     gamepad.settings.ui.bindingsPanel.flagDraftChanged = function (that) {
@@ -245,6 +248,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         else {
             var draftBindingContent = fluid.filterKeys(bindingComponentModel, ["action", "invert", "repeatRate", "scrollFactor", "background"]);
             that.applier.change(["draftBindings", bindingIndex], draftBindingContent);
+
+            var addBindingPanel = that.locate("add");
+            gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
         }
     };
 
@@ -266,13 +272,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         transaction.fireChangeRequest({ path: "draftBindings", value: newDraftBindings });
         transaction.commit();
 
-        // Since the user was on the "remove" button of the component, move to the same button on the previous
-        // binding (or the first binding if there is now only one).  Even if it takes too long for the model change to
-        // result in the editBinding component and its markup being removed from the DOM, focus will not change again.
-        var removeButtons = that.locate("removeButton");
-        var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
-        if (removeButtonToFocus) {
-            removeButtonToFocus.focus();
+        if (Object.keys(newDraftBindings).length > 0) {
+            // Since the user was on the "remove" button of the component, move to the same button on the previous
+            // binding (or the first binding if there is now only one).  Even if it takes too long for the model change to
+            // result in the editBinding component and its markup being removed from the DOM, focus will not change again.
+            var removeButtons = that.locate("removeButton");
+            var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
+            if (removeButtonToFocus) {
+                removeButtonToFocus.focus();
+            }
+        }
+        else {
+            var addBindingPanel = that.locate("add");
+            gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
         }
     };
 
