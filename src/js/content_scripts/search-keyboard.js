@@ -21,7 +21,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
 
     fluid.defaults("gamepad.searchKeyboard.modal", {
-        gradeNames: ["gamepad.osk.modal"],
+        gradeNames: ["gamepad.osk.modal.base"],
         model: {
             label: "Gamepad Navigator: Search",
             classNames: " gamepad-navigator-searchKeyboard"
@@ -35,13 +35,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
 
         components: {
+            input: {
+                options: {
+                    model: {
+                        composition: "{gamepad.searchKeyboard.modal}.model.inputValue"
+                    }
+                }
+            },
             searchButton: {
                 container: "{that}.dom.modalFooter",
                 type: "gamepad.searchKeyboard.searchButton",
                 options: {
-                    model: {
-                        arrowNav: "{gamepad.searchKeyboard.modal}.model.prefs.arrowModals"
-                    },
                     listeners: {
                         "onCreate.bindClick": {
                             this: "{searchButton}.container",
@@ -58,12 +62,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         that.applier.change("activeModal", false);
         event.preventDefault();
 
-        if (that.model.textInputValue && that.model.textInputValue.trim().length) {
+        if (that.model.inputValue && that.model.inputValue.trim().length) {
             var actionOptions = {
                 action: "search",
                 // See: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search/query
                 disposition: "NEW_TAB",
-                text: that.model.textInputValue.trim()
+                text: that.model.inputValue.trim()
             };
 
             gamepad.inputMapperUtils.background.postMessage(inputMapper, actionOptions);

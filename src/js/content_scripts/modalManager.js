@@ -26,8 +26,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             activeModal: false,
             shadowElement: false,
             lastExternalFocused: false,
-            textInputValue: "",
-            textInputType: "",
+            inputValue: "",
+            inputType: "",
 
             // Inline all styles from JS-wrapped global namespaced variable.
             styles: gamepad.css
@@ -55,7 +55,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     model: {
                         hidden: "{gamepad.modalManager}.model.hideOnscreenKeyboard",
                         prefs: "{gamepad.modalManager}.model.prefs",
-                        textInputValue: "{gamepad.modalManager}.model.textInputValue"
+                        inputValue: "{gamepad.modalManager}.model.inputValue"
+                    }
+                }
+            },
+            onscreenNumpad: {
+                container: "{that}.model.shadowElement",
+                type: "gamepad.numpad.modal",
+                createOnEvent: "onShadowReady",
+                options: {
+                    model: {
+                        hidden: "{gamepad.modalManager}.model.hideOnscreenNumpad",
+                        prefs: "{gamepad.modalManager}.model.prefs",
+                        inputValue: "{gamepad.modalManager}.model.inputValue"
                     }
                 }
             },
@@ -118,12 +130,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         var hideOnscreenKeyboard = that.model.activeModal !== "onscreenKeyboard";
         transaction.fireChangeRequest({ path: "hideOnscreenKeyboard", value: hideOnscreenKeyboard });
 
-
         var hideSearchKeyboard = that.model.activeModal !== "searchKeyboard";
         transaction.fireChangeRequest({ path: "hideSearchKeyboard", value: hideSearchKeyboard });
 
         var hideSelectOperator = that.model.activeModal !== "selectOperator";
         transaction.fireChangeRequest({ path: "hideSelectOperator", value: hideSelectOperator });
+
+        var hideOnscreenNumpad = that.model.activeModal !== "onscreenNumpad";
+        transaction.fireChangeRequest({ path: "hideOnscreenNumpad", value: hideOnscreenNumpad});
 
         transaction.commit();
     };

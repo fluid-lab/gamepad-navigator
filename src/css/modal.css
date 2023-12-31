@@ -70,11 +70,14 @@
 }
 
 .modal-footer button {
-    background-color: #ccc;
     border: 1px solid #999;
     border-radius: 0.5rem;
-    color: black;
     font-size: 2rem;
     margin: 1rem;
     padding: 0.5rem;
+}
+
+modal-footer button:not([disabled]) {
+    background-color: #ccc;
+    color: black;
 }

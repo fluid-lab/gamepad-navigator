@@ -24,8 +24,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         model: {
             activeModal: false,
             shadowElement: false,
-            textInputValue: "",
-            textInputType: "",
+            inputValue: "",
+            inputType: "",
 
             bindings: gamepad.bindings.defaults
         },
@@ -37,7 +37,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             activeModal: {
                 func: "{that}.updateTabbables"
             },
-            textInputValue: {
+            inputValue: {
+                excludeSource: "local",
                 funcName: "gamepad.inputMapper.updateFormFieldText",
                 args: ["{that}"]
             }
@@ -197,8 +198,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         prefs: "{gamepad.inputMapper}.model.prefs",
                         selectElement: "{gamepad.inputMapper}.model.selectElement",
                         shadowElement: "{gamepad.inputMapper}.model.shadowElement",
-                        textInputValue: "{gamepad.inputMapper}.model.textInputValue",
-                        textInputType: "{gamepad.inputMapper}.model.textInputType"
+                        inputValue: "{gamepad.inputMapper}.model.inputValue",
+                        inputType: "{gamepad.inputMapper}.model.inputType"
                     },
                     listeners: {
                         "onShadowReady.startObserving": {
@@ -220,10 +221,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapper.updateFormFieldText = function (that) {
-        if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused)) {
-            that.model.lastExternalFocused.value = that.model.textInputValue;
+        var lastFocusedIsFormInput = that.model.lastExternalFocused && that.model.lastExternalFocused.nodeName === "INPUT";
+        if (lastFocusedIsFormInput) {
+            var beforeInputEvent = new InputEvent("beforeinput", { bubbles: true, composed: true });
+            that.model.lastExternalFocused.dispatchEvent(beforeInputEvent);
 
-            that.model.lastExternalFocused.dispatchEvent(new Event("change"));
+            that.model.lastExternalFocused.value = that.model.inputValue;
+
+            var inputEvent = new InputEvent("input", { bubbles: true, composed: true });
+            that.model.lastExternalFocused.dispatchEvent(inputEvent);
+
+            var changeEvent = new Event("change", { bubbles: true, composed: true });
+            that.model.lastExternalFocused.dispatchEvent(changeEvent);
         }
     };
 

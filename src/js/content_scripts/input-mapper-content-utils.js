@@ -267,15 +267,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         if (activeElement) {
             var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
             var isMediaElement = gamepad.inputMapperUtils.content.isMediaElement(activeElement);
+            var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(activeElement);
 
             // Open the onscreen keyboard to input text.
-            if (isTextInput) {
+            if (isTextInput || isNumberInput) {
                 var lastExternalFocused = activeElement;
                 that.applier.change("lastExternalFocused", lastExternalFocused);
-                that.applier.change("textInputValue", lastExternalFocused.value);
+                that.applier.change("inputValue", lastExternalFocused.value);
                 lastExternalFocused.blur();
 
-                that.applier.change("activeModal", "onscreenKeyboard");
+                if (isNumberInput) {
+                    that.applier.change("activeModal", "onscreenNumpad");
+                }
+                else if (isTextInput) {
+                    that.applier.change("activeModal", "onscreenKeyboard");
+                }
             }
             else if (isMediaElement) {
                 if (activeElement.paused) {
@@ -331,7 +337,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapperUtils.content.isNumberInput = function (element) {
-        return element.nodeName === "INPUT" && ["number", "range"].includes(element.getAttribute("type"));
+        return element.nodeName === "INPUT" && (element.getAttribute("type") === "number" || element.getAttribute("inputmode") === "decimal");
+    };
+
+    gamepad.inputMapperUtils.content.isRangeInput = function (element) {
+        return element.nodeName === "INPUT" && element.getAttribute("type") === "range";
     };
 
     gamepad.inputMapperUtils.content.isRadioInput = function (element) {
@@ -480,7 +490,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
         if (activeElement) {
-            if (gamepad.inputMapperUtils.content.isNumberInput(activeElement)) {
+            var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(activeElement);
+            var isRangeInput = gamepad.inputMapperUtils.content.isRangeInput(activeElement);
+            if (isNumberInput || isRangeInput) {
                 switch (key) {
                     case "ArrowLeft":
                     case "ArrowDown":
