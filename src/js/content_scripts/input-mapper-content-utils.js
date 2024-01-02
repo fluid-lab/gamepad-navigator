@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
-/* global document, gamepad, ally, chrome */
+/* global gamepad, ally, chrome */
 
 (function (fluid) {
     "use strict";

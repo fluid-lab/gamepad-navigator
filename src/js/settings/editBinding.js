@@ -303,6 +303,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.settings.ui.editBinding.click", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
+    fluid.defaults("gamepad.settings.ui.editBinding.enterFullscreen", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
+    fluid.defaults("gamepad.settings.ui.editBinding.exitFullscreen", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.maximizeWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.nextPageInHistory", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.openActionLauncher", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
