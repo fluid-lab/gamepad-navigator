@@ -339,5 +339,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
+
     gamepad.inputMapperInstance = gamepad.inputMapper("body");
 })(fluid, jQuery);

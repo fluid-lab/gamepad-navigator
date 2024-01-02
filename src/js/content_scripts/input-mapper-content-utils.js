@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
-/* global gamepad, ally, chrome */
+/* global document, gamepad, ally, chrome */
 
 (function (fluid) {
     "use strict";
@@ -601,4 +601,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             return checkURLObject.hash;
         }
     };
+
+    gamepad.inputMapperUtils.content.enterFullscreen = function (that) {
+        if (document.fullscreen) {
+            that.vibrate();
+        }
+        else {
+            document.documentElement.requestFullscreen();
+        }
+    };
+
+    gamepad.inputMapperUtils.content.exitFullscreen = function (that) {
+        if (document.fullscreen) {
+            document.exitFullscreen();
+        }
+        else {
+            that.vibrate();
+        }
+    };
+
 })(fluid, jQuery);

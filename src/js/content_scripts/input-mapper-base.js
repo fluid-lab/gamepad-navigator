@@ -85,6 +85,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
 
             // Actions are called with actionOptions, inputType, index
+
+            // button actions
             click: {
                 funcName: "gamepad.inputMapperUtils.content.click",
                 args: ["{that}"]
@@ -131,6 +133,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 funcName: "gamepad.inputMapperUtils.content.scrollVertically",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
+
+            enterFullscreen: {
+                funcName: "gamepad.inputMapperUtils.content.enterFullscreen",
+                args: ["{that}"]
+            },
+            exitFullscreen: {
+                funcName: "gamepad.inputMapperUtils.content.exitFullscreen",
+                args: ["{that}"]
+            },
+
+            sendKey: {
+                funcName: "gamepad.inputMapperUtils.content.sendKey",
+                args: ["{that}", "{arguments}.0"] // actionOptions
+            },
+
+            // Thumb stick actions
             thumbstickHistoryNavigation: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
@@ -139,11 +157,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             thumbstickTabbing: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickTabbing",
                 args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
-            },
-
-            sendKey: {
-                funcName: "gamepad.inputMapperUtils.content.sendKey",
-                args: ["{that}", "{arguments}.0"] // actionOptions
             },
 
             // Arrow actions for axes

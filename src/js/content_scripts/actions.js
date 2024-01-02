@@ -81,6 +81,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             action: "closeCurrentWindow",
             description: "Close the current window"
         },
+        enterFullscreen: {
+            action: "enterFullscreen",
+            description: "Enter fullscreen mode."
+        },
+        exitFullscreen: {
+            action: "exitFullscreen",
+            description: "Exit fullscreen mode."
+        },
         goToNextTab: {
             action: "goToNextTab",
             description: "Switch to the next tab",
@@ -218,6 +226,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "nextPageInHistory",
         "maximizeWindow",
         "restoreWindowSize",
+        "enterFullscreen",
+        "exitFullscreen",
         "click",
         "tabBackward",
         "tabForward",
