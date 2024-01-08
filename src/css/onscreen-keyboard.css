@@ -28,3 +28,42 @@ button.osk-key {
     height: clamp(20rem, 80vh, 50rem);
     top: clamp(5rem, 10vh, 10rem);
 }
+
+.onscreen-keyboard-modal .osk-key-Space,
+.gamepad-navigator-searchKeyboard .osk-key-Space {
+    margin: clamp(0.125rem, 0.5vw, 1rem);
+    width: 88%;
+}
+
+.onscreen-keyboard-modal .osk-key-CapsLock,
+.onscreen-keyboard-modal .osk-key-Backspace,
+.onscreen-keyboard-modal .osk-key-Enter,
+.onscreen-keyboard-modal .osk-key-ShiftLeft,
+.onscreen-keyboard-modal .osk-key-ShiftRight,
+.gamepad-navigator-searchKeyboard .osk-key-CapsLock,
+.gamepad-navigator-searchKeyboard .osk-key-Backspace,
+.gamepad-navigator-searchKeyboard .osk-key-Enter,
+.gamepad-navigator-searchKeyboard .osk-key-ShiftLeft,
+.gamepad-navigator-searchKeyboard .osk-key-ShiftRight {
+    width: clamp(1.1rem, 7vw, 6.75rem);
+}
+
+.onscreen-keyboard-modal .osk-key-ArrowLeft,
+.gamepad-navigator-searchKeyboard .osk-key-ArrowLeft {
+    margin: clamp(0.125rem, 0.5vw, 1rem);
+}
+
+.gamepad-navigator-numpad .osk-row {
+    justify-content: center;
+}
+
+.gamepad-navigator-numpad .osk-key-ArrowLeft {
+    margin-left: inherit;
+}
+
+.gamepad-navigator-numpad .osk-key {
+    height: clamp(0.75rem, 4.5vw, 4.5rem);
+    margin: clamp(0.15rem, 0.45vw, 1rem);
+    padding: clamp(0.2rem, 0.75vw, 0.75rem);
+    width: clamp(0.75rem, 4.5vw, 4.5rem);
+}
