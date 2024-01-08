@@ -39,7 +39,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             inputValue: {
                 excludeSource: "local",
-                funcName: "gamepad.inputMapper.updateFormFieldText",
+                funcName: "gamepad.inputMapper.saveUpdatedInputValue",
                 args: ["{that}"]
             },
             fullscreen: {
@@ -226,19 +226,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         that.applier.change("pageInView", false);
     };
 
-    gamepad.inputMapper.updateFormFieldText = function (that) {
-        var lastFocusedIsFormInput = that.model.lastExternalFocused && that.model.lastExternalFocused.nodeName === "INPUT";
-        if (lastFocusedIsFormInput) {
-            var beforeInputEvent = new InputEvent("beforeinput", { bubbles: true, composed: true });
-            that.model.lastExternalFocused.dispatchEvent(beforeInputEvent);
+    gamepad.inputMapper.saveUpdatedInputValue = function (that) {
+        if (that.model.lastExternalFocused) {
 
-            that.model.lastExternalFocused.value = that.model.inputValue;
+            var isTextInput = gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused);
+            var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(that.model.lastExternalFocused);
+            var isContentEditable = gamepad.inputMapperUtils.content.isContentEditable(that.model.lastExternalFocused);
 
-            var inputEvent = new InputEvent("input", { bubbles: true, composed: true });
-            that.model.lastExternalFocused.dispatchEvent(inputEvent);
+            if (isTextInput || isNumberInput) {
+                var beforeInputEvent = new InputEvent("beforeinput", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(beforeInputEvent);
 
-            var changeEvent = new Event("change", { bubbles: true, composed: true });
-            that.model.lastExternalFocused.dispatchEvent(changeEvent);
+                that.model.lastExternalFocused.value = that.model.inputValue;
+
+                var inputEvent = new InputEvent("input", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(inputEvent);
+
+                var changeEvent = new Event("change", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(changeEvent);
+            }
+            else if (isContentEditable) {
+                that.model.lastExternalFocused.innerHTML = that.model.inputValue;
+            }
         }
     };
 
@@ -334,7 +343,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
-
     gamepad.inputMapper.focusPageAnchor = function () {
         var internalPageAnchor = gamepad.inputMapperUtils.content.getInternalPageAnchor(document.URL);
         if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
@@ -344,7 +352,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             }
         }
     };
-
 
     gamepad.inputMapperInstance = gamepad.inputMapper("body");
 })(fluid, jQuery);

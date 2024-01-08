@@ -265,6 +265,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             var isTextInput = gamepad.inputMapperUtils.content.isTextInput(activeElement);
             var isMediaElement = gamepad.inputMapperUtils.content.isMediaElement(activeElement);
             var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(activeElement);
+            var isContentEditable = gamepad.inputMapperUtils.content.isContentEditable(activeElement);
 
             // Open the onscreen keyboard to input text.
             if (isTextInput || isNumberInput) {
@@ -287,6 +288,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 else {
                     activeElement.pause();
                 }
+            }
+            else if (isContentEditable) {
+                that.applier.change("lastExternalFocused", activeElement);
+                that.applier.change("inputValue", activeElement.innerHTML);
+                activeElement.blur();
+
+                that.applier.change("activeModal", "onscreenKeyboard");
             }
             // Open our "select operator".
             else if (activeElement.nodeName === "SELECT") {
@@ -327,6 +335,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             }
         }
         else if (element.nodeName === "TEXTAREA") {
+            return true;
+        }
+
+        return false;
+    };
+
+    gamepad.inputMapperUtils.content.isContentEditable = function (element) {
+        if (element.getAttribute("contenteditable") !== null) {
             return true;
         }
 
