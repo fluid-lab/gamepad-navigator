@@ -217,39 +217,36 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
              * shift the focus to the next element.
              */
             var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
-            if (!activeElement || activeElement.nodeName === "BODY") {
-                that.tabbableElements[0].focus();
+            var activeElementIndex = that.tabbableElements.indexOf(activeElement);
+
+            /**
+             * If the currently focused element is not found in the list, refer to
+             * the stored value of the index.
+             */
+            if (activeElementIndex === -1) {
+                activeElementIndex = that.currentTabIndex;
             }
-            else {
-                var activeElementIndex = that.tabbableElements.indexOf(activeElement);
 
-                /**
-                 * If the currently focused element is not found in the list, refer to
-                 * the stored value of the index.
-                 */
-                if (activeElementIndex === -1) {
-                    activeElementIndex = that.currentTabIndex;
-                }
-
+            if (activeElement) {
                 activeElement.blur();
+            }
 
-                var actionPolarity = actionOptions.action === "tabForward" ? 1 : -1;
+            var actionPolarity = actionOptions.action === "tabForward" ? 1 : -1;
 
-                var fullyWeightedValue = value * actionPolarity * inversionFactor;
-                var increment = fullyWeightedValue > 0 ? 1 : -1;
+            var fullyWeightedValue = value * actionPolarity * inversionFactor;
+            var increment = fullyWeightedValue > 0 ? 1 : -1;
 
-                // 7 elements, at position 6, forward by one would be (7 + 6 + 1) % 7 or 0.
-                // 7 elements, at position 0, add -1 would be (7 + 0 -1) % 7, or 6
+            // 7 elements, at position 6, forward by one would be (7 + 6 + 1) % 7 or 0.
+            // 7 elements, at position 0, add -1 would be (7 + 0 -1) % 7, or 6
+            that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
+            var elementToFocus = that.tabbableElements[that.currentTabIndex];
+            elementToFocus.focus();
+
+            // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
+            if (!that.model.activeModal && elementToFocus !== document.activeElement) {
                 that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
-                var elementToFocus = that.tabbableElements[that.currentTabIndex];
-                elementToFocus.focus();
-
-                // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
-                if (!that.model.activeModal && elementToFocus !== document.activeElement) {
-                    that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
-                    var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
-                    failoverElementToFocus.focus();
-                }
+                var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
+                failoverElementToFocus.focus();
             }
         }
     };
@@ -477,6 +474,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
+    // Needed to support older javascript that uses key codes, like jQuery UI: https://api.jqueryui.com/jQuery.ui.keyCode/
+    gamepad.inputMapperUtils.content.keyCodesByKey = {
+        "ArrowLeft": 37,
+        "ArrowRight": 39,
+        "ArrowUp": 38,
+        "ArrowDown": 40,
+        "Enter": 13,
+        "Escape": 27
+    };
+
     /**
      *
      * Simulate a key press (down and up) on the current focused element.
@@ -521,13 +528,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 }
             }
             else {
-                var keyDownEvent = new KeyboardEvent("keydown", { key: key, code: key, bubbles: true });
+                var keyPayload = {
+                    bubbles: true,
+                    code: key,
+                    key: key,
+                    keyCode: gamepad.inputMapperUtils.content.keyCodesByKey[key]
+                };
+
+                var keyDownEvent = new KeyboardEvent("keydown", keyPayload);
                 activeElement.dispatchEvent(keyDownEvent);
 
-                // TODO: Test with text inputs and textarea fields to see if
-                // beforeinput and input are needed.
-
-                var keyUpEvent = new KeyboardEvent("keyup", { key: key, code: key, bubbles: true });
+                var keyUpEvent = new KeyboardEvent("keyup", keyPayload);
                 activeElement.dispatchEvent(keyUpEvent);
             }
         }

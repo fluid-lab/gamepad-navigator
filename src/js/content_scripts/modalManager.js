@@ -24,6 +24,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         model: {
             activeModal: false,
+            fullscreen: false,
             shadowElement: false,
             lastExternalFocused: false,
             inputValue: "",
@@ -95,16 +96,27 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 }
             }
         },
-        listeners: {
-            "onCreate.createShadow": {
+        invokers: {
+            "createShadow": {
                 funcName: "gamepad.modalManager.createShadow",
                 args: ["{that}"]
+            }
+        },
+        listeners: {
+            "onCreate.createShadow": {
+                func: "{that}.createShadow",
+                args: []
             }
         },
         modelListeners: {
             activeModal: {
                 excludeSource: "init",
                 funcName: "gamepad.modalManager.toggleModals",
+                args: ["{that}"]
+            },
+            fullscreen: {
+                excludeSource: "init",
+                funcName: "gamepad.modalManager.reattachToDOM",
                 args: ["{that}"]
             }
         }
@@ -116,10 +128,18 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
         // We inline all styles here so that all modals get the common styles,
         // and to avoid managing multiple shadow elements.
-        shadowElement.innerHTML = fluid.stringTemplate(that.options.markup.styles, that.model);
+        var safeModel = fluid.filterKeys(that.model, ["shadowElement", "lastExternalFocused", "selectElement"], true);
+        shadowElement.innerHTML = fluid.stringTemplate(that.options.markup.styles, safeModel);
 
         that.applier.change("shadowElement", shadowElement);
         that.events.onShadowReady.fire();
+    };
+
+    gamepad.modalManager.reattachToDOM = function (that) {
+        that.applier.change("activeModal", false);
+
+        var toAttach = document.fullscreenElement || document.body;
+        toAttach.appendChild(that.container[0]);
     };
 
     gamepad.modalManager.toggleModals = function (that) {

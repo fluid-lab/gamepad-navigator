@@ -41,6 +41,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 excludeSource: "local",
                 funcName: "gamepad.inputMapper.updateFormFieldText",
                 args: ["{that}"]
+            },
+            fullscreen: {
+                excludeSource: "init",
+                func: "{that}.updateTabbables",
+                args: []
             }
         },
         events: {
@@ -194,6 +199,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         activeModal: "{gamepad.inputMapper}.model.activeModal",
+                        fullscreen: "{gamepad.inputMapper}.model.fullscreen",
                         lastExternalFocused: "{gamepad.inputMapper}.model.lastExternalFocused",
                         prefs: "{gamepad.inputMapper}.model.prefs",
                         selectElement: "{gamepad.inputMapper}.model.selectElement",

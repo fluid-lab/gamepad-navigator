@@ -19,7 +19,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     fluid.defaults("gamepad.inputMapper.base", {
         gradeNames: ["gamepad.navigator"],
+        members: {
+            resizeObserver: false
+        },
         model: {
+            fullscreen: false,
             pageInView: true,
             prefs: gamepad.prefs.defaults,
             bindings: {}
@@ -274,7 +278,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapper.base.updateTabbables = function (that) {
-        that.tabbableElements = ally.query.tabsequence({ strategy: "strict" });
+        var tababbleOptions = { strategy: "strict" };
+        if (document.fullscreenElement) {
+            tababbleOptions.context = document.fullscreenElement;
+        }
+
+        that.tabbableElements = ally.query.tabsequence(tababbleOptions);
     };
 
 
@@ -313,11 +322,34 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     gamepad.inputMapper.base.handleDOMMutation = function (that) {
         that.updateMediaControls();
 
+        gamepad.inputMapper.base.listenForFullscreenChanges(that);
+
         // Because we need to consider the order of elements, this method can't benefit from any insight into what has
         // changed. Run this after any potential changes that would make media elements "tabbable".
         that.updateTabbables();
     };
 
+    // Ideally we would rather listen for "fullscreenchange", but this is broken under some circumstances.
+    // See: https://stackoverflow.com/questions/21103478/fullscreenchange-event-not-firing-in-chrome
+    gamepad.inputMapper.base.listenForFullscreenChanges = function (that) {
+        if (that.resizeObserver) {
+            that.resizeObserver.disconnect();
+        }
+        else {
+            that.resizeObserver = new ResizeObserver(function () {
+                var fullscreen = document.fullscreenElement ? true : false;
+                that.applier.change("fullscreen", fullscreen);
+            });
+        }
+
+        var videoElements = document.querySelectorAll("video");
+
+        if (videoElements.length) {
+            videoElements.forEach(function (videoElement) {
+                that.resizeObserver.observe(videoElement);
+            });
+        }
+    };
 
     gamepad.inputMapper.base.updateMediaControls = function (that, performFullUpdate) {
         if (that.model.prefs.controlsOnAllMedia) {
