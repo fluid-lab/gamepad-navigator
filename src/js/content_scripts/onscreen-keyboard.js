@@ -186,7 +186,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         lastExternalFocused: "{gamepad.osk.modal}.model.lastExternalFocused",
-                        disabled: "{gamepad.osk.modal}.model.disableUpdateButton"                        
+                        disabled: "{gamepad.osk.modal}.model.disableUpdateButton"
                     },
                     listeners: {
                         "onCreate.bindClick": {

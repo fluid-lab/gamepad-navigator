@@ -248,7 +248,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 var isSearchField = gamepad.inputMapperUtils.content.isSearchField(that.model.lastExternalFocused);
                 if (isSearchField && that.model.lastExternalFocused.form) {
                     that.model.lastExternalFocused.form.submit();
-                }    
+                }
             }
             else if (isContentEditable) {
                 that.model.lastExternalFocused.innerHTML = that.model.inputValue;
