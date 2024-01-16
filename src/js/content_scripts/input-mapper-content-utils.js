@@ -326,6 +326,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         return element.nodeName === "AUDIO" || element.nodeName === "VIDEO";
     };
 
+    gamepad.inputMapperUtils.content.isSearchField = function (element) {
+        if ((element.nodeName === "INPUT" || element.nodeName === "TEXTAREA") && element.getAttribute("type") === "search") {
+            return true;
+        }
+
+        return false;
+    };
+
+
     gamepad.inputMapperUtils.content.isTextInput = function (element) {
         if (element.nodeName === "INPUT") {
             var allowedTypes = ["text", "search", "email", "password", "tel", "text", "url"];

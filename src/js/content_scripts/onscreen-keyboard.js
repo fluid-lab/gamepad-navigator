@@ -106,14 +106,37 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             container: "<button class='gamepad-navigator-osk-update-button' disabled>%label</button>"
         },
         model: {
+            lastExternalFocused: false,
             label: "Update Field",
             disabled: true
         },
         modelRelay: {
-            source: "{that}.model.disabled",
-            target: "{that}.model.dom.container.attr.disabled"
+            disabled: {
+                source: "{that}.model.disabled",
+                target: "{that}.model.dom.container.attr.disabled"
+            },
+            label: {
+                source: "{that}.model.label",
+                target: "{that}.model.dom.container.text"
+            }
+        },
+        modelListeners: {
+            lastExternalFocused: {
+                funcName: "gamepad.osk.updateButton.updateText",
+                args: ["{that}"]
+            }
         }
     });
+
+    gamepad.osk.updateButton.updateText = function (that) {
+        var label = "Update Field";
+
+        if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isSearchField(that.model.lastExternalFocused)) {
+            label = "Search";
+        }
+
+        that.applier.change("label", label);
+    };
 
     fluid.defaults("gamepad.osk.modal", {
         gradeNames: ["gamepad.osk.modal.base"],
@@ -162,7 +185,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 type: "gamepad.osk.updateButton",
                 options: {
                     model: {
-                        disabled: "{gamepad.osk.modal}.model.disableUpdateButton"
+                        lastExternalFocused: "{gamepad.osk.modal}.model.lastExternalFocused",
+                        disabled: "{gamepad.osk.modal}.model.disableUpdateButton"                        
                     },
                     listeners: {
                         "onCreate.bindClick": {

@@ -56,6 +56,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     model: {
                         hidden: "{gamepad.modalManager}.model.hideOnscreenKeyboard",
                         prefs: "{gamepad.modalManager}.model.prefs",
+                        lastExternalFocused: "{gamepad.modalManager}.model.lastExternalFocused",
                         inputValue: "{gamepad.modalManager}.model.inputValue"
                     }
                 }
