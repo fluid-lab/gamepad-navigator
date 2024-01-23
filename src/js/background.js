@@ -347,13 +347,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         openNewTab: async function (actionOptions) {
             return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.newTabOrWindowURL);
         },
-        closeCurrentTab: async function (actionOptions) {
-            if (actionOptions.tabId) {
-                var tabs = await chrome.tabs.query({currentWindow: true });
+        closeCurrentTab: async function () {
+            var tabs = await chrome.tabs.query({ currentWindow: true });
+            var activeTab = tabs.find(function (tab) { return tab.active === true; });
+
+            if (activeTab) {
                 var controllableTabs = tabs.filter(gamepad.messageListenerUtils.filterControllableTabs);
                 // More than one controllable tab, just close the tab.
                 if (controllableTabs.length > 1) {
-                    await chrome.tabs.remove(actionOptions.tabId);
+                    await chrome.tabs.remove(activeTab.id);
                 }
                 // Fail over to the window close logic, which will check for controllable tabs in other windows.
                 else {
@@ -414,13 +416,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
                 // Trigger the action only if a valid action is found.
                 if (action) {
-                    var tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-                    var tabId = tabs[0] ? tabs[0].id : undefined;
-
-                    var wrappedActionOptions = JSON.parse(JSON.stringify(actionOptions));
-                    wrappedActionOptions.tabId = tabId;
-
-                    var actionResult = await action(wrappedActionOptions);
+                    var actionResult = await action(actionOptions);
                     port.postMessage(actionResult);
                     port.disconnect();
                 }
