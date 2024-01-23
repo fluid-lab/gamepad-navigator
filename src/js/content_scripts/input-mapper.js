@@ -253,6 +253,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             else if (isContentEditable) {
                 that.model.lastExternalFocused.innerHTML = that.model.inputValue;
             }
+
+            that.applier.change("lastExternalFocused", false);
         }
     };
 
