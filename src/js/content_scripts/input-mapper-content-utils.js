@@ -10,7 +10,7 @@ You may obtain a copy of the BSD 3-Clause License at
 https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
-/* global gamepad, ally, chrome */
+/* global gamepad, ally */
 
 (function (fluid) {
     "use strict";
@@ -417,17 +417,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         var value = fluid.get(that.model, [inputType, index]);
         var polarisedValue = value * inversionFactor;
         if (polarisedValue > 0) {
-            that.nextPageInHistory();
+            gamepad.inputMapperUtils.background.nextPageInHistory(that);
         }
         else if (polarisedValue < 0) {
-            that.previousPageInHistory();
+            gamepad.inputMapperUtils.background.previousPageInHistory(that);
         }
     };
-
-    /**
-     * TODO: Use a common function definition for the "previousPageInHistory" and
-     * "nextPageInHistory" methods.
-     */
 
     /**
      *
@@ -436,28 +431,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * @param {Object} that - The inputMapper component.
      *
      */
-    gamepad.inputMapperUtils.content.previousPageInHistory = function (that) {
+    gamepad.inputMapperUtils.content.previousPageInHistory = async function (that) {
         if (window.history.length > 1) {
-            var activeElementIndex = null;
-
-            // Get the index of the currently active element, if available.
-            if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
-                activeElementIndex = tabbableElements.indexOf(document.activeElement);
-            }
-
-            /**
-             * Store the index of the active element in local storage object with its key
-             * set to the URL of the webpage and navigate back in history.
-             */
-            var storageData = {},
-                pageAddress = that.options.windowObject.location.href;
-            if (activeElementIndex !== -1) {
-                storageData[pageAddress] = activeElementIndex;
-            }
-            chrome.storage.local.set(storageData, function () {
-                that.options.windowObject.history.back();
-            });
+            that.options.windowObject.history.back();
         }
         else {
             that.vibrate();
@@ -471,28 +447,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * @param {Object} that - The inputMapper component.
      *
      */
-    gamepad.inputMapperUtils.content.nextPageInHistory = function (that) {
+    gamepad.inputMapperUtils.content.nextPageInHistory = async function (that) {
         if (window.history.length > 1) {
-            var activeElementIndex = null;
-
-            // Get the index of the currently active element, if available.
-            if (fluid.get(document, "activeElement")) {
-                var tabbableElements = ally.query.tabsequence({ strategy: "strict" });
-                activeElementIndex = tabbableElements.indexOf(document.activeElement);
-            }
-
-            /**
-             * Store the index of the active element in local storage object with its key
-             * set to the URL of the webpage and navigate forward in history.
-             */
-            var storageData = {},
-                pageAddress = that.options.windowObject.location.href;
-            if (activeElementIndex !== -1) {
-                storageData[pageAddress] = activeElementIndex;
-            }
-            chrome.storage.local.set(storageData, function () {
-                that.options.windowObject.history.forward();
-            });
+            that.options.windowObject.history.forward();
         }
         else {
             that.vibrate();
