@@ -17,6 +17,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     var gamepad = { messageListener: {}, messageListenerUtils: {} };
 
+    gamepad.messageListenerUtils.getCurrentTab = async function () {
+        var currentTabs = await chrome.tabs.query({ currentWindow: true, active: true });
+        if (currentTabs.length) {
+            return currentTabs[0];
+        }
+    };
+
     /**
      *
      * Open a new tab in the current window.
@@ -211,26 +218,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * @return {Object} - A response payload if there are custom instructions for the client to follow up on.
      */
     gamepad.messageListenerUtils.setZoom = async function (zoomType) {
-        var currentTab = await chrome.tabs.query({ currentWindow: true, active: true });
+        var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
 
-        // Obtain the zoom value of the current tab.
-        var currentZoomFactor = await chrome.tabs.getZoom(currentTab.id);
+        if (currentTab) {
+            // Obtain the zoom value of the current tab.
+            var currentZoomFactor = await chrome.tabs.getZoom(currentTab.id);
 
-        // Compute the new zoom value according to the zoom type.
-        var newZoomFactor = null;
-        if (zoomType === "zoomIn") {
-            newZoomFactor = currentZoomFactor + 0.1;
-        }
-        else if (zoomType === "zoomOut") {
-            newZoomFactor = currentZoomFactor - 0.1;
-        }
+            // Compute the new zoom value according to the zoom type.
+            var newZoomFactor = null;
+            if (zoomType === "zoomIn") {
+                newZoomFactor = currentZoomFactor + 0.1;
+            }
+            else if (zoomType === "zoomOut") {
+                newZoomFactor = currentZoomFactor - 0.1;
+            }
 
-        if (currentZoomFactor === newZoomFactor) {
-            return { vibrate: true };
-        }
-        else {
-            // Set the new zoom value.
-            chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+            if (currentZoomFactor === newZoomFactor) {
+                return { vibrate: true };
+            }
+            else {
+                // Set the new zoom value.
+                chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+            }
         }
     };
 
@@ -398,10 +407,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         search: gamepad.messageListenerUtils.search,
         openOptionsPage: gamepad.messageListenerUtils.openOptionsPage,
         reloadTab: async function () {
-            var currentTab = await chrome.tabs.query({ currentWindow: true, active: true });
+            var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
 
             if (currentTab) {
                 await chrome.tabs.reload(currentTab.id);
+            }
+        },
+        duplicateTab: async function () {
+            var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
+
+            if (currentTab) {
+                await chrome.tabs.duplicate(currentTab.id);
             }
         }
     };

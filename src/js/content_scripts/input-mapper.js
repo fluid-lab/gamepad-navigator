@@ -165,6 +165,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 args: ["{that}", { action: "reopenTabOrWindow" }]
             },
 
+            duplicateTab: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "duplicateTab" }]
+            },
+
             reloadTab: {
                 funcName: "gamepad.inputMapperUtils.background.postMessage",
                 args: ["{that}", { action: "reloadTab" }]

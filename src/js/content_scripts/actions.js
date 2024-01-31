@@ -81,6 +81,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             action: "closeCurrentWindow",
             description: "Close the current window"
         },
+        duplicateTab: {
+            action: "duplicateTab",
+            description: "Duplicate the current tab"
+        },
         enterFullscreen: {
             action: "enterFullscreen",
             description: "Enter fullscreen mode."
@@ -220,6 +224,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "goToNextTab",
         "closeCurrentTab",
         "closeCurrentWindow",
+        "duplicateTab",
         "reloadTab",
         "reopenTabOrWindow",
         "previousPageInHistory",
