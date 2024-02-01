@@ -439,6 +439,26 @@
     "1094544|stylelint-order>postcss": {
       "decision": "ignore",
       "madeAt": 1699613213481
+    },
+    "1094493|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1706777073188
+    },
+    "1094498|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1706777076104
+    },
+    "1094499|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1706777079924
+    },
+    "1094500|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1706777082058
+    },
+    "1096305|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1706777084332
     }
   },
   "rules": {},
