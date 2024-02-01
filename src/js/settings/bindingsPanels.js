@@ -39,14 +39,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         modelListeners: {
             bindings: [
                 {
-                    // excludeSource: "init",
+                    excludeSource: "init",
                     funcName: "gamepad.settings.ui.bindingsPanel.resetDraft",
                     args: ["{that}"]
                 }
             ],
             draftBindings: [
                 {
-                    // excludeSource: "init",
+                    excludeSource: "init",
                     funcName: "gamepad.settings.ui.bindingsPanel.flagDraftChanged",
                     args: ["{that}"]
                 },

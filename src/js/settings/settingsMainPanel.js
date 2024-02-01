@@ -51,7 +51,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     }
                 }
             },
-
             buttonsPanel: {
                 container: "{that}.container",
                 type: "gamepad.settings.ui.buttonsPanel",
