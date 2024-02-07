@@ -1,22 +1,23 @@
 <!--
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 -->
 
 # Contributing to the Gamepad Navigator
 
 Thank you for your interest in contributing to this project. As the core values and principles of this project align
 with the [Fluid Project](https://wiki.fluidproject.org/pages/viewpage.action?pageId=3900010), a first good step would
-be to get acquainted with the Fluid Community (see [Get Involved](https://tinyurl.com/yxgwccdr)), and understanding how
-[Infusion](http://docs.fluidproject.org/infusion/) works. The next step should be reviewing the project's
-[documentation](docs) and looking into the [source code](src).
+be to get acquainted with the Fluid Community (see [Get Involved](https://tinyurl.com/yxgwccdr)). You should also
+read about [Infusion](http://docs.fluidproject.org/infusion/), which most of the extension is written in.
+
+The next step should be reviewing the project's [documentation](docs) and looking at the [source code](src).
 
 ## Code of Conduct
 
@@ -29,13 +30,13 @@ channel](https://tinyurl.com/y53ue7d8) or the [fluid-work mailing list](https://
 ## Process/Workflow
 
 The Gamepad Navigator's [source code](src) is hosted on GitHub. All of the code included in a
-[release](https://github.com/fluid-lab/gamepad-navigator/releases) lives in the `master` branch.
+[release](https://github.com/fluid-lab/gamepad-navigator/releases) lives in the `main` branch.
 
 The Gamepad Navigator uses a workflow where individual contributors fork the project repository, work in a branch
-created off of `master`, and submit a pull request against the project repository's `master` branch to merge their
+created off of `main`, and submit a pull request against the project repository's `main` branch to merge their
 contributions. See the
-[Coding and Commit Standards](https://wiki.fluidproject.org/display/fluid/Coding+and+Commit+Standards) for more clarity
-on the quality and standards of submitted contributions.
+[Coding and Commit Standards](https://wiki.fluidproject.org/display/fluid/Coding+and+Commit+Standards) for more
+information on the quality and standards expected for contributions.
 
 ### Open an Issue on GitHub
 
@@ -108,10 +109,10 @@ Refactored the inputMapper to include a new bar algorithm based on the latest ch
 ## Security
 
 All dependencies used in this project are monitored to ensure that we are aware
-of and fix security issues that would affect our end users.  For this purpose
+of and fix security issues that would affect our end users. For this purpose
 we use [npm-audit-resolver](https://www.npmjs.com/package/npm-audit-resolver).
 All pulls are checked to ensure that they do not introduce security
-dependencies.  If you are adding a new dependency (development or otherwise),
+dependencies. If you are adding a new dependency (development or otherwise),
 it is recommended that you check for security issues using a command like
 the following:
 
@@ -120,7 +121,7 @@ node node_modules/.bin/check-audit
 ```
 
 This script ignores known issues found in the `audit-resolve.json` file in the
-root of the repository.  If, after reviewing the output of `check-audit`, the
+root of the repository. If, after reviewing the output of `check-audit`, the
 team is able to determine that a dependency does not pose a risk to end users
 (for example because it is only used as part of the build chain), a security
 issue can be excluded from further checks using a command like the following:
@@ -132,7 +133,11 @@ node node_modules/.bin/resolve-audit
 ### Submit a Pull Request
 
 Once you've added tests with your code and "confirmed that the lint checks are passing, you can submit a Pull Request
-(PR) to the repository's `master` branch. After the PR has been submitted, ping one or more maintainers on the
+(PR) to the repository's `main` branch. After the PR has been submitted, ping one or more maintainers on the
 "#fluid-work" IRC channel, fluid-work mailing list, or the PR itself. They will review the contribution, which
 typically results in a back and forth conversation and modifications to the PR. Merging into the project repo is a
 manual process and requires at least one maintainer to merge it into the project repo.
+
+## Publishing
+
+To publish the extension to the Chrome Web Store, please refer to [our publishing guid](docs/PUBLISHING.md).

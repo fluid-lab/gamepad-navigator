@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 (function (fluid) {
@@ -19,10 +19,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     fluid.defaults("gamepad.navigator", {
         gradeNames: ["fluid.modelComponent"],
         model: {
-            // TODO: Figure out how this is used and how it differs from "in view";
             connected: false,
             axes: {},
-            buttons: {}
+            buttons: {},
+            prefs: {
+                pollingFrequency: 50
+            }
         },
         events: {
             onGamepadConnected: null,
@@ -34,8 +36,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             "onGamepadDisconnected.handleConnectedGamepads": "{that}.onDisconnected",
             "onDestroy.clearConnectivityInterval": "{that}.clearConnectivityInterval"
         },
+        modelListeners: {
+            "prefs.pollingFrequency": {
+                funcName: "gamepad.navigator.setGamepadPollingInterval",
+                args: ["{that}"]
+            },
+            "connected": {
+                funcName: "gamepad.navigator.setGamepadPollingInterval",
+                args: ["{that}"]
+            }
+        },
         windowObject: window,
-        frequency: 50,
         members: {
             connectivityIntervalReference: null
         },
@@ -91,10 +102,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.navigator.onConnected = function (that) {
-        // Store the gamepad info if no other gamepad is already connected.
-        if (!that.model.connected) {
-            // Scan the state of gamepad frequently.
-            that.connectivityIntervalReference = setInterval(that.pollGamepads, that.options.frequency);
+        that.applier.change("connected", true);
+    };
+
+    gamepad.navigator.setGamepadPollingInterval = function (that) {
+        clearInterval(that.connectivityIntervalReference);
+
+        if (that.model.connected) {
+            var pollingFrequency = fluid.get(that.model, "prefs.pollingFrequency") || 50;
+
+            // Poll the state of all connected gamepads.
+            that.connectivityIntervalReference = setInterval(that.pollGamepads, pollingFrequency);
         }
     };
 
@@ -117,44 +135,41 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         // Combine the inputs from all the gamepads.
         for (var index = 0; index < gamepadsList.length; index++) {
-            // Look for the gamepad data if it is connected.
-            if (gamepadsList[index]) {
-                // Set the connected status to true if any gamepad is available.
-                combinedGamepadData.connected = true;
+            var singleGamepad = gamepadsList[index];
+            if (singleGamepad) {
+                var connected = fluid.get(singleGamepad, "connected") || false;
+                if (connected) {
+                    // Set the connected status to true if any gamepad is available.
+                    combinedGamepadData.connected = true;
 
-                // Combine the axes values from the gamepad currently scanned.
-                fluid.each(gamepadsList[index].axes, function (axesValue, axesIndex) {
-                    if (!combinedGamepadData.axes[axesIndex]) {
-                        combinedGamepadData.axes[axesIndex] = 0;
-                    }
-                    combinedGamepadData.axes[axesIndex] += axesValue;
-                });
+                    // Combine the axes values from the gamepad currently scanned.
+                    fluid.each(gamepadsList[index].axes, function (axesValue, axesIndex) {
+                        if (!combinedGamepadData.axes[axesIndex]) {
+                            combinedGamepadData.axes[axesIndex] = 0;
+                        }
+                        combinedGamepadData.axes[axesIndex] += axesValue;
+                    });
 
-                // Combine the button values from the gamepad currently scanned.
-                fluid.each(gamepadsList[index].buttons, function (buttonObject, buttonIndex) {
-                    if (!combinedGamepadData.buttons[buttonIndex]) {
-                        combinedGamepadData.buttons[buttonIndex] = 0;
-                    }
-                    combinedGamepadData.buttons[buttonIndex] += buttonObject.value;
-                });
+                    // Combine the button values from the gamepad currently scanned.
+                    fluid.each(gamepadsList[index].buttons, function (buttonObject, buttonIndex) {
+                        if (!combinedGamepadData.buttons[buttonIndex]) {
+                            combinedGamepadData.buttons[buttonIndex] = 0;
+                        }
+                        combinedGamepadData.buttons[buttonIndex] += buttonObject.value;
+                    });
+                }
             }
         }
 
-        /**
-         * If at least one gamepad is available then update the component's model
-         * as per the combined inputs.
-         */
-        if (combinedGamepadData.connected) {
-            // Initiate the gamepad navigator model transaction.
-            var modelUpdateTransaction = that.applier.initiate();
+        var modelUpdateTransaction = that.applier.initiate();
+        modelUpdateTransaction.fireChangeRequest({ path: "connected", value: combinedGamepadData.connected });
 
-            modelUpdateTransaction.fireChangeRequest({ path: "connected", value: combinedGamepadData.connected });
+        if (combinedGamepadData.connected) {
             modelUpdateTransaction.fireChangeRequest({ path: "axes", value: combinedGamepadData.axes });
             modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: combinedGamepadData.buttons });
-
-            // Commit the current state of gamepad.
-            modelUpdateTransaction.commit();
         }
+
+        modelUpdateTransaction.commit();
     };
 
     /**
@@ -167,15 +182,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      *
      */
     gamepad.navigator.onDisconnected = function (that) {
-        // Stop the interval loop scanning the gamepad state.
-        clearInterval(that.connectivityIntervalReference);
-
         // Assume by default that no other gamepad is connected/available.
         var isGamepadAvailable = false;
 
         // Check if any other gamepad is already connected.
         for (var index = 0; index < that.options.windowObject.navigator.getGamepads().length; index++) {
-            if (that.options.windowObject.navigator.getGamepads()[index] !== null) {
+            var singleGamepad = that.options.windowObject.navigator.getGamepads()[index];
+            if ( singleGamepad !== null && singleGamepad.connected) {
                 isGamepadAvailable = true;
             }
         }
@@ -186,21 +199,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
          * component's model to its initial state.
          */
         var modelUpdateTransaction = that.applier.initiate();
-        modelUpdateTransaction.fireChangeRequest({ path: "connected", value: false });
-        if (isGamepadAvailable) {
-            /**
-             * Commit the connected state as false for the onGamepadConnected event to
-             * work.
-             */
-            modelUpdateTransaction.commit();
-            that.events.onGamepadConnected.fire();
-        }
-        else {
-            modelUpdateTransaction.fireChangeRequest({ path: "axes", value: {} });
-            modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: {} });
 
-            // Commit the initial model.
-            modelUpdateTransaction.commit();
+        modelUpdateTransaction.fireChangeRequest({ path: "connected", value: isGamepadAvailable });
+
+        if (!isGamepadAvailable) {
+            modelUpdateTransaction.fireChangeRequest({ path: "axes", type: "DELETE" });
+            modelUpdateTransaction.fireChangeRequest({ path: "axes", value: {} });
+            modelUpdateTransaction.fireChangeRequest({ path: "buttons", type: "DELETE" });
+            modelUpdateTransaction.fireChangeRequest({ path: "buttons", value: {} });
         }
+
+        modelUpdateTransaction.commit();
     };
 })(fluid);

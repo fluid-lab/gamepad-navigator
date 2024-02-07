@@ -1,25 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
-*/
-
-/*
-Copyright (c) 2023 The Gamepad Navigator Authors
-See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
-
-Licensed under the BSD 3-Clause License. You may not use this file except in
-compliance with this License.
-
-You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 (function (fluid) {
     "use strict";
@@ -27,22 +15,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     // Adapted from: https://github.com/duhrer/fluid-osk/blob/GH-1/examples/js/customTextInput.js
 
-    fluid.defaults("gamepad.osk.modal", {
+    fluid.defaults("gamepad.osk.modal.base", {
         gradeNames: ["gamepad.modal"],
         model: {
             classNames: " onscreen-keyboard-modal",
+            closeButtonLabel: "Cancel",
             label: "Gamepad Navigator: Onscreen Keyboard",
             lastExternalFocused: false,
-            textInputValue: ""
+            inputValue: ""
         },
         components: {
             input: {
                 container: "{that}.dom.modalBody",
                 type: "osk.inputs.text",
                 options: {
-                    model: {
-                        composition: "{gamepad.osk.modal}.model.textInputValue"
-                    },
                     modelListeners: {
                         composition: {
                             excludeSource: "local",
@@ -54,8 +40,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             osk: {
                 container: "{that}.dom.modalBody",
-                type: "gamepad.osk.keyboard",
+                type: "gamepad.osk.keyboard.text",
                 options: {
+                    model: {
+                        arrowNav: "{gamepad.osk.modal}.model.prefs.arrowModals"
+                    },
                     listeners: {
                         "onAction.updateInput": {
                             priority: "before:handleLatches",
@@ -111,9 +100,115 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    // Wrapped in case we want to extend later, for example to add bespoke
-    // buttons for domains.
-    fluid.defaults("gamepad.osk.keyboard", {
-        gradeNames: ["osk.keyboard.qwerty"]
+    fluid.defaults("gamepad.osk.updateButton", {
+        gradeNames: ["gamepad.templateRenderer"],
+        markup: {
+            container: "<button class='gamepad-navigator-osk-update-button' disabled>%label</button>"
+        },
+        model: {
+            lastExternalFocused: false,
+            label: "Update Field",
+            disabled: true
+        },
+        modelRelay: {
+            disabled: {
+                source: "{that}.model.disabled",
+                target: "{that}.model.dom.container.attr.disabled"
+            },
+            label: {
+                source: "{that}.model.label",
+                target: "{that}.model.dom.container.text"
+            }
+        },
+        modelListeners: {
+            lastExternalFocused: {
+                funcName: "gamepad.osk.updateButton.updateText",
+                args: ["{that}"]
+            }
+        }
     });
+
+    gamepad.osk.updateButton.updateText = function (that) {
+        var label = "Update Field";
+
+        if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isSearchField(that.model.lastExternalFocused)) {
+            label = "Search";
+        }
+
+        that.applier.change("label", label);
+    };
+
+    fluid.defaults("gamepad.osk.modal", {
+        gradeNames: ["gamepad.osk.modal.base"],
+        model: {
+            disableUpdateButton: true
+        },
+        modelRelay: [
+            {
+                source: "inputValue",
+                target: "draftInputValue",
+                backward: {
+                    excludeSource: "*"
+                }
+            }
+        ],
+        modelListeners: {
+            draftInputValue: {
+                excludeSource: "init",
+                funcName: "gamepad.osk.modal.validateOnChange",
+                args: ["{that}"]
+            }
+        },
+        invokers: {
+            handleUpdateClick: {
+                funcName: "gamepad.osk.modal.handleUpdateClick",
+                args: ["{that}", "{arguments}.0"] // event
+
+            },
+            validateInput: {
+                funcName: "fluid.identity",
+                args: [true]
+            }
+        },
+        components: {
+            input: {
+                container: "{that}.dom.modalBody",
+                type: "osk.inputs.text",
+                options: {
+                    model: {
+                        composition: "{gamepad.osk.modal}.model.draftInputValue"
+                    }
+                }
+            },
+            updateButton: {
+                container: "{that}.dom.modalFooter",
+                type: "gamepad.osk.updateButton",
+                options: {
+                    model: {
+                        lastExternalFocused: "{gamepad.osk.modal}.model.lastExternalFocused",
+                        disabled: "{gamepad.osk.modal}.model.disableUpdateButton"
+                    },
+                    listeners: {
+                        "onCreate.bindClick": {
+                            this: "{updateButton}.container",
+                            method: "click",
+                            args: ["{gamepad.osk.modal}.handleUpdateClick"]
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    gamepad.osk.modal.validateOnChange = function (that) {
+        var hasChanged = (that.model.draftInputValue !== that.model.inputValue);
+        var hasValidChanges =  hasChanged && that.validateInput();
+        that.applier.change("disableUpdateButton", !hasValidChanges);
+    };
+
+    gamepad.osk.modal.handleUpdateClick = function (that, event) {
+        that.applier.change("inputValue", that.model.draftInputValue);
+
+        that.closeModal(event);
+    };
 })(fluid);

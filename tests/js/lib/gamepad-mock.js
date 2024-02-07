@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 /* global gamepad */
@@ -35,6 +35,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * The above inputSpec return a gamepad mock with the value of axes 2 set to 0.753.
      *
      * {
+     *   disconnected: false,
      *   buttons: {
      *     "5": 1,
      *     "11": 1
@@ -92,11 +93,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         }
 
+        var disconnected = fluid.get(inputSpec, "disconnected") ? true : false;
+
         // According to the standard Gamepad specification.
         return [{
             id: "Sony PlayStation 4 Controller Mock",
             index: 0,
-            connected: true,
+            connected: !disconnected,
             timestamp: 100,
             axes: axesArray,
             buttons: buttonsArray

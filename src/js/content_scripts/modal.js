@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 /* global ally */
@@ -24,6 +24,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         gradeNames: ["gamepad.templateRenderer"],
         model: {
             classNames: "",
+            closeButtonLabel: "Close",
             hidden: true
         },
         icon: gamepad.svg["gamepad-icon"],
@@ -31,7 +32,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             hidden: [
                 {
                     this: "{that}.container",
-                    method: "toggleClass",
+                    method: "attr",
                     args: ["hidden", "{change}.value"]
                 },
                 {
@@ -45,12 +46,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             innerContainer: ".modal-inner-container",
             modalBody: ".modal-body",
             modalFooter: ".modal-footer",
+            modalButton: ".modal-button",
             modalCloseButton: ".modal-close-button",
             leadingFocusTrap: ".modal-focus-trap-leading",
             trailingFocusTrap: ".modal-focus-trap-trailing"
         },
         markup: {
-            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-close-button'>Close</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
+            container: "<div class='modal-outer-container%classNames'><div class='modal-focus-trap modal-focus-trap-leading' tabindex=0></div>\n<div class='modal-inner-container'>\n\t<div class='modal-header'><div class='modal-icon'></div><h3>%label</h3></div>\n<div class='modal-body'></div>\n<div class='modal-footer'><button class='modal-button modal-close-button'>%closeButtonLabel</button></div>\n</div><div class='modal-focus-trap modal-focus-trap-trailing' tabindex=0></div>\n</div>"
         },
         invokers: {
             closeModal: {
@@ -59,6 +61,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             },
             handleKeydown: {
                 funcName: "gamepad.modal.handleKeydown",
+                args: ["{that}", "{arguments}.0"] // event
+
+            },
+            handleModalButtonKeydown: {
+                funcName: "gamepad.modal.handleModalButtonKeydown",
                 args: ["{that}", "{arguments}.0"] // event
 
             },
@@ -105,6 +112,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 this: "{that}.dom.modalCloseButton",
                 method: "click",
                 args: "{that}.closeModal"
+            },
+            "onCreate.bindModalButtonKeydown": {
+                this: "{that}.dom.modalButton",
+                method: "keydown",
+                args: "{that}.handleModalButtonKeydown"
             }
         }
     });
@@ -128,6 +140,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             if (!targetInsideContainer) {
                 event.preventDefault();
             }
+        }
+    };
+
+    gamepad.modal.allowedModalButtonKeys = ["Space", "Enter", "Tab", "Escape"];
+
+    // Make sure that arrows, page up/down are not passed on.
+    gamepad.modal.handleModalButtonKeydown = function (that, event) {
+        if (!gamepad.modal.allowedModalButtonKeys.includes(event.key)) {
+            event.preventDefault();
         }
     };
 

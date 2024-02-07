@@ -18,27 +18,48 @@
     margin-left: 3rem;
 }
 
-.gamepad-config-editable-section h3 {
+.gamepad-settings-editable-section h3 {
     font-size: 1.6rem;
 }
 
-.gamepad-config-editable-section-body {
+.gamepad-settings-editable-section-body {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    margin-left: 2rem;
+}
+
+.gamepad-settings-prefs-panel .gamepad-settings-editable-section-body {
+    column-gap: 5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: 2rem;
+}
+
+.gamepad-toggle-outer-container {
+    column-gap: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamepad-toggle-header, .gamepad-range-input-header, .gamepad-text-input-header, .gamepad-settings-params-select-header {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.gamepad-settings-binding-header .gamepad-toggle-header, .gamepad-settings-binding-header .gamepad-range-input-header, .gamepad-settings-binding-header .gamepad-text-input-header {
+    margin: auto;
+}
+
+.gamepad-toggle-body {
     display: flex;
     flex-direction: column;
     row-gap: 0.5rem;
 }
 
-.gamepad-toggle-outer-container {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    margin-left: 2rem;
-}
-
-.gamepad-toggle-header {
-    font-size: 1.2rem;
-    font-weight: bold;
-    width: 75%;
+.gamepad-toggle-description {
+    font-style: italic;
+    justify-content: center;
 }
 
 .gamepad-toggle {
@@ -47,13 +68,12 @@
     border-radius: 1.25rem;
     display: flex;
     height: 2.5rem;
-    justify-items: left;
-    margin-left: 0.5rem;
+    justify-content: left;
     width: 5rem;
 }
 
 .gamepad-toggle:focus {
-    border: 5px solid black;
+    box-shadow: 0 0 0 5px #000;
     outline: none;
 }
 
@@ -76,7 +96,7 @@
     margin-right: 0.25rem;
 }
 
-.gamepad-config-editable-section-footer {
+.gamepad-settings-editable-section-footer {
     column-gap: 1rem;
     display: flex;
     flex-direction: row;
@@ -89,4 +109,292 @@
     font-size: 1.5rem;
     font-weight: bold;
     height: 3rem;
+}
+
+.gamepad-settings-draft-button:focus {
+    box-shadow:
+        0 0 0 3px white,
+        0 0 0 5px black;
+    outline: none;
+}
+
+.gamepad-range-input-outer-container {
+    column-gap: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamepad-range-input-vertical-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.75rem;
+    width: 100%;
+}
+
+.gamepad-range-input-container {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamepad-range-input {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    width: 100%;
+}
+
+.gamepad-range-input:focus {
+    box-shadow:
+        0 0 0 3px #fff,
+        0 0 0 6px #000;
+    outline: none;
+}
+
+.gamepad-range-summary {
+    margin: auto;
+}
+
+.gamepad-text-input-outer-container {
+    column-gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamepad-text-input-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.gamepad-text-input-description {
+    font-style: italic;
+    justify-content: center;
+}
+
+.gamepad-text-input {
+    border-style: solid;
+    font-size: 1.5rem;
+    height: 3rem;
+    padding: 0.5rem;
+}
+
+.gamepad-text-input:focus {
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 5px #000;
+    outline: none;
+}
+
+.gamepad-select-input-container {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.2rem;
+    row-gap: 1rem;
+}
+
+.gamepad-select-input-label {
+    font-weight: bold;
+}
+
+.gamepad-select-input-input {
+    font-size: 1.5rem;
+    height: 3rem;
+}
+
+.gamepad-select-input-input:focus {
+    box-shadow:
+        0 0 0 2px #fff,
+        0 0 0 5px #000;
+    outline: none;
+}
+
+.gamepad-settings-binding-params .gamepad-select-input-input {
+    width: 90%;
+}
+
+.dynamic-binding-components {
+    display: flex;
+    flex-direction: column;
+}
+
+.gamepad-settings-binding {
+    border-top: 1px solid #999;
+    column-gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+}
+
+.gamepad-settings-binding:first-of-type {
+    border-top: none;
+    padding-top: none;
+}
+
+.gamepad-settings-binding-header {
+    align-items: center;
+    column-gap: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 5rem 15rem;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+}
+
+.gamepad-settings-binding-header .gamepad-select-input-label {
+    margin: auto;
+}
+
+.gamepad-settings-binding-header .gamepad-select-input-container {
+    column-gap: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+button.gamepad-settings-params-icon {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    height: 3rem;
+    width: 3rem;
+}
+
+button.gamepad-settings-params-icon:focus:not([disabled]),
+button.gamepad-settings-params-icon:hover:not([disabled]) {
+    box-shadow: 0 0 0 3px black;
+    outline: none;
+}
+
+.gamepad-settings-params-icon svg {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.gamepad-settings-params-icon svg path {
+    fill: black;
+    stroke: black;
+}
+
+.gamepad-settings-params-icon[disabled] svg path {
+    fill: #999;
+    stroke: #999;
+}
+
+.gamepad-settings-binding-params {
+    background-color: #eee;
+    border-top: 1px dashed #666;
+    column-gap: 5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    padding-bottom: 1rem;
+    padding-left: 2rem;
+    padding-top: 1rem;
+    row-gap: 2.5rem;
+}
+
+.gamepad-settings-binding-params.hidden {
+    display: none;
+}
+
+.gamepad-settings-add-binding-addButton, .gamepad-settings-binding-removeButton {
+    font-size: 1.2rem;
+    font-weight: bold;
+    height: 3rem;
+}
+
+.gamepad-settings-binding-removeButton {
+    align-self: flex-start;
+}
+
+.gamepad-settings-add-binding-addButton:focus,
+.gamepad-settings-binding-removeButton:focus {
+    box-shadow:
+        0 0 0 3px white,
+        0 0 0 5px black;
+    outline: none;
+}
+
+.gamepad-settings-params-select-input-container {
+    column-gap: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.gamepad-settings-binding-header .gamepad-settings-params-select-input-container {
+    align-items: center;
+}
+
+.gamepad-settings-binding-description {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.gamepad-settings-params-select-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.5rem;
+}
+
+.gamepad-settings-add-binding-container {
+    align-items: center;
+    border-bottom: 1px solid #999;
+    column-gap: 1rem;
+    display: flex;
+    flex-direction: row;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding-bottom: 1rem;
+}
+
+.gamepad-settings-add-binding-container.hidden {
+    display: none;
+}
+
+@media (min-width: 600px) {
+    .gamepad-settings-prefs-panel .gamepad-settings-editable-section-body {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .gamepad-settings-binding-params {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+
+    .gamepad-toggle:focus,
+    .gamepad-range-input:focus,
+    .gamepad-select-input-input:focus,
+    .gamepad-select-text-input:focus,
+    .gamepad-settings-draft-button:focus,
+    .gamepad-settings-add-binding-addButton:focus,
+    .gamepad-settings-binding-removeButton:focus {
+        box-shadow:
+            0 0 0 2px #000,
+            0 0 0 5px #fff;
+    }
+
+    .gamepad-text-input {
+        background-color: black;
+        border-color: #666;
+        color: white;
+    }
+
+    button.gamepad-settings-params-icon svg path {
+        fill: white;
+        stroke: white;
+    }
+
+    button.gamepad-settings-params-icon:focus:not([disabled]),
+    button.gamepad-settings-params-icon:hover:not([disabled]) {
+        box-shadow: 0 0 0 3px white;
+    }
+
+    .gamepad-settings-binding-params {
+        background-color: #333;
+    }
 }

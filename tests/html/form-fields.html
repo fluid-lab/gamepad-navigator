@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Form Field Test Page</title>
+
+    <script src="../../node_modules/infusion/dist/infusion-all.js"></script>
+    <script src="../../src/js/content_scripts/templateRenderer.js"></script>
+    <script src="../../src/js/settings/selectInput.js"></script>
+  </head>
+  <body>
+    <h1>Form Field Test Page</h1>
+
+    <p>This page provides many examples of form elements, so that we can test them with the gamepad navigator.</p>
+
+    <h2>Text Inputs</h2>
+
+    <p>These inputs should be editable with the onscreen keyboard.</p>
+
+    <h3>Input with No Type</h3>
+
+    <input></input>
+    
+    <h3>Text Input</h3>
+
+    <input type="text"></input>
+
+    <h3>Search Input</h3>
+
+    <input type="search"></input>
+
+    <h3>Email Input</h3>
+
+    <input type="email"></input>
+
+    <h3>Password Input</h3>
+
+    <input type="password"></input>
+
+    <h3>Telephone Number Input</h3>
+
+    <input type="tel"></input>
+
+    <h3>URL input</h3>
+
+    <input type="url"></input>
+
+    <h3>Text Area</h3>
+
+    <textarea></textarea>
+
+    <h2>Number Inputs</h2>
+
+    <p>Number inputs should be controllable using arrow keys (which are bound to the d-pad by default)</p>
+
+    <h3>Number Input, No Parameters</h3>
+
+    <input type="number"></input>
+
+    <h3>Number Input with Max / Min / Step</h3>
+
+    <input type="number" value="5" min="1" max="10" step="1"></input>
+
+    <h3>Range Input</h3>
+
+    <input type="range" value="5" min="1" max="10" step="1"></input>
+
+    <h3>&quot;Decimal&quot; Input Mode</h3>
+
+    <input type="text" inputmode="decimal"/>
+
+    <h2>Radio Buttons</h3>
+
+    <h3>No Radio Group, Nothing Selected</h3>
+
+    <div>
+      <input type="radio" name="channel" value="#F00" id="red-channel">
+      <label for="red-channel">Red</label>
+
+      <input type="radio" name="channel" value="#0F0" id="green-channel">
+      <label for="green-channel">Green</label>
+
+      <input type="radio" name="channel" value="#00F" id="blue-channel">
+      <label for="blue-channel">Blue</label>
+    </div>
+
+    <h3>No Radio Group, Button Selected</h3>
+
+    <div>
+      <input type="radio" name="size" value="small" id="small-size">
+      <label for="small-size">Small</label>
+
+      <input type="radio" name="size" value="medium" id="medium-size" checked>
+      <label for="medium-size">Medium</label>
+
+      <input type="radio" name="size" value="large" id="large-size">
+      <label for="large-size">Large</label>
+    </div>
+
+    <h2>Select Boxes</h2>
+
+    <p>Select boxes should open with the "select operator" modal.</p>
+
+    <h3>Select Input, Nothing Selected</h3>
+
+    <select class="select-none-selected">
+      <option value="1">The first option</option>
+      <option value="2">The second option</option>
+      <option value="3">The third option</option>
+    </select>
+
+    <h3>Select Input, Value Selected</h3>
+
+    <select class="select-value-selected">
+      <option value="1">The first option</option>
+      <option value="2" selected>The second option</option>
+      <option value="3">The third option</option>
+    </select>
+
+    <h3>Select Input, Disabled Value Selected</h3>
+
+    <select class="select-disabled-value-selected">
+      <option value="none" disabled selected>Select an option</option>
+      <option value="1">The first option</option>
+      <option value="2">The second option</option>
+      <option value="3">The third option</option>
+    </select>
+
+    <h3>Multi Select</h3>
+
+    <select multiple>
+      <option value="beans">Beans</option>
+      <option value="rice">Rice</option>
+      <option value="cheese">Cheese</option>
+    </select>
+
+    <h3>Custom Select Input</h3>
+
+    <div class="gamepad-select-input"></div>
+
+    <script>
+      gamepad.ui.select(".gamepad-select-input", {
+        model: {
+          noneOption: true,
+          noneDescription: "Select an option",
+          selectedChoice: "none",
+          choices: {
+            "hot": "Peas Porridge Hot",
+            "cold": "Peas Porridge Cold",
+            "old": "In the Pot, Nine Days Old"
+          }
+        }
+      });
+      
+    </script>
+
+  </body>
+</html>

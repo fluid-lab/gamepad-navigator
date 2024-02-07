@@ -1,22 +1,20 @@
 <!--
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 -->
 
 # `gamepad.inputMapper`
 
-<!-- TODO: Add links to the messageListener component's documentation -->
-
 This component extends the [`inputMapper.base`](inputMapper.base.md) grade to provide **inter-web page navigation**
-features. It should be used with the `messageListener` component as the navigation-producing invokers rely on background
-scripts to work correctly.
+features. It should be used with the `messageListener` background script as the navigation-producing invokers rely on
+the background script to work correctly.
 
 ## Using this grade
 
@@ -34,26 +32,7 @@ state of the tab as an argument to the `gamepad.inputMapperManager`, which creat
 
 ## Component Options
 
-This component supports the same [configuration options](inputMapper.base.md#component-options) provided by the
-[`inputMapper.base`](inputMapper.base.md) component. You can provide custom configuration options to the component as
-shown in the following example.
-
-``` javascript
-gamepad.visibilityChangeTracker(gamepad.inputMapperManager, {
-    cutoffValue: 0.50,
-    scrollInputMultiplier: 60,
-    model: {
-        map: {
-            buttons: {
-                "0": {
-                    currentAction: "scrollDown",
-                    speedFactor: 2.2
-                }
-            }
-        }
-    }
-});
-```
+This component supports the same key model variables as [the base grade](inputMapper.base.md).
 
 ## Non-navigation Invokers
 
@@ -64,200 +43,118 @@ gamepad.visibilityChangeTracker(gamepad.inputMapperManager, {
 Restores the focus on the last focused element after the state of browser tab is changed from **hidden** to **visible**
 or after the web page is reloaded due to refreshing or history navigation.
 
-### `{inputMapper}.updateControls()`
+## Actions
 
-- Returns: Nothing.
+### `{inputMapper}.goToPreviousTab`
 
-Listens to the `onCreate` event of the `inputMapper` component and updates the `map` model variable with the custom
-gamepad configuration data (saved using the configuration panel).
+This action supports the following options:
 
-## Navigation Invokers
+- `repeatRate {Number}` How often (in seconds) to repeat the action while the input is held down.
 
-### `{inputMapper}.goToPreviousTab(value, oldValue)`
+Sends a message to the background script to switch to the previous browser
+tab using buttons and triggers. If the active tab is the first tab in the list, it will switch to the last tab. Vibrates
+the gamepad if there are no other controllable tabs open.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+### `{inputMapper}.goToNextTab`
 
-Sends a message to the `messageListener` component present in the background script to switch to the previous browser
-tab using buttons and triggers. If the active tab is the first tab in the list, it will switch to the last tab.
+This action supports the following options:
 
-### `{inputMapper}.goToNextTab(value, oldValue)`
+- `repeatRate {Number}` How often (in seconds) to repeat the action while the input is held down.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+Sends a message to the background script to switch to the next browser tab
+using buttons and triggers. If the active tab is the last tab in the list, it will switch to the first tab. Vibrates the
+gamepad if there are no other controllable tabs open.
 
-Sends a message to the `messageListener` component present in the background script to switch to the next browser tab
-using buttons and triggers. If the active tab is the last tab in the list, it will switch to the first tab.
+### `{inputMapper}.closeCurrentTab`
 
-### `{inputMapper}.closeCurrentTab(value, oldValue)`
-
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
-
-Sends a message to the `messageListener` component present in the background script to close the current browser tab
+Sends a message to the background script to close the current browser tab
 using buttons and triggers.
 
-### `{inputMapper}.openNewTab(value, oldValue, background, homepageURL)`
+### `{inputMapper}.openNewTab`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- `background {Boolean}` Whether a new browser tab should open in background.
-- `homepageURL {String}` URL that a new browser tab should load when opened.
-- Returns: Nothing.
+This action supports the following options:
 
-Sends a message to the `messageListener` component present in the background script to open a new browser tab
+- `background {Boolean}` Whether to open the new tab in the background.
+
+Sends a message to the background script to open a new browser tab
 using buttons and triggers.
 
-### `{inputMapper}.openNewWindow(value, oldValue, background, homepageURL)`
+### `{inputMapper}.openNewWindow`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- `background {Boolean}` Whether a new browser window should open in background.
-- `homepageURL {String}` URL that a new browser window should load when opened.
-- Returns: Nothing.
+This action supports the following options:
 
-Sends a message to the `messageListener` component present in the background script to open a new browser window
+- `background {Boolean}` Whether to open the new tab in the background.
+
+Sends a message to the background script to open a new browser window
 using buttons and triggers.
 
-### `{inputMapper}.closeCurrentWindow(value, oldValue)`
+### `{inputMapper}.closeCurrentWindow`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
-
-Sends a message to the `messageListener` component present in the background script to close the current browser window
+Sends a message to the background script to close the current browser window
 using buttons and triggers.
 
-### `{inputMapper}.goToPreviousWindow(value, oldValue)`
+### `{inputMapper}.goToPreviousWindow`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+This action supports the following options:
 
-Sends a message to the `messageListener` component present in the background script to switch to the previous browser
-window using buttons and triggers.
+- `repeatRate {Number}` How often (in seconds) to repeat the action while the input is held down.
 
-### `{inputMapper}.goToNextWindow(value, oldValue)`
+Sends a message to the background script to switch to the previous browser
+window using buttons and triggers. Vibrates the gamepad if there are no other controllable windows open.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+### `{inputMapper}.goToNextWindow`
 
-Sends a message to the `messageListener` component present in the background script to switch to the next browser
-window using buttons and triggers.
+This action supports the following options:
 
-### `{inputMapper}.zoomIn(value, oldValue)`
+- `repeatRate {Number}` How often (in seconds) to repeat the action while the input is held down.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+Sends a message to the background script to switch to the next browser
+window using buttons and triggers. Vibrates the gamepad if there are no other controllable windows open.
 
-Sends a message to the `messageListener` component present in the background script to zoom in on the current web page
-using buttons and triggers.
+### `{inputMapper}.zoomIn`
 
-### `{inputMapper}.zoomOut(value, oldValue)`
+Sends a message to the background script to zoom in on the current web page
+using buttons and triggers. Vibrates the gamepad if the page is already zoomed in as far as possible.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+### `{inputMapper}.zoomOut`
 
-Sends a message to the `messageListener` component present in the background script to zoom out on the current web page
-using buttons and triggers.
+Sends a message to the background script to zoom out on the current web page
+using buttons and triggers. Vibrates the gamepad if the page is already zoomed out as far as possible.
 
-### `{inputMapper}.thumbstickZoom(value, invert)`
+### `{inputMapper}.thumbstickZoom`
 
-- `value {Number}` Current value of the gamepad input.
-- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order (see below).
-- Returns: Nothing.
+This action supports the following options:
 
-Sends a message to the `messageListener` component present in the background script to change the zoom on the current
+- `repeatRate {Number}` How often (in seconds) to repeat the action while the input is held down.
+- `invert {Boolean}` Whether the thumbstick tab navigation should be in opposite order (see below).
+
+Sends a message to the background script to change the zoom on the current
 web page according to the direction the thumbstick is pressed. For example, left on the horizontal axis and upward on
 the vertical axis of a thumbstick should zoom in on the current web page. Pressing the thumbstick in opposite direction
-should zoom out on the current web page.
+should zoom out on the current web page.  Vibrates when the user has zoomed as far in or out as possible.
 
-### `{inputMapper}.maximizeWindow(value, oldValue)`
+### `{inputMapper}.maximizeWindow`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+Sends a message to the background script to maximize the current browser window.  Vibrates the gamepad if the browser
+window has already been maximized.
 
-Sends a message to the `messageListener` component present in the background script to maximize the current browser
-window using buttons and triggers.
+### `{inputMapper}.restoreWindowSize`
 
-### `{inputMapper}.restoreWindowSize(value, oldValue)`
+Sends a message to the background script to restore the size of current browser window. Vibrates the gamepad if the
+browser window has already been restored to its previous size.
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
+### `{inputMapper}.thumbstickWindowSize`
 
-Sends a message to the `messageListener` component present in the background script to restore the size of current
-browser window using buttons and triggers.
+This action supports the following options:
 
-### `{inputMapper}.thumbstickWindowSize(value, invert)`
+- `invert {Boolean}` Whether the thumbstick direction should be inverted.
 
-- `value {Number}` Current value of the gamepad input.
-- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order (see below).
-- Returns: Nothing.
-
-Sends a message to the `messageListener` component present in the background script to change the size of the current
+Sends a message to the background script to change the size of the current
 browser window according to the direction the thumbstick is pressed. For example, left on the horizontal axis and upward
 on the vertical axis of a thumbstick should restore the current browser window size. Pressing the thumbstick in opposite
-direction should maximize the current browser window.
+direction should maximize the current browser window.  Vibrates if the browser window is already at the desired size.
 
-### `{inputMapper}.reopenTabOrWindow(value, oldValue)`
+### `{inputMapper}.reopenTabOrWindow`
 
-- `value {Number}` Current value of the gamepad input.
-- `oldValue {Number}` Previous value of the gamepad input.
-- Returns: Nothing.
-
-Sends a message to the `messageListener` component present in the background script to reopen the last closed browser
+Sends a message to the background script to reopen the last closed browser
 session using buttons and triggers. The closed session could be a tab or a window.
-
-### `{inputMapper}.sendArrowLeft(value)`
-
-- `value {Number}` Current value of the gamepad input.
-- Returns: Nothing.
-
-Send a left arrow to the current focused element when a button is pressed.
-
-### `{inputMapper}.sendArrowRight(value)`
-
-- `value {Number}` Current value of the gamepad input.
-- Returns: Nothing.
-
-Send a right arrow to the current focused element when a button is pressed.
-
-### `{inputMapper}.sendArrowUp(value)`
-
-- `value {Number}` Current value of the gamepad input.
-- Returns: Nothing.
-
-Send an up arrow to the current focused element when a button is pressed.
-
-### `{inputMapper}.sendArrowDown(value)`
-
-- `value {Number}` Current value of the gamepad input.
-- Returns: Nothing.
-
-Send a down arrow to the current focused element when a button is pressed.
-
-### `{inputMapper}.thumbstickHorizontalArrows(value, speedFactor, invert)`
-
-- `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Current value of the gamepad input.
-- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order.
-- Returns: Nothing.
-
-Send left/right arrows to the current focused element to simulate arrow navigation.
-
-### `{inputMapper}.thumbstickVerticalArrows(value, speedFactor, invert)`
-
-- `value {Number}` Current value of the gamepad input.
-- `speedFactor {Number}` Current value of the gamepad input.
-- `invert {Boolean}` Whether the thumbstick direction for zoom should be in opposite order.
-- Returns: Nothing.
-
-Send up/down arrows to the current focused element to simulate arrow navigation.

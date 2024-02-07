@@ -1,19 +1,20 @@
 <!--
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 -->
 <!DOCTYPE html>
 <html>
     <head>
         <title>Gamepad Navigator Settings</title>
 
+        <link rel="stylesheet" href="../css/common.css"/>
         <link rel="stylesheet" href="../css/settings.css"/>
 
         <!-- Our content_scripts are not injected into this page, so we load them manually -->
@@ -27,17 +28,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         <script src="../js/lib/fluid-osk/keyboards.js"></script>
         <script src="../js/lib/fluid-osk/inputs.js"></script>
         <script src="../js/content_scripts/gamepad-navigator.js"></script>
-        <script src="../js/shared/configuration-maps.js"></script>
         <script src="../js/shared/prefs.js"></script>
-        <script src="../js/content_scripts/utils.js"></script>
+        <script src="../js/shared/utils.js"></script>
+        <script src="../js/content_scripts/actions.js"></script>
         <script src="../js/content_scripts/bindings.js"></script>
         <script src="../js/content_scripts/styles.js"></script>
         <script src="../js/content_scripts/svgs.js"></script>
         <script src="../js/content_scripts/templateRenderer.js"></script>
         <script src="../js/content_scripts/modal.js"></script>
+        <script src="../js/content_scripts/list-selector.js"></script>
         <script src="../js/content_scripts/action-launcher.js"></script>
+        <script src="../js/content_scripts/keyboards.js"></script>
         <script src="../js/content_scripts/onscreen-keyboard.js"></script>
+        <script src="../js/content_scripts/onscreen-numpad.js"></script>
         <script src="../js/content_scripts/search-keyboard.js"></script>
+        <script src="../js/content_scripts/select-operator.js"></script>
         <script src="../js/content_scripts/modalManager.js"></script>
         <script src="../js/content_scripts/input-mapper-content-utils.js"></script>
         <script src="../js/content_scripts/input-mapper-background-utils.js"></script>
@@ -45,7 +50,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         <script src="../js/content_scripts/input-mapper.js" defer></script>
 
         <script src="../js/settings/toggle.js"></script>
-        <script src="../js/settings/settings.js" defer></script>
+        <script src="../js/settings/rangeInput.js"></script>
+        <script src="../js/settings/textInput.js"></script>
+        <script src="../js/settings/selectInput.js"></script>
+        <script src="../js/settings/draftHandlingButton.js"></script>
+        <script src="../js/settings/editableSection.js"></script>
+        <script src="../js/settings/prefsPanel.js"></script>
+        <script src="../js/settings/editBinding.js"></script>
+        <script src="../js/settings/addBinding.js"></script>
+        <script src="../js/settings/bindingsPanels.js"></script>
+
+        <script src="../js/settings/settingsMainPanel.js" defer></script>
     </head>
     <body>
         <div class="gamepad-settings-header">

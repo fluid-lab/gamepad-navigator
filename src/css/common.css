@@ -6,3 +6,11 @@
 * {
     font-family: ubuntu, sans-serif;
 }
+
+.hidden {
+    display: none;
+}
+
+.no-focus-indicator {
+    outline: none;
+}

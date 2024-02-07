@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 /* global gamepad, chrome */
@@ -19,17 +19,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     // TODO: Add continuous / long-press browser tab navigation, if needed.
     // TODO: Add browser tab navigation for thumbsticks.
-
-    /**
-     * TODO: Save the DOM element focus before switching tabs so that it can be restored
-     * when the user navigates back to the same tab.
-     */
-
-    gamepad.inputMapperUtils.background.postMessageOnControlDown = function (that, value, oldValue, actionOptions) {
-        if (oldValue === 0 && value > that.model.prefs.analogCutoff) {
-            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
-        }
-    };
 
     /**
      *
@@ -51,10 +40,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         var wrappedActionOptions = fluid.copy(actionOptions);
 
-        wrappedActionOptions.homepageURL = that.model.commonConfiguration.homepageURL;
+        wrappedActionOptions.newTabOrWindowURL = that.model.prefs.newTabOrWindowURL;
 
         // Set the left pixel if the action is about changing "window size".
-        if (actionOptions.actionName === "maximizeWindow" || actionOptions.actionName === "restoreWindowSize") {
+        if (actionOptions.action === "maximizeWindow" || actionOptions.action === "restoreWindowSize") {
             wrappedActionOptions.left = screen.availLeft;
         }
 
@@ -67,26 +56,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * thumbsticks.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
-     * @param {Boolean} invert - Whether the zooming should be in opposite order.
+     * @param {Object} actionOptions - The parameters for this action.
+     * @property {Boolean} invert - Whether the zooming should be in opposite order.
+     * @param {String} inputType - The input type ("buttons" or "axes").
+     * @param {String|Number} index - Which button number or axis we're responding to.
      *
      */
-    gamepad.inputMapperUtils.background.thumbstickZoom = async function (that, value, invert) {
-        clearInterval(that.intervalRecords.zoomIn);
-        clearInterval(that.intervalRecords.zoomOut);
+    gamepad.inputMapperUtils.background.thumbstickZoom = async function (that, actionOptions, inputType, index) {
+        var inversionFactor = fluid.get(actionOptions, "invert") ? -1 : 1;
 
-        // Get the updated input value according to the configuration.
-        var inversionFactor = invert ? -1 : 1;
+        var value = fluid.get(that.model, [inputType, index]);
+
         var polarisedValue = value * inversionFactor;
         var zoomType = polarisedValue > 0 ? "zoomOut" : "zoomIn";
-        var actionOptions = { actionName: zoomType };
 
-        // Call the zoom changing invokers according to the input values.
-        if (Math.abs(value) > that.options.cutoffValue) {
-            that.intervalRecords[zoomType] = setInterval(function (actionOptions) {
-                gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
-            }, that.options.frequency, actionOptions);
-        }
+        var delegatedActionOptions = fluid.copy(actionOptions);
+        delegatedActionOptions.action = zoomType;
+        gamepad.inputMapperUtils.background.postMessage(that, delegatedActionOptions);
     };
 
     /**
@@ -95,25 +81,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * thumbsticks.
      *
      * @param {Object} that - The inputMapper component.
-     * @param {Integer} value - The value of the gamepad input.
-     * @param {Boolean} invert - Whether the zooming should be in opposite order.
+     * @param {Object} actionOptions - The parameters for this action.
+     * @property {Boolean} invert - Whether the zooming should be in opposite order.
+     * @param {String} inputType - The input type ("buttons" or "axes").
+     * @param {String|Number} index - Which button number or axis we're responding to.
      *
      */
-    gamepad.inputMapperUtils.background.thumbstickWindowSize = function (that, value, invert) {
-        // Get the updated input value according to the configuration.
+    gamepad.inputMapperUtils.background.thumbstickWindowSize = function (that, actionOptions, inputType, index) {
+        var invert = fluid.get(actionOptions, "invert") || false;
+
+        var value = fluid.get(that.model, [inputType, index]);
+
         var inversionFactor = invert ? -1 : 1;
         var polarisedValue = value * inversionFactor;
 
-        var actionName = polarisedValue > 0 ? "maximizeWindow" : "restoreWindowSize";
+        var delegatedAction = polarisedValue > 0 ? "maximizeWindow" : "restoreWindowSize";
 
-        var actionOptions = {
-            actionName: actionName,
+        var delegatedActionOptions = {
+            action: delegatedAction,
             left: screen.availLeft
         };
-
-        // Call the window size changing invokers according to the input value.
-        if (Math.abs(value) > that.options.cutoffValue) {
-            gamepad.inputMapperUtils.background.postMessage(that, actionOptions);
-        }
+        gamepad.inputMapperUtils.background.postMessage(that, delegatedActionOptions);
     };
 })(fluid);

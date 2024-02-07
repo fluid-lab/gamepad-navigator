@@ -1,16 +1,16 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
-/* global chrome */
+/* global chrome, ally */
 
 (function (fluid) {
     "use strict";
@@ -24,11 +24,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         model: {
             activeModal: false,
             shadowElement: false,
-            textInputValue: "",
-            textInputType: "",
+            inputValue: "",
+            inputType: "",
 
-            bindings: gamepad.bindings.defaults,
-            prefs: gamepad.prefs.defaults
+            bindings: gamepad.bindings.defaults
         },
         modelListeners: {
             pageInView: {
@@ -38,29 +37,34 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             activeModal: {
                 func: "{that}.updateTabbables"
             },
-            textInputValue: {
-                funcName: "gamepad.inputMapper.updateFormFieldText",
+            inputValue: {
+                excludeSource: "local",
+                funcName: "gamepad.inputMapper.saveUpdatedInputValue",
                 args: ["{that}"]
+            },
+            fullscreen: {
+                excludeSource: "init",
+                func: "{that}.updateTabbables",
+                args: []
             }
         },
         events: {
             onWindowFocus: null,
             onWindowBlur: null,
             onPageShow: null,
-            onPageHide: null
+            onPageHide: null,
+            onSettingsLoaded: null
         },
 
         listeners: {
-            // Old persistence.
-            // TODO: Remove
-            "onCreate.updateControls": {
-                funcName: "gamepad.inputMapper.updateControls",
-                args: ["{that}"]
-            },
-
             "onCreate.loadSettings": {
                 funcName: "gamepad.inputMapper.loadSettings",
                 args: ["{that}"]
+            },
+
+            "onCreate.focusPageAnchor": {
+                funcName: "gamepad.inputMapper.focusPageAnchor",
+                args: []
             },
 
             // Wire up event listeners to window.
@@ -97,81 +101,100 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             "onPageHide": {
                 funcName: "gamepad.inputMapper.handleBlurred",
                 args: ["{that}"]
+            },
+
+            "onDestroy.stopObservingShadows": {
+                funcName: "gamepad.inputMapper.stopObservingShadows",
+                args: ["{that}"]
             }
         },
         invokers: {
-            // Actions, these are called with: value, oldValue, actionOptions
+            // Actions, these are called with: actionOptions, inputType, index
             goToPreviousTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousTab" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToPreviousTab" }]
             },
             goToNextTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextTab"}]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToNextTab"}]
             },
             closeCurrentTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentTab"}]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}",{ action: "closeCurrentTab"}]
             },
             openNewTab: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewTab" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "openNewTab" }]
             },
             openNewWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "openNewWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "openNewWindow" }]
             },
             closeCurrentWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "closeCurrentWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "closeCurrentWindow" }]
             },
             goToPreviousWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToPreviousWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToPreviousWindow" }]
             },
             goToNextWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "goToNextWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "goToNextWindow" }]
             },
             zoomIn: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomIn" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "zoomIn" }]
             },
             zoomOut: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "zoomOut" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "zoomOut" }]
             },
-            thumbstickZoom: {
-                funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
-                args: ["{that}", "{arguments}.0", "{arguments}.2"]
-            },
+
+
             maximizeWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "maximizeWindow" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "maximizeWindow" }]
             },
             restoreWindowSize: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "restoreWindowSize" }]
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "restoreWindowSize" }]
+            },
+            reopenTabOrWindow: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "reopenTabOrWindow" }]
+            },
+
+            duplicateTab: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "duplicateTab" }]
+            },
+
+            reloadTab: {
+                funcName: "gamepad.inputMapperUtils.background.postMessage",
+                args: ["{that}", { action: "reloadTab" }]
+            },
+
+            thumbstickZoom: {
+                funcName: "gamepad.inputMapperUtils.background.thumbstickZoom",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
             },
             thumbstickWindowSize: {
                 funcName: "gamepad.inputMapperUtils.background.thumbstickWindowSize",
                 args: ["{that}", "{arguments}.0", "{arguments}.2"] // value, actionOptions
             },
-            reopenTabOrWindow: {
-                funcName: "gamepad.inputMapperUtils.background.postMessageOnControlDown",
-                args: ["{that}", "{arguments}.0", "{arguments}.1", { actionName: "reopenTabOrWindow" }]
-            },
+
             openActionLauncher: {
                 funcName: "gamepad.inputMapper.openActionLauncher",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             },
             openSearchKeyboard: {
                 funcName: "gamepad.inputMapper.openSearchKeyboard",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             },
             openConfigPanel: {
                 funcName: "gamepad.inputMapper.openConfigPanel",
-                args: ["{that}", "{arguments}.0", "{arguments}.1"] // value, oldValue
+                args: ["{that}"]
             }
         },
         components: {
@@ -181,10 +204,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 options: {
                     model: {
                         activeModal: "{gamepad.inputMapper}.model.activeModal",
+                        fullscreen: "{gamepad.inputMapper}.model.fullscreen",
                         lastExternalFocused: "{gamepad.inputMapper}.model.lastExternalFocused",
+                        prefs: "{gamepad.inputMapper}.model.prefs",
+                        selectElement: "{gamepad.inputMapper}.model.selectElement",
                         shadowElement: "{gamepad.inputMapper}.model.shadowElement",
-                        textInputValue: "{gamepad.inputMapper}.model.textInputValue",
-                        textInputType: "{gamepad.inputMapper}.model.textInputType"
+                        inputValue: "{gamepad.inputMapper}.model.inputValue",
+                        inputType: "{gamepad.inputMapper}.model.inputType"
+                    },
+                    listeners: {
+                        "onShadowReady.startObserving": {
+                            funcName: "gamepad.inputMapper.startObservingShadows",
+                            args: ["{gamepad.inputMapper}"]
+                        }
                     }
                 }
             }
@@ -199,20 +231,44 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         that.applier.change("pageInView", false);
     };
 
-    gamepad.inputMapper.updateFormFieldText = function (that) {
-        if (that.model.lastExternalFocused && gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused)) {
-            that.model.lastExternalFocused.value = that.model.textInputValue;
+    gamepad.inputMapper.saveUpdatedInputValue = function (that) {
+        if (that.model.lastExternalFocused) {
+
+            var isTextInput = gamepad.inputMapperUtils.content.isTextInput(that.model.lastExternalFocused);
+            var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(that.model.lastExternalFocused);
+            var isContentEditable = gamepad.inputMapperUtils.content.isContentEditable(that.model.lastExternalFocused);
+
+            if (isTextInput || isNumberInput) {
+                var beforeInputEvent = new InputEvent("beforeinput", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(beforeInputEvent);
+
+                that.model.lastExternalFocused.value = that.model.inputValue;
+
+                var inputEvent = new InputEvent("input", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(inputEvent);
+
+                var changeEvent = new Event("change", { bubbles: true, composed: true });
+                that.model.lastExternalFocused.dispatchEvent(changeEvent);
+
+                var isSearchField = gamepad.inputMapperUtils.content.isSearchField(that.model.lastExternalFocused);
+                if (isSearchField && that.model.lastExternalFocused.form) {
+                    that.model.lastExternalFocused.form.submit();
+                }
+            }
+            else if (isContentEditable) {
+                that.model.lastExternalFocused.innerHTML = that.model.inputValue;
+            }
+
+            that.applier.change("lastExternalFocused", false);
         }
     };
 
     gamepad.inputMapper.generateModalOpenFunction = function (modalKey) {
-        return function (that, value, oldValue) {
-            if (that.model.pageInView && value && !oldValue) {
-                // In this case we don't want to fail over to a modal's activeElement.
-                that.applier.change("lastExternalFocused", document.activeElement);
+        return function (that) {
+            // In this case we don't want to fail over to a modal's activeElement.
+            that.applier.change("lastExternalFocused", document.activeElement);
 
-                that.applier.change("activeModal", modalKey);
-            }
+            that.applier.change("activeModal", modalKey);
         };
     };
 
@@ -220,49 +276,26 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     gamepad.inputMapper.openActionLauncher = gamepad.inputMapper.generateModalOpenFunction("actionLauncher");
     gamepad.inputMapper.openSearchKeyboard = gamepad.inputMapper.generateModalOpenFunction("searchKeyboard");
 
-    gamepad.inputMapper.openConfigPanel = function (that, value, oldValue) {
-        if (oldValue === 0 && value > that.model.prefs.analogCutoff) {
-            gamepad.inputMapperUtils.background.postMessage(that, { actionName: "openOptionsPage"});
-        }
+    gamepad.inputMapper.openConfigPanel = function (that) {
+        gamepad.inputMapperUtils.background.postMessage(that, { action: "openOptionsPage"});
     };
 
     gamepad.inputMapper.handlePageInViewChange = function (that) {
         if (that.model.pageInView) {
-            gamepad.inputMapper.updateControls(that);
+            gamepad.inputMapper.loadSettings(that);
         }
         else {
             that.applier.change("activeModal", false);
         }
     };
 
-    // TODO: Remove this once the new bindings are fully wired up.
-    /**
-     *
-     * (Re)load the gamepad configuration from local storage.
-     *
-     * @param {Object} that - The inputMapper component.
-     *
-     */
-    gamepad.inputMapper.updateControls = function (that) {
-        if (that.model.pageInView) {
-            chrome.storage.local.get(["gamepadConfiguration"], function (configWrapper) {
-                var gamepadConfig = configWrapper.gamepadConfiguration;
-
-                // Update the gamepad configuration only if it's available.
-                if (gamepadConfig) {
-                    that.applier.change("map", gamepadConfig);
-                }
-            });
-        }
-    };
-
     gamepad.inputMapper.loadSettings = async function (that) {
-        gamepad.inputMapper.loadPrefs(that);
+        await gamepad.inputMapper.loadPrefs(that);
 
-        gamepad.inputMapper.loadBindings(that);
+        await gamepad.inputMapper.loadBindings(that);
 
         /*
-            The two params for the onChanged listener callbak are "changes" and "areaName".  In our case, "areaName" is
+            The two params for the onChanged listener callback are "changes" and "areaName".  In our case, "areaName" is
             always "local", so we ignore it. "changes" is an object with an entry for each changed key, as in:
 
             { "gamepad-prefs": newValue: {}}
@@ -277,30 +310,59 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 gamepad.inputMapper.loadBindings(that);
             }
         });
+
+        that.events.onSettingsLoaded.fire();
     };
 
     gamepad.inputMapper.loadPrefs = async function (that) {
         var storedPrefs = await gamepad.utils.getStoredKey("gamepad-prefs");
-        var prefsToSave = storedPrefs || gamepad.prefs.defaults;
+        var prefsToApply = fluid.extend({}, gamepad.prefs.defaults, storedPrefs);
 
         var transaction = that.applier.initiate();
 
         transaction.fireChangeRequest({ path: "prefs", type: "DELETE"});
-        transaction.fireChangeRequest({ path: "prefs", value: prefsToSave });
+        transaction.fireChangeRequest({ path: "prefs", value: prefsToApply });
 
         transaction.commit();
     };
 
     gamepad.inputMapper.loadBindings = async function (that) {
         var storedBindings = await gamepad.utils.getStoredKey("gamepad-bindings");
-        var bindingsToSave = storedBindings || gamepad.bindings.defaults;
+        var bindingsToApply = storedBindings || gamepad.bindings.defaults;
 
         var transaction = that.applier.initiate();
 
         transaction.fireChangeRequest({ path: "bindings", type: "DELETE"});
-        transaction.fireChangeRequest({ path: "bindings", value: bindingsToSave });
+        transaction.fireChangeRequest({ path: "bindings", value: bindingsToApply });
 
         transaction.commit();
+    };
+
+    gamepad.inputMapper.startObservingShadows = function (that) {
+        that.shadowMutationObserver = ally.observe.shadowMutations({
+            context: ".gamepad-navigator-modal-manager",
+            callback: that.updateTabbables,
+            config: {
+                attributes: true,
+                subtree: true
+            }
+        });
+    };
+
+    gamepad.inputMapper.stopObservingShadows = function (that) {
+        if (that.shadowMutationObserver) {
+            that.shadowMutationObserver.disengage();
+        }
+    };
+
+    gamepad.inputMapper.focusPageAnchor = function () {
+        var internalPageAnchor = gamepad.inputMapperUtils.content.getInternalPageAnchor(document.URL);
+        if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
+            var linkedElement = document.querySelector(internalPageAnchor);
+            if (linkedElement) {
+                gamepad.inputMapperUtils.content.addTemporaryFocus(linkedElement);
+            }
+        }
     };
 
     gamepad.inputMapperInstance = gamepad.inputMapper("body");

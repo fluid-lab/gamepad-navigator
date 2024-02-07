@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 /* global gamepad, jqUnit */
@@ -19,36 +19,25 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
         fluid.registerNamespace("gamepad.tests");
 
-        jqUnit.module("Gamepad Navigator Axes Tab Navigation Tests", {
-            setup: function () {
-                gamepad.tests.windowObject = window;
-                gamepad.tests.frequency = 50;
-                jqUnit.expect(5);
-            },
-            teardown: function () {
-                // Destroy the component and verify it.
-                gamepad.tests.navigator.destroy();
-                jqUnit.assertTrue("The instance of the gamepad navigator should be destroyed.", fluid.isDestroyed(gamepad.tests.navigator));
-            }
-        });
+        gamepad.tests.delayMs = 250;
 
-        jqUnit.asyncTest("Tab from the last element to the first in forward tabbing using axes.", function () {
-            gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.forwardTab(3, gamepad.tests.navigator);
-            };
+        jqUnit.module("Gamepad Navigator Axes Tab Navigation Tests");
+
+        jqUnit.test("Tab from the last element to the first in forward tabbing using axes.", function () {
+            jqUnit.expect(1);
 
             // Set initial conditions i.e., focus on the last element.
             $("#last").focus();
 
-            // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
-            gamepad.tests.utils.initialClickTestChecks("#last", gamepad.tests.navigator);
+            var inputMapper = gamepad.tests.tab.inputMapper();
 
             /**
              * Update the gamepad to tilt axes 2 in the right direction for forward tab
              * navigation.
              */
-            gamepad.tests.navigator.pollGamepads();
+            inputMapper.applier.change("axes.2", 1);
+
+            jqUnit.stop();
 
             /**
              * Wait for a few milliseconds for the navigator to focus.
@@ -57,32 +46,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * setInterval for continuous tabbing when button is pressed but not released.
              */
             setTimeout(function () {
-                // Restore the gamepad back to its neutral state.
-                gamepad.tests.navigator.pollGamepads();
+                jqUnit.start();
 
                 // Check if the first element is focused.
                 jqUnit.assertEquals("The first element (with tabindex=1) should be focused.", document.querySelector("#first"), document.activeElement);
-                jqUnit.start();
-            }, gamepad.tests.frequency * 3);
+            }, gamepad.tests.delayMs);
         });
 
-        jqUnit.asyncTest("Tab from the first element to the last in reverse tabbing using axes.", function () {
-            gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.reverseTab(3, gamepad.tests.navigator);
-            };
+        jqUnit.test("Tab from the first element to the last in reverse tabbing using axes.", function () {
+            jqUnit.expect(1);
 
             // Set initial conditions i.e., focus on the first element.
             $("#first").focus();
 
-            // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
-            gamepad.tests.utils.initialClickTestChecks("#first", gamepad.tests.navigator);
+            var inputMapper = gamepad.tests.tab.inputMapper();
 
             /**
              * Update the gamepad to tilt axes 2 in the left direction for reverse tab
              * navigation.
              */
-            gamepad.tests.navigator.pollGamepads();
+            inputMapper.applier.change("axes.2", -1);
+
+            jqUnit.stop();
 
             /**
              * Wait for a few milliseconds for the navigator to focus.
@@ -91,26 +76,20 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * setInterval for continuous tabbing when button is pressed but not released.
              */
             setTimeout(function () {
-                // Restore the gamepad back to its neutral state.
-                gamepad.tests.navigator.pollGamepads();
+                jqUnit.start();
 
                 // Check if the last element is focused.
                 jqUnit.assertEquals("The last element should be focused.", document.querySelector("#last"), document.activeElement);
-                jqUnit.start();
-            }, gamepad.tests.frequency * 3);
+            }, gamepad.tests.delayMs);
         });
 
-        jqUnit.asyncTest("Change the focus to one of the next elements in forward tabbing using axes.", function () {
-            gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.forwardTab(3, gamepad.tests.navigator);
-            };
+        jqUnit.test("Change the focus to one of the next elements in forward tabbing using axes.", function () {
+            jqUnit.expect(1);
 
             // Set initial conditions i.e., focus on the first element.
             $("#first").focus();
 
-            // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
-            gamepad.tests.utils.initialClickTestChecks("#first", gamepad.tests.navigator);
+            var inputMapper = gamepad.tests.tab.inputMapper();
 
             // Record the tabindex of the focused elements before polling.
             var beforePollingFocusedElementTabIndex = document.activeElement.getAttribute("tabindex");
@@ -119,12 +98,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * Update the gamepad to tilt axes 2 in the right direction for forward tab
              * navigation.
              */
-            gamepad.tests.navigator.pollGamepads();
+            inputMapper.applier.change("axes.2", 1);
+
+            jqUnit.stop();
 
             // Wait for a few milliseconds for the navigator to change focus.
             setTimeout(function () {
-                // Restore the gamepad back to its neutral state.
-                gamepad.tests.navigator.pollGamepads();
+                jqUnit.start();
 
                 // Record the index of the element currently focused.
                 var afterPollingFocusedElementTabIndex = document.activeElement.getAttribute("tabindex");
@@ -132,21 +112,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // Check if the focus has moved to one of the next elements.
                 var hasTabbedForward = beforePollingFocusedElementTabIndex < afterPollingFocusedElementTabIndex;
                 jqUnit.assertTrue("The focus should have moved to the next elements in the order.", hasTabbedForward);
-                jqUnit.start();
-            }, gamepad.tests.frequency * 4);
+            }, gamepad.tests.delayMs);
         });
 
-        jqUnit.asyncTest("Change the focus to one of the previous elements in reverse tabbing using axes.", function () {
-            gamepad.tests.windowObject.navigator.getGamepads = function () {
-                return gamepad.tests.utils.axes.reverseTab(3, gamepad.tests.navigator);
-            };
+        jqUnit.test("Change the focus to one of the previous elements in reverse tabbing using axes.", function () {
+            jqUnit.expect(1);
 
             // Set initial conditions i.e., focus on some element in the middle.
             $("#fifth").focus();
 
-            // Confirm that the instance of the gamepad navigator is created.
-            gamepad.tests.navigator = gamepad.tests.inputMapperForTabTests({ frequency: gamepad.tests.frequency });
-            gamepad.tests.utils.initialClickTestChecks("#fifth", gamepad.tests.navigator);
+            var inputMapper = gamepad.tests.tab.inputMapper();
 
             // Record the tabindex of the focused element before polling.
             var beforePollingFocusedElementTabIndex = document.activeElement.getAttribute("tabindex");
@@ -155,12 +130,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
              * Update the gamepad to tilt axes 2 in the left direction for reverse tab
              * navigation.
              */
-            gamepad.tests.navigator.pollGamepads();
+            inputMapper.applier.change("axes.2", -1);
+
+            jqUnit.stop();
 
             // Wait for a few milliseconds for the navigator to change focus.
             setTimeout(function () {
-                // Restore the gamepad back to its neutral state.
-                gamepad.tests.navigator.pollGamepads();
+                jqUnit.start();
 
                 // Record the index of the element currently focused.
                 var afterPollingFocusedElementTabIndex = document.activeElement.getAttribute("tabindex");
@@ -168,8 +144,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
                 // Check if the focus has moved to one of the previous elements.
                 var hasTabbedBackward = beforePollingFocusedElementTabIndex > afterPollingFocusedElementTabIndex;
                 jqUnit.assertTrue("The focus should have moved to the previous elements in the order.", hasTabbedBackward);
-                jqUnit.start();
-            }, gamepad.tests.frequency * 4);
+            }, gamepad.tests.delayMs);
         });
     });
 })(fluid, jQuery);

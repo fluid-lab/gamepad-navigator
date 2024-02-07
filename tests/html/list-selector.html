@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List Selector Tests</title>
+        <script src="../../node_modules/infusion/dist/infusion-all.js"></script>
+        <script src="../../src/js/content_scripts/templateRenderer.js"></script>
+        <script src="../../src/js/content_scripts/list-selector.js"></script>
+
+        <link rel="stylesheet" href="../../src/css/common.css"/>
+        <link rel="stylesheet" href="../../src/css/list-selector.css"/>
+    </head>
+
+    <body>
+        <!-- TODO: Convert this to tests including testing both states of arrowModals -->
+        <button>Before the List</button>
+
+        <div class="list-selector-container"></div>
+
+        <button>After the List</button>
+
+        <script>
+            gamepad.ui.listSelector(".list-selector-container", {
+                invokers: {
+                    handleItemClick: {
+                        funcName: "fluid.identity"
+                    }
+                },
+                model: {
+                    focusedItemIndex: 1,
+                    items: {
+                        one: {
+                            description: "The first item."
+                        },
+                        two: {
+                            description: "The second item."
+                        },
+                        three: {
+                            description: "The third item."
+                        }                   
+                    },
+                    prefs: {
+                        arrowModals: true
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

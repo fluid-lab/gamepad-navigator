@@ -12,16 +12,15 @@
         <script type="text/javascript" src="../../node_modules/infusion/tests/lib/qunit/js/qunit.js"></script>
         <script type="text/javascript" src="../../node_modules/infusion/tests/test-core/jqUnit/js/jqUnit.js"></script>
 
+        <script type="text/javascript" src="../../src/js/shared/prefs.js"></script>
+        <script type="text/javascript" src="../../src/js/shared/utils.js"></script>
+ 
         <script type="text/javascript" src="../../src/js/content_scripts/gamepad-navigator.js"></script>
-        <script type="text/javascript" src="../../src/js/shared/configuration-maps.js"></script>
         <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-content-utils.js"></script>
         <script type="text/javascript" src="../../src/js/content_scripts/input-mapper-base.js"></script>
 
-        <script type="text/javascript" src="../js/gamepad-mock.js"></script>
-        <script type="text/javascript" src="../js/test-utils.js"></script>
         <script type="text/javascript" src="../js/click/click-mock-utils.js"></script>
         <script type="text/javascript" src="../js/click/click-basic-tests.js"></script>
-        <script type="text/javascript" src="../js/click/click-dropdown-tests.js"></script>
     </head>
     <body id="body">
         <h1 id="qunit-header">Gamepad Navigator Click Tests</h1>
@@ -47,39 +46,6 @@
                 <input type="checkbox" id="checkbox-three" name="group1">
                 <label for="checkbox-three"> Checkbox Three</label>
             </fieldset><br>
-            <br>
-            <label for="dropdown-short">Short Dropdown: </label>
-            <select id="dropdown-short">
-                <option id="short-one">one</option>
-                <option id="short-two">two</option>
-                <option id="short-three">three</option>
-                <option id="short-four">four</option>
-                <option id="short-five">five</option>
-            </select>
-            <br><br>
-            <label for="dropdown-long">Long Dropdown: </label>
-            <select id="dropdown-long">
-                <option id="long-one">one</option>
-                <option id="long-two">two</option>
-                <option id="long-three">three</option>
-                <option id="long-four">four</option>
-                <option id="long-five">five</option>
-                <option id="long-six">six</option>
-                <option id="long-seven">seven</option>
-                <option id="long-eight">eight</option>
-                <option id="long-nine">nine</option>
-                <option id="long-ten">ten</option>
-                <option id="long-eleven">eleven</option>
-                <option id="long-twelve">twelve</option>
-                <option id="long-thirteen">thirteen</option>
-                <option id="long-fourteen">fourteen</option>
-                <option id="long-fifteen">fifteen</option>
-                <option id="long-sixteen">sixteen</option>
-                <option id="long-seventeen">seventeen</option>
-                <option id="long-eighteen">eighteen</option>
-                <option id="long-nineteen">nineteen</option>
-                <option id="long-twenty">twenty</option>
-            </select>
         </div>
     </body>
 </html>

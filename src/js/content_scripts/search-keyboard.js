@@ -1,25 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
-*/
-
-/*
-Copyright (c) 2023 The Gamepad Navigator Authors
-See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
-
-Licensed under the BSD 3-Clause License. You may not use this file except in
-compliance with this License.
-
-You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 (function (fluid) {
     "use strict";
@@ -33,7 +21,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     });
 
     fluid.defaults("gamepad.searchKeyboard.modal", {
-        gradeNames: ["gamepad.osk.modal"],
+        gradeNames: ["gamepad.osk.modal.base"],
         model: {
             label: "Gamepad Navigator: Search",
             classNames: " gamepad-navigator-searchKeyboard"
@@ -47,6 +35,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         },
 
         components: {
+            input: {
+                options: {
+                    model: {
+                        composition: "{gamepad.searchKeyboard.modal}.model.inputValue"
+                    }
+                }
+            },
             searchButton: {
                 container: "{that}.dom.modalFooter",
                 type: "gamepad.searchKeyboard.searchButton",
@@ -67,12 +62,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         that.applier.change("activeModal", false);
         event.preventDefault();
 
-        if (that.model.textInputValue && that.model.textInputValue.trim().length) {
+        if (that.model.inputValue && that.model.inputValue.trim().length) {
             var actionOptions = {
-                actionName: "search",
+                action: "search",
                 // See: https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/search/query
                 disposition: "NEW_TAB",
-                text: that.model.textInputValue.trim()
+                text: that.model.inputValue.trim()
             };
 
             gamepad.inputMapperUtils.background.postMessage(inputMapper, actionOptions);

@@ -1,13 +1,13 @@
 /*
 Copyright (c) 2023 The Gamepad Navigator Authors
 See the AUTHORS.md file at the top-level directory of this distribution and at
-https://github.com/fluid-lab/gamepad-navigator/raw/master/AUTHORS.md.
+https://github.com/fluid-lab/gamepad-navigator/raw/main/AUTHORS.md.
 
 Licensed under the BSD 3-Clause License. You may not use this file except in
 compliance with this License.
 
 You may obtain a copy of the BSD 3-Clause License at
-https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
+https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 */
 
 /* global chrome */
@@ -17,16 +17,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
 
     var gamepad = { messageListener: {}, messageListenerUtils: {} };
 
+    gamepad.messageListenerUtils.getCurrentTab = async function () {
+        var currentTabs = await chrome.tabs.query({ currentWindow: true, active: true });
+        if (currentTabs.length) {
+            return currentTabs[0];
+        }
+    };
+
     /**
      *
      * Open a new tab in the current window.
      *
      * @param {Boolean} active - Whether the new tab should be focused when created.
-     * @param {String} homepageURL - The URL for the new tab.
+     * @param {String} newTabOrWindowURL - The URL for the new tab.
      *
      */
-    gamepad.messageListenerUtils.openNewTab = function (active, homepageURL) {
-        chrome.tabs.create({ active: active, url: homepageURL });
+    gamepad.messageListenerUtils.openNewTab = function (active, newTabOrWindowURL) {
+        chrome.tabs.create({ active: active, url: newTabOrWindowURL });
     };
 
     /**
@@ -78,12 +85,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * Open a new window.
      *
      * @param {Boolean} active - Whether the new window should be focused when created.
-     * @param {String} homepageURL - The URL for the new window.
+     * @param {String} newTabOrWindowURL - The URL for the new window.
      *
      */
-    gamepad.messageListenerUtils.openNewWindow = function (active, homepageURL) {
+    gamepad.messageListenerUtils.openNewWindow = function (active, newTabOrWindowURL) {
         var windowConfig = {
-            url: homepageURL,
+            url: newTabOrWindowURL,
             focused: active
         };
         if (active) {
@@ -129,10 +136,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         }
     };
 
-    // Exclude tabs whose URL begins with `chrome://`, which do not contain
-    // our scripts and cannot be controlled using a gamepad.
+    // Exclude tabs which do not contain our scripts and cannot be controlled using a gamepad.
     gamepad.messageListenerUtils.filterControllableTabs = function (tabElement) {
-        return tabElement.url && !tabElement.url.startsWith("chrome://");
+        return tabElement.url && !tabElement.url.startsWith("chrome://") && !tabElement.url.startsWith("edge://");
     };
 
     // Exclude windows that do not contain controllable tabs (see above).
@@ -212,26 +218,28 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
      * @return {Object} - A response payload if there are custom instructions for the client to follow up on.
      */
     gamepad.messageListenerUtils.setZoom = async function (zoomType) {
-        var currentTab = await chrome.tabs.query({ currentWindow: true, active: true });
+        var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
 
-        // Obtain the zoom value of the current tab.
-        var currentZoomFactor = await chrome.tabs.getZoom(currentTab.id);
+        if (currentTab) {
+            // Obtain the zoom value of the current tab.
+            var currentZoomFactor = await chrome.tabs.getZoom(currentTab.id);
 
-        // Compute the new zoom value according to the zoom type.
-        var newZoomFactor = null;
-        if (zoomType === "zoomIn") {
-            newZoomFactor = currentZoomFactor + 0.1;
-        }
-        else if (zoomType === "zoomOut") {
-            newZoomFactor = currentZoomFactor - 0.1;
-        }
+            // Compute the new zoom value according to the zoom type.
+            var newZoomFactor = null;
+            if (zoomType === "zoomIn") {
+                newZoomFactor = currentZoomFactor + 0.1;
+            }
+            else if (zoomType === "zoomOut") {
+                newZoomFactor = currentZoomFactor - 0.1;
+            }
 
-        if (currentZoomFactor === newZoomFactor) {
-            return { vibrate: true };
-        }
-        else {
-            // Set the new zoom value.
-            chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+            if (currentZoomFactor === newZoomFactor) {
+                return { vibrate: true };
+            }
+            else {
+                // Set the new zoom value.
+                chrome.tabs.setZoom(currentTab.id, newZoomFactor);
+            }
         }
     };
 
@@ -346,15 +354,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         // On the client side, we check the control state before triggering
         // these, so the method signature is simply `action(actionOptions)`.
         openNewTab: async function (actionOptions) {
-            return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.homepageURL);
+            return await gamepad.messageListenerUtils.openNewTab(actionOptions.active, actionOptions.newTabOrWindowURL);
         },
-        closeCurrentTab: async function (actionOptions) {
-            if (actionOptions.tabId) {
-                var tabs = await chrome.tabs.query({currentWindow: true });
+        closeCurrentTab: async function () {
+            var tabs = await chrome.tabs.query({ currentWindow: true });
+            var activeTab = tabs.find(function (tab) { return tab.active === true; });
+
+            if (activeTab) {
                 var controllableTabs = tabs.filter(gamepad.messageListenerUtils.filterControllableTabs);
                 // More than one controllable tab, just close the tab.
                 if (controllableTabs.length > 1) {
-                    await chrome.tabs.remove(actionOptions.tabId);
+                    await chrome.tabs.remove(activeTab.id);
                 }
                 // Fail over to the window close logic, which will check for controllable tabs in other windows.
                 else {
@@ -363,7 +373,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             }
         },
         openNewWindow: async function (actionOptions) {
-            return await gamepad.messageListenerUtils.openNewWindow(actionOptions.active, actionOptions.homepageURL);
+            return await gamepad.messageListenerUtils.openNewWindow(actionOptions.active, actionOptions.newTabOrWindowURL);
         },
 
         maximizeWindow: async function (actionOptions) {
@@ -396,28 +406,33 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             return await gamepad.messageListenerUtils.switchTab("nextTab");
         },
         closeCurrentWindow: gamepad.messageListenerUtils.closeCurrentWindow,
-        openActionLauncher: async function () {
-            return await gamepad.messageListenerUtils.openActionLauncher();
-        },
         search: gamepad.messageListenerUtils.search,
-        openOptionsPage: gamepad.messageListenerUtils.openOptionsPage
+        openOptionsPage: gamepad.messageListenerUtils.openOptionsPage,
+        reloadTab: async function () {
+            var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
+
+            if (currentTab) {
+                await chrome.tabs.reload(currentTab.id);
+            }
+        },
+        duplicateTab: async function () {
+            var currentTab = await gamepad.messageListenerUtils.getCurrentTab();
+
+            if (currentTab) {
+                await chrome.tabs.duplicate(currentTab.id);
+            }
+        }
     };
 
     chrome.runtime.onConnect.addListener(function (port) {
         port.onMessage.addListener(async function (actionOptions) {
             // Execute the actions only if the action data is available.
-            if (actionOptions.actionName) {
-                var action = messageListener[actionOptions.actionName];
+            if (actionOptions.action) {
+                var action = messageListener[actionOptions.action];
 
                 // Trigger the action only if a valid action is found.
                 if (action) {
-                    var tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-                    var tabId = tabs[0] ? tabs[0].id : undefined;
-
-                    var wrappedActionOptions = JSON.parse(JSON.stringify(actionOptions));
-                    wrappedActionOptions.tabId = tabId;
-
-                    var actionResult = await action(wrappedActionOptions);
+                    var actionResult = await action(actionOptions);
                     port.postMessage(actionResult);
                     port.disconnect();
                 }
@@ -426,16 +441,22 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
     });
 
     // If the user's preferences allow us to, open the settings panel on startup.
-    chrome.runtime.onStartup.addListener(function () {
-        chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
-            var storedPrefs = storedObject && storedObject["gamepad-prefs"];
-            // If our prefs exactly match the defaults, nothing is stored.
-            // In this case, the default behaviour is to open a window, so if
-            // there are no stored settings, we do that.
-            if (!storedPrefs || storedPrefs["openWindowOnStartup"]) {
-                chrome.runtime.openOptionsPage();
-            }
-        });
+    chrome.runtime.onStartup.addListener(async function () {
+        var windowsArray = await chrome.windows.getAll({ populate: true});
+        // Filter to controllable windows.
+        var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
+
+        if (filteredWindows.length === 0) {
+            chrome.storage.local.get(["gamepad-prefs"], function (storedObject) {
+                var storedPrefs = storedObject && storedObject["gamepad-prefs"];
+                // If our prefs exactly match the defaults, nothing is stored.
+                // In this case, the default behaviour is to open a window, so if
+                // there are no stored settings, we do that.
+                if (!storedPrefs || storedPrefs["openWindowOnStartup"]) {
+                    chrome.runtime.openOptionsPage();
+                }
+            });
+        }
     });
 
     // Open the settings panel when the icon is clicked.
