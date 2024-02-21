@@ -136,6 +136,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.arrowModals"
                     }
                 }
+            },
+            fixFocus: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.toggle",
+                options: {
+                    model: {
+                        label: "Fix Focus",
+                        description: "<p>The browser does not consistently display focus styles unless you periodically use the keyboard or change your accessibility settings to &quot;Show a quick highlight on the focused object&quot;.</p><p>This setting enables a workaround that ensures that focus is always indicated.</p>",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.fixFocus"
+                    }
+                }
             }
         }
     });

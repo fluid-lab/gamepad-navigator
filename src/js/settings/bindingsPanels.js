@@ -167,7 +167,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         transaction.commit();
 
         var addBindingPanel = that.locate("add");
-        gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
+        gamepad.inputMapperUtils.content.addTemporaryFocus(that, addBindingPanel[0]);
     };
 
     gamepad.settings.ui.bindingsPanel.flagDraftChanged = function (that) {
@@ -250,7 +250,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             that.applier.change(["draftBindings", bindingIndex], draftBindingContent);
 
             var addBindingPanel = that.locate("add");
-            gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
+            gamepad.inputMapperUtils.content.addTemporaryFocus(that, addBindingPanel[0]);
         }
     };
 
@@ -279,12 +279,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             var removeButtons = that.locate("removeButton");
             var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
             if (removeButtonToFocus) {
-                removeButtonToFocus.focus();
+                gamepad.inputMapperUtils.content.focus(removeButtonToFocus);
             }
         }
         else {
             var addBindingPanel = that.locate("add");
-            gamepad.inputMapperUtils.content.addTemporaryFocus(addBindingPanel[0]);
+            gamepad.inputMapperUtils.content.addTemporaryFocus(that, addBindingPanel[0]);
         }
     };
 

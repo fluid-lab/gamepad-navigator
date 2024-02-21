@@ -198,6 +198,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
             description: "Focus on the next focusable element",
             repeatRate: 0.4
         },
+        toggleFocusFix: {
+            action: "toggleFocusFix",
+            description: "Toggle optional focus indicator.",
+            repeatRate: 0
+        },
         zoomIn: {
             action: "zoomIn",
             description: "Zoom in to the current window",
@@ -236,6 +241,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/master/LICENSE
         "click",
         "tabBackward",
         "tabForward",
+        "toggleFocusFix",
         "scrollLeft",
         "scrollRight",
         "scrollUp",

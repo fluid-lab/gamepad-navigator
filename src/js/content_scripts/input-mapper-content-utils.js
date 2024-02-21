@@ -240,13 +240,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             // 7 elements, at position 0, add -1 would be (7 + 0 -1) % 7, or 6
             that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
             var elementToFocus = that.tabbableElements[that.currentTabIndex];
-            elementToFocus.focus();
+            gamepad.inputMapperUtils.content.focus(that, elementToFocus);
 
             // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
             if (!that.model.activeModal && elementToFocus !== document.activeElement) {
                 that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
                 var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
-                failoverElementToFocus.focus();
+                gamepad.inputMapperUtils.content.focus(that, failoverElementToFocus);
             }
         }
     };
@@ -308,7 +308,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
                     var linkedElement = document.querySelector(internalPageAnchor);
                     if (linkedElement) {
-                        gamepad.inputMapperUtils.content.addTemporaryFocus(linkedElement);
+                        gamepad.inputMapperUtils.content.addTemporaryFocus(that, linkedElement);
                     }
                 }
                 else {
@@ -370,7 +370,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         return element.nodeName === "INPUT" && element.getAttribute("type") === "radio";
     };
 
-    gamepad.inputMapperUtils.content.changeRadioInput = function (currentRadioButton, increment) {
+    gamepad.inputMapperUtils.content.changeRadioInput = function (that, currentRadioButton, increment) {
         var groupName = currentRadioButton.getAttribute("name");
         var allButtons = document.querySelectorAll("input[type='radio'][name='" + groupName + "']");
 
@@ -388,17 +388,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             // Ensure that we "wrap" in both directions.
             var buttonToFocusIndex = (allButtons.length + (currentButtonIndex + increment)) % allButtons.length;
             var buttonToFocus = allButtons[buttonToFocusIndex];
-            buttonToFocus.focus();
+            gamepad.inputMapperUtils.content.focus(that, buttonToFocus);
             buttonToFocus.click();
         }
     };
 
-    gamepad.inputMapperUtils.content.nextRadioInput = function (currentRadioButton) {
-        gamepad.inputMapperUtils.content.changeRadioInput(currentRadioButton, 1);
+    gamepad.inputMapperUtils.content.nextRadioInput = function (that, currentRadioButton) {
+        gamepad.inputMapperUtils.content.changeRadioInput(that, currentRadioButton, 1);
     };
 
-    gamepad.inputMapperUtils.content.previousRadioInput = function (currentRadioButton) {
-        gamepad.inputMapperUtils.content.changeRadioInput(currentRadioButton, -1);
+    gamepad.inputMapperUtils.content.previousRadioInput = function (that, currentRadioButton) {
+        gamepad.inputMapperUtils.content.changeRadioInput(that, currentRadioButton, -1);
     };
 
     /**
@@ -499,12 +499,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 switch (key) {
                     case "ArrowLeft":
                     case "ArrowUp":
-                        gamepad.inputMapperUtils.content.previousRadioInput(activeElement);
+                        gamepad.inputMapperUtils.content.previousRadioInput(that, activeElement);
                         activeElement.dispatchEvent(new Event("change"));
                         break;
                     case "ArrowRight":
                     case "ArrowDown":
-                        gamepad.inputMapperUtils.content.nextRadioInput(activeElement);
+                        gamepad.inputMapperUtils.content.nextRadioInput(that, activeElement);
                         activeElement.dispatchEvent(new Event("change"));
                         break;
                 }
@@ -562,9 +562,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * listener to reset the `tabindex` on blur.  We also add our own class to
      * prevent the display of the default outline on focus.
      *
+     * @param {Object} that - The input mapper component.
      * @param {HTMLElement} element - The DOM element to manipulate.
      */
-    gamepad.inputMapperUtils.content.addTemporaryFocus = function (element) {
+    gamepad.inputMapperUtils.content.addTemporaryFocus = function (that, element) {
         if (!ally.is.focusable(element)) {
             var oldTabIndex = element.getAttribute("tabindex");
 
@@ -583,7 +584,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 element.classList.toggle("no-focus-indicator", false);
             });
 
-            element.focus();
+            gamepad.inputMapperUtils.content.focus(that, element);
         }
     };
 
@@ -613,4 +614,23 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
+    /**
+     *
+     * Simulate focus on an element, including triggering visible focus.
+     *
+     * @param {Object} that - The input mapper component itself.
+     * @param {HTMLElement} element - The element to simulate focus on.
+     *
+     */
+    gamepad.inputMapperUtils.content.focus = function (that, element) {
+        if (that.model.prefs.fixFocus) {
+            that.applier.change("focusOverlayElement", element);
+
+            element.addEventListener("blur", function () {
+                that.applier.change("focusOverlayElement", false);
+            });
+        }
+
+        element.focus();
+    };
 })(fluid, jQuery);

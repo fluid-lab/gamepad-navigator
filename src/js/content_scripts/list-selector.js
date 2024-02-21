@@ -123,7 +123,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
         var toFocus = fluid.get(activeItems, that.model.focusedItemIndex);
         if (toFocus) {
-            toFocus.focus();
+            gamepad.inputMapperUtils.content.focus(that, toFocus);
         }
     };
 

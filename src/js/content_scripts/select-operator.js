@@ -128,6 +128,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         transaction.commit();
 
         that.closeModal(event);
-        selectElement.focus();
+        gamepad.inputMapperUtils.content.focus(that, selectElement);
     };
 })(fluid);
