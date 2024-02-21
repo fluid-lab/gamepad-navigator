@@ -459,6 +459,10 @@
     "1096305|grunt-prompt>inquirer>lodash": {
       "decision": "ignore",
       "madeAt": 1706777084332
+    },
+    "1096487|grunt-prompt>inquirer>lodash": {
+      "decision": "ignore",
+      "madeAt": 1708527488158
     }
   },
   "rules": {},
