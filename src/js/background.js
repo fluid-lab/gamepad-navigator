@@ -440,8 +440,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         });
     });
 
-    // If the user's preferences allow us to, open the settings panel on startup.
-    chrome.runtime.onStartup.addListener(async function () {
+    var startupWindowCheckFn = async function () {
         var windowsArray = await chrome.windows.getAll({ populate: true});
         // Filter to controllable windows.
         var filteredWindows = windowsArray.filter(gamepad.messageListenerUtils.filterControllableWindows);
@@ -457,7 +456,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 }
             });
         }
-    });
+    };
+
+    // If the user's preferences allow us to, open the settings panel on startup or when the plugin is (re)installed.
+    chrome.runtime.onStartup.addListener(startupWindowCheckFn);
+    chrome.runtime.onInstalled.addListener(startupWindowCheckFn);
 
     // Open the settings panel when the icon is clicked.
     chrome.action.onClicked.addListener(() => {
