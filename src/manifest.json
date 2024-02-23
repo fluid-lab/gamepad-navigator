@@ -15,7 +15,7 @@
             "matches": [
                 "<all_urls>"
             ],
-            "css": [],
+            "css": ["css/focus-fix.css"],
             "js": [
                 "js/lib/infusion/infusion-all.js",
                 "js/lib/ally/ally.min.js",
@@ -28,6 +28,7 @@
                 "js/lib/fluid-osk/inputs.js",
                 "js/shared/prefs.js",
                 "js/shared/utils.js",
+                "js/shared/settings.js",
                 "js/content_scripts/gamepad-navigator.js",
                 "js/content_scripts/actions.js",
                 "js/content_scripts/bindings.js",
@@ -42,7 +43,9 @@
                 "js/content_scripts/search-keyboard.js",
                 "js/content_scripts/onscreen-numpad.js",
                 "js/content_scripts/select-operator.js",
+                "js/content_scripts/shadow-holder.js",
                 "js/content_scripts/modalManager.js",
+                "js/content_scripts/focus-overlay.js",
                 "js/content_scripts/input-mapper-content-utils.js",
                 "js/content_scripts/input-mapper-background-utils.js",
                 "js/content_scripts/input-mapper-base.js",

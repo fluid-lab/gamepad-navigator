@@ -17,24 +17,16 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
 
     fluid.defaults("gamepad.modalManager", {
-        gradeNames: ["gamepad.templateRenderer"],
+        gradeNames: ["gamepad.shadowHolder"],
         markup: {
-            container: "<div class='gamepad-navigator-modal-manager'></div>",
-            styles: "<style>%styles</style>"
+            container: "<div class='gamepad-navigator-modal-manager'></div>"
         },
         model: {
             activeModal: false,
             fullscreen: false,
-            shadowElement: false,
             lastExternalFocused: false,
             inputValue: "",
-            inputType: "",
-
-            // Inline all styles from JS-wrapped global namespaced variable.
-            styles: gamepad.css
-        },
-        events: {
-            onShadowReady: null
+            inputType: ""
         },
         components: {
             actionLauncher: {
@@ -97,18 +89,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 }
             }
         },
-        invokers: {
-            "createShadow": {
-                funcName: "gamepad.modalManager.createShadow",
-                args: ["{that}"]
-            }
-        },
-        listeners: {
-            "onCreate.createShadow": {
-                func: "{that}.createShadow",
-                args: []
-            }
-        },
         modelListeners: {
             activeModal: {
                 excludeSource: "init",
@@ -122,19 +102,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             }
         }
     });
-
-    gamepad.modalManager.createShadow = function (that) {
-        var host = that.container[0];
-        var shadowElement = host.attachShadow({mode: "open"});
-
-        // We inline all styles here so that all modals get the common styles,
-        // and to avoid managing multiple shadow elements.
-        var safeModel = fluid.filterKeys(that.model, ["shadowElement", "lastExternalFocused", "selectElement"], true);
-        shadowElement.innerHTML = fluid.stringTemplate(that.options.markup.styles, safeModel);
-
-        that.applier.change("shadowElement", shadowElement);
-        that.events.onShadowReady.fire();
-    };
 
     gamepad.modalManager.reattachToDOM = function (that) {
         that.applier.change("activeModal", false);

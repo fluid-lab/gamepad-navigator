@@ -1,0 +1,17 @@
+.gamepad-focus-overlay {
+    height: 100%;
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.gamepad-navigator-focus-overlay-pointer {
+    border: 3px dashed white;
+    content: '';
+    height: 0;
+    mix-blend-mode: difference;
+    position: absolute;
+    width: 0;
+    z-index: 99999;
+}

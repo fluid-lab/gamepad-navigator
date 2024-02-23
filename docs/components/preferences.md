@@ -16,5 +16,5 @@ The code that allows the gamepad navigator to respond to inputs is not injected 
 browser preferences. A new window that is created using a mouse or keyboard uses one of these "internal" pages as well.
 This is why we have two of the preferences outlined above.
 
-The `newTabOrWindowURL` preference gives us a "safe" URL to use when creating windows and tabs. The `openWindowOnSartup`
+The `newTabOrWindowURL` preference gives us a "safe" URL to use when creating windows and tabs. The `openWindowOnStartup`
 setting is designed to ensure that there will always be a "safe" window available and focused on startup.

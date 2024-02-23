@@ -16,8 +16,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     "use strict";
 
     var gamepad = fluid.registerNamespace("gamepad");
-    fluid.registerNamespace("gamepad.inputMapper");
 
+    fluid.registerNamespace("gamepad.inputMapper");
 
     fluid.defaults("gamepad.inputMapper", {
         gradeNames: ["gamepad.inputMapper.base", "fluid.viewComponent"],
@@ -64,7 +64,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
             "onCreate.focusPageAnchor": {
                 funcName: "gamepad.inputMapper.focusPageAnchor",
-                args: []
+                args: ["{that}"]
             },
 
             // Wire up event listeners to window.
@@ -219,6 +219,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         }
                     }
                 }
+            },
+            focusOverlay: {
+                container: "{that}.container",
+                type: "gamepad.focusOverlay",
+                options: {
+                    model: {
+                        activeModal: "{gamepad.inputMapper}.model.activeModal",
+                        focusOverlayElement: "{gamepad.inputMapper}.model.focusOverlayElement",
+                        prefs: "{gamepad.inputMapper}.model.prefs"
+                    }
+                }
             }
         }
     });
@@ -355,12 +366,12 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     };
 
-    gamepad.inputMapper.focusPageAnchor = function () {
+    gamepad.inputMapper.focusPageAnchor = function (that) {
         var internalPageAnchor = gamepad.inputMapperUtils.content.getInternalPageAnchor(document.URL);
         if (internalPageAnchor !== undefined && internalPageAnchor.length > 0) {
             var linkedElement = document.querySelector(internalPageAnchor);
             if (linkedElement) {
-                gamepad.inputMapperUtils.content.addTemporaryFocus(linkedElement);
+                gamepad.inputMapperUtils.content.addTemporaryFocus(that, linkedElement);
             }
         }
     };

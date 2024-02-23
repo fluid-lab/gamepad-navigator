@@ -315,6 +315,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.settings.ui.editBinding.reloadTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.restoreWindowSize", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
     fluid.defaults("gamepad.settings.ui.editBinding.reopenTabOrWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
+    fluid.defaults("gamepad.settings.ui.editBinding.toggleFocusFix", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
 
     //Actions that only support the `background` parameter:
     fluid.defaults("gamepad.settings.ui.editBinding.openNewTab", {

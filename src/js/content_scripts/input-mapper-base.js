@@ -152,6 +152,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 args: ["{that}", "{arguments}.0"] // actionOptions
             },
 
+            toggleFocusFix: {
+                funcName: "gamepad.inputMapper.base.toggleFocusFix",
+                args: ["{that}"]
+            },
+
             // Thumb stick actions
             thumbstickHistoryNavigation: {
                 funcName: "gamepad.inputMapperUtils.content.thumbstickHistoryNavigation",
@@ -417,5 +422,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 }
             });
         }
+    };
+
+    gamepad.inputMapper.base.toggleFocusFix = function (that) {
+        var fixFocus = fluid.get(that, "model.prefs.fixFocus") ? true : false;
+        that.applier.change("prefs.fixFocus", !fixFocus);
+        gamepad.settings.savePrefs(that.model.prefs);
     };
 })(fluid);
