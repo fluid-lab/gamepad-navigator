@@ -110,11 +110,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         repeatRate: "{source}.repeatRate",
                         scrollFactor: "{source}.scrollFactor",
                         background: "{source}.background",
-                        key: "{source}.key",
-
-                        actionChoices: "{gamepad.settings.ui.bindingsPanel}.options.actionChoices",
-                        indexChoices: "{gamepad.settings.ui.bindingsPanel}.options.indexChoices",
-                        availableIndexChoices: "{gamepad.settings.ui.bindingsPanel}.model.availableIndexChoices"
+                        key: "{source}.key"
                     }
                 }
             }
@@ -149,7 +145,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         fluid.each(originalBindings, function (binding, index) {
             var consolidatedBinding = fluid.copy(binding);
             consolidatedBinding.index = index;
-            consolidatedBinding.type = "gamepad.settings.ui.editBinding." + consolidatedBinding.action;
+            consolidatedBinding.type = "gamepad.ui.editBinding." + consolidatedBinding.action;
 
             var combinedKey = index + "-" + binding.action;
             componentSources[combinedKey] = consolidatedBinding;
@@ -279,7 +275,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             var removeButtons = that.locate("removeButton");
             var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
             if (removeButtonToFocus) {
-                gamepad.inputMapperUtils.content.focus(removeButtonToFocus);
+                gamepad.inputMapperUtils.content.focus(that, removeButtonToFocus);
             }
         }
         else {

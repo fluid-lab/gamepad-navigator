@@ -17,19 +17,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.ui.textInput", {
         gradeNames: ["gamepad.templateRenderer"],
         model: {
-            label: "Text Input",
-            description: "Enter some text!",
             value: 0
         },
         modelRelay: [{
             source: "{that}.model.value",
-            target: "dom.input.value"
+            target: "dom.container.value"
         }],
         markup: {
-            container: "<div class='gamepad-text-input-outer-container'><div class='gamepad-text-input-header'>%label</div><div class='gamepad-text-input-container'><div class='gamepad-text-input-description'>%description</div><input class='gamepad-text-input'></input></div></div>"
-        },
-        selectors: {
-            input: ".gamepad-text-input"
+            container: "<input class='gamepad-text-input'></input>"
         },
         invokers: {
             handleInputChange: {
@@ -39,15 +34,40 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         listeners: {
             "onCreate.bindChange": {
-                this: "{that}.dom.input",
+                this: "{that}.container",
                 method: "change",
                 args: ["{that}.handleInputChange"]
             }
         }
     });
 
-    // TODO: This doesn't seem to work for the onscreen keyboard.
     gamepad.ui.textInput.handleInputChange = function (that, event) {
         that.applier.change("value", event.target.value);
     };
+
+    fluid.defaults("gamepad.ui.prefs.textInput", {
+        gradeNames: ["gamepad.templateRenderer"],
+        model: {
+            label: "Text Input",
+            description: "Enter some text!",
+            value: 0
+        },
+        markup: {
+            container: "<div class='gamepad-pref-outer-container'><div class='gamepad-pref-label'>%label</div><div class='gamepad-pref-body'><div class='gamepad-pref-description'>%description</div><div class='gamepad-text-input-container'></div></div></div>"
+        },
+        selectors: {
+            input: ".gamepad-text-input-container"
+        },
+        components: {
+            input: {
+                container: "{that}.dom.input",
+                type: "gamepad.ui.textInput",
+                options: {
+                    model: {
+                        value: "{gamepad.ui.prefs.textInput}.model.value"
+                    }
+                }
+            }
+        }
+    });
 })(fluid);

@@ -18,12 +18,21 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.ui.rangeInput", {
         gradeNames: ["gamepad.templateRenderer"],
         model: {
-            label: "Range Input",
             value: 0,
             summary: ""
         },
         markup: {
-            container: "<div class='gamepad-range-input-outer-container'>\n<div class='gamepad-range-input-header'>%label</div>\n<div class='gamepad-range-input-vertical-container'>\n<div class='gamepad-range-description'>%description</div>\n<div class='gamepad-range-input-container'>\n<div class='gamepad-range-min'></div>\n<input type='range' class='gamepad-range-input'></input>\n<div class='gamepad-range-max'></div>\n</div>\n<div class='gamepad-range-summary'>%summary</div>\n</div>\n</div>"
+            container:
+                "<div class='gamepad-range-input-outer-container'>\n" +
+                "\t<div class='gamepad-range-input-vertical-container'>" +
+                "\t\t<div class='gamepad-range-input-bar-container'>\n" +
+                "\t\t\t<div class='gamepad-range-min'></div>\n" +
+                "\t\t\t<input type='range' class='gamepad-range-input'></input>\n" +
+                "\t\t\t<div class='gamepad-range-max'></div>\n" +
+                "\t\t</div>\n" +
+                "\t\t<div class='gamepad-range-summary'>%summary</div>\n" +
+                "\t</div>" +
+                "</div>\n"
         },
         modelListeners: {
             value: {
@@ -84,7 +93,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         listeners: {
             "onCreate.bindChange": {
-                this: "{that}.dom.input",
+                this: "{that}.container",
                 method: "change",
                 args: ["{that}.handleInputChange"]
             }
@@ -111,4 +120,53 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             fluid.log("Invalid range input: '" + newValue + "'.");
         }
     };
+
+
+    // A wrapped grade that includes the surrounding markup for a preference entry.
+    fluid.defaults("gamepad.ui.prefs.rangeInput", {
+        gradeNames: ["gamepad.templateRenderer"],
+        model: {
+            label: "Range Input",
+            value: 0
+        },
+        markup: {
+            container:
+                "<div class='gamepad-pref-outer-container'>\n" +
+                "\t<div class='gamepad-pref-label'>%label</div>\n" +
+                "\t<div class='gamepad-pref-body'>\n" +
+                "\t<div class='gamepad-pref-description'>%description</div>\n" +
+                "\t<div class='gamepad-range-input-container'>\n</div>\n" +
+                "</div>\n"
+        },
+        selectors: {
+            input: ".gamepad-range-input-container"
+        },
+        components: {
+            input: {
+                container: "{that}.dom.input",
+                type: "gamepad.ui.rangeInput",
+                options: {
+                    model: {
+                        max: "{gamepad.ui.prefs.rangeInput}.model.max",
+                        min: "{gamepad.ui.prefs.rangeInput}.model.min",
+                        step: "{gamepad.ui.prefs.rangeInput}.model.step",
+                        value: "{gamepad.ui.prefs.rangeInput}.model.value"
+                    }
+                }
+            }
+        }
+    });
+
+    fluid.defaults("gamepad.ui.bindingParam.rangeInput", {
+        gradeNames: ["gamepad.ui.prefs.rangeInput"],
+        markup: {
+            container:
+                "<div class='gamepad-bindingParam-outer-container'>\n" +
+                "\t<div class='gamepad-bindingParam-label'>%label</div>\n" +
+                "\t<div class='gamepad-bindingParam-body'>\n" +
+                "\t<div class='gamepad-bindingParam-description'>%description</div>\n" +
+                "\t<div class='gamepad-range-input-container'>\n</div>\n" +
+                "</div>\n"
+        }
+    });
 })(fluid);
