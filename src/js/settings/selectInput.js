@@ -14,8 +14,6 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     var gamepad = fluid.registerNamespace("gamepad");
 
-    // TODO: Ensure that gamepad "arrow" inputs and or "tabs" move up and down in the list.
-
     fluid.defaults("gamepad.ui.select", {
         gradeNames: ["gamepad.templateRenderer"],
         markup: {
@@ -65,4 +63,38 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
         $(selectInputElement).html(renderedText);
     };
+
+    fluid.defaults("gamepad.ui.bindingParam.selectInput", {
+        gradeNames: ["gamepad.templateRenderer"],
+        model: {
+            label: "Select",
+            description: ""
+        },
+        markup: {
+            container:
+                "<div class='gamepad-bindingParam-outer-container'>\n" +
+                "\t<div class='gamepad-bindingParam-label'>%label</div>\n" +
+                "\t<div class='gamepad-bindingParam-body'>\n" +
+                "\t<div class='gamepad-bindingParam-description'>%description</div>\n" +
+                "\t<div class='gamepad-select-input-container'>\n</div>\n" +
+                "</div>\n"
+        },
+        selectors: {
+            select: ".gamepad-select-input-container"
+        },
+        components: {
+            select: {
+                container: "{that}.dom.select",
+                type: "gamepad.ui.select",
+                options: {
+                    model: {
+                        choices: "{gamepad.ui.bindingParam.selectInput}.model.choices",
+                        noneDescription: "{gamepad.ui.bindingParam.selectInput}.model.noneDescription",
+                        noneOption: "{gamepad.ui.bindingParam.selectInput}.model.noneOption",
+                        selectedChoice: "{gamepad.ui.bindingParam.selectInput}.model.selectedChoice"
+                    }
+                }
+            }
+        }
+    });
 })(fluid);

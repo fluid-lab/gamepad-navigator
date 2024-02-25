@@ -61,7 +61,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         label: "Buttons / Triggers",
-                        bindings: "{gamepad.settings.ui.mainPanel}.model.bindings.buttons"
+                        bindings: "{gamepad.settings.ui.mainPanel}.model.bindings.buttons",
+                        prefs: "{gamepad.settings.ui.mainPanel}.model.prefs"
                     }
                 }
             },
@@ -71,7 +72,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 options: {
                     model: {
                         label: "Axes (Thumb sticks)",
-                        bindings: "{gamepad.settings.ui.mainPanel}.model.bindings.axes"
+                        bindings: "{gamepad.settings.ui.mainPanel}.model.bindings.axes",
+                        prefs: "{gamepad.settings.ui.mainPanel}.model.prefs"
                     }
                 }
             }

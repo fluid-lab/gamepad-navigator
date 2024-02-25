@@ -14,7 +14,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     var gamepad = fluid.registerNamespace("gamepad");
 
-    fluid.defaults("gamepad.settings.ui.editBinding.base", {
+    fluid.defaults("gamepad.ui.editBinding.base", {
         gradeNames: ["gamepad.templateRenderer"],
         icon: gamepad.svg["options-icon"],
         markup: {
@@ -51,7 +51,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 args: ["{that}.removeBinding"]
             },
             "onCreate.drawIcon": {
-                funcName: "gamepad.settings.ui.editBinding.base.drawIcon",
+                funcName: "gamepad.ui.editBinding.base.drawIcon",
                 args: ["{that}"]
             }
         },
@@ -64,15 +64,15 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                     indexChoices: "{gamepad.settings.ui.bindingsPanel}.options.indexChoices",
 
                     model: {
-                        action: "{gamepad.settings.ui.editBinding.base}.model.action",
-                        index: "{gamepad.settings.ui.editBinding.base}.model.index"
+                        action: "{gamepad.ui.editBinding.base}.model.action",
+                        index: "{gamepad.ui.editBinding.base}.model.index"
                     }
                 }
             }
         }
     });
 
-    gamepad.settings.ui.editBinding.base.drawIcon = function (that) {
+    gamepad.ui.editBinding.base.drawIcon = function (that) {
         var iconElement = that.locate("toggleParams");
         iconElement.html(that.options.icon);
     };
@@ -155,8 +155,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     // Mix-in grades for each supported parameter.
-    fluid.defaults("gamepad.settings.ui.editBinding.hasParams", {
-        gradeNames: ["gamepad.settings.ui.editBinding.base"],
+    fluid.defaults("gamepad.ui.editBinding.hasParams", {
+        gradeNames: ["gamepad.ui.editBinding.base"],
         model: {
             hideParams: true
         },
@@ -165,7 +165,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         },
         invokers: {
             handleClick: {
-                funcName: "gamepad.settings.ui.editBinding.hasParams.handleClick",
+                funcName: "gamepad.ui.editBinding.hasParams.handleClick",
                 args: ["{that}", "{arguments}.0"] // event
             }
         },
@@ -178,25 +178,25 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         }
     });
 
-    gamepad.settings.ui.editBinding.hasParams.handleClick = function (that, event) {
+    gamepad.ui.editBinding.hasParams.handleClick = function (that, event) {
         event.preventDefault();
         that.applier.change("hideParams", !that.model.hideParams);
     };
 
     // `background`: Whether to open a window/tab in the background.
-    fluid.defaults("gamepad.settings.ui.editBinding.supportsBackground", {
+    fluid.defaults("gamepad.ui.editBinding.supportsBackground", {
         model: {
             background: false
         },
         components: {
             background: {
                 container: "{that}.dom.params",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.bindingParam.toggle",
                 options: {
                     model: {
                         label: "Background",
                         description: "Open the new window/tab in the background.",
-                        value: "{gamepad.settings.ui.editBinding.base}.model.background"
+                        value: "{gamepad.ui.editBinding.base}.model.background"
                     }
                 }
             }
@@ -204,23 +204,29 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
 
     // `repeatRate`: How often to repeat an action if the control is held down.  If set to zero, does not repeat.
-    fluid.defaults("gamepad.settings.ui.editBinding.supportsRepeatRate", {
+    fluid.defaults("gamepad.ui.editBinding.supportsRepeatRate", {
         components: {
             repeatRate: {
                 container: "{that}.dom.params",
-                type: "gamepad.ui.rangeInput",
+                type: "gamepad.ui.bindingParam.rangeInput",
                 options: {
-                    templates: {
-                        summary: "Repeat every %value second(s)",
-                        noValue: "Do not repeat"
-                    },
                     model: {
                         label: "Repeat Rate",
                         description: "How often (in seconds) to repeat the action while the control is held down. Set to zero (0) to only respond once no matter how long the button is held.",
                         min: "0",
                         max: "1",
                         step: "0.05",
-                        value: "{gamepad.settings.ui.editBinding.base}.model.repeatRate"
+                        value: "{gamepad.ui.editBinding.base}.model.repeatRate"
+                    },
+                    components: {
+                        input: {
+                            options: {
+                                templates: {
+                                    summary: "Repeat every %value second(s)",
+                                    noValue: "Do not repeat"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -228,19 +234,19 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
 
     // `invert`: (For axes) whether to invert the direction of motion.
-    fluid.defaults("gamepad.settings.ui.editBinding.supportsInvert", {
+    fluid.defaults("gamepad.ui.editBinding.supportsInvert", {
         model: {
             invert: false
         },
         components: {
             invert: {
                 container: "{that}.dom.params",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.bindingParam.toggle",
                 options: {
                     model: {
                         label: "Invert",
                         description: "Invert the axis input so that left is treated as right, et cetera.",
-                        checked: "{gamepad.settings.ui.editBinding.base}.model.invert"
+                        checked: "{gamepad.ui.editBinding.base}.model.invert"
                     }
                 }
             }
@@ -248,14 +254,14 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     });
 
     // `scrollFactor`: A multiplier for scroll operations.
-    fluid.defaults("gamepad.settings.ui.editBinding.supportsScrollFactor", {
+    fluid.defaults("gamepad.ui.editBinding.supportsScrollFactor", {
         model: {
             scrollFactor: 0
         },
         components: {
             scrollFactor: {
                 container: "{that}.dom.params",
-                type: "gamepad.ui.rangeInput",
+                type: "gamepad.ui.bindingParam.rangeInput",
                 options: {
                     model: {
                         label: "Scroll Factor",
@@ -263,35 +269,30 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         min: "1",
                         max: "50",
                         step: "1",
-                        value: "{gamepad.settings.ui.editBinding.base}.model.scrollFactor"
+                        value: "{gamepad.ui.editBinding.base}.model.scrollFactor"
                     }
                 }
             }
         }
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.supportsKey", {
-        keyChoices:  {
-            "ArrowLeft": "left arrow",
-            "ArrowRight": "right arrow",
-            "ArrowUp": "up arrow",
-            "ArrowDown": "down arrow",
-            "Escape": "escape"
-        },
+    fluid.defaults("gamepad.ui.editBinding.supportsKey", {
         components: {
             key: {
                 container: "{that}.dom.params",
-                type: "gamepad.settings.ui.params.select",
+                type: "gamepad.ui.bindingParam.selectInput",
                 options: {
-                    markup: {
-                        container: "<div class='gamepad-select-input-container'>\n<div>Simulate pressing and releasing the following key:</div><select class='gamepad-select-input-input'></select>\n</div>"
-                    },
                     model: {
-                        label: "Key",
+                        choices: {
+                            "ArrowLeft": "left arrow",
+                            "ArrowRight": "right arrow",
+                            "ArrowUp": "up arrow",
+                            "ArrowDown": "down arrow",
+                            "Escape": "escape"
+                        },
                         description: "The key to send.",
-                        selectedChoice: "{gamepad.settings.ui.editBinding.base}.model.key",
-                        choices: "{gamepad.settings.ui.editBinding.supportsKey}.options.keyChoices",
-                        availableChoices: "{gamepad.settings.ui.editBinding.supportsKey}.options.keyChoices"
+                        label: "Key",
+                        selectedChoice: "{gamepad.ui.editBinding.base}.model.key"
                     }
                 }
             }
@@ -300,142 +301,142 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     // Here are the individual grade names directly correlated with action names.
 
     // Actions with no additional parameters:
-    fluid.defaults("gamepad.settings.ui.editBinding.click", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.closeCurrentWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.duplicateTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.enterFullscreen", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.exitFullscreen", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.maximizeWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.nextPageInHistory", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.openActionLauncher", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.openConfigPanel", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.openSearchKeyboard", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.previousPageInHistory", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.reloadTab", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.restoreWindowSize", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.reopenTabOrWindow", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
-    fluid.defaults("gamepad.settings.ui.editBinding.toggleFocusFix", { gradeNames: ["gamepad.settings.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.click", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.closeCurrentTab", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.closeCurrentWindow", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.duplicateTab", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.enterFullscreen", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.exitFullscreen", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.maximizeWindow", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.nextPageInHistory", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.openActionLauncher", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.openConfigPanel", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.openSearchKeyboard", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.previousPageInHistory", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.reloadTab", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.restoreWindowSize", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.editBinding.reopenTabOrWindow", { gradeNames: ["gamepad.ui.editBinding.base"] });
+    fluid.defaults("gamepad.ui.bindingParam.toggleFocusFix", { gradeNames: ["gamepad.ui.editBinding.base"] });
 
     //Actions that only support the `background` parameter:
-    fluid.defaults("gamepad.settings.ui.editBinding.openNewTab", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsBackground"],
+    fluid.defaults("gamepad.ui.editBinding.openNewTab", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsBackground"],
         model: gamepad.actions.button.openNewTab
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.openNewWindow", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsBackground"],
+    fluid.defaults("gamepad.ui.editBinding.openNewWindow", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsBackground"],
         model: gamepad.actions.button.openNewWindow
     });
 
     //Actions that only support the `repeatRate` parameter:
-    fluid.defaults("gamepad.settings.ui.editBinding.tabForward", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.tabForward", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.tabForward
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.goToNextTab", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.goToNextTab", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.goToNextTab
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.goToNextWindow", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.goToNextWindow", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.goToNextWindow
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.goToPreviousTab", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.goToPreviousTab", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.goToPreviousTab
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.goToPreviousWindow", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.goToPreviousWindow", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.goToPreviousWindow
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.tabBackward", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.tabBackward", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.tabBackward
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.zoomIn", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.zoomIn", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.zoomIn
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.zoomOut", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate"],
+    fluid.defaults("gamepad.ui.editBinding.zoomOut", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate"],
         model: gamepad.actions.button.zoomOut
     });
 
 
     // Actions that support `repeatRate` and `key`:
-    fluid.defaults("gamepad.settings.ui.editBinding.sendKey", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsKey"],
+    fluid.defaults("gamepad.ui.editBinding.sendKey", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsKey"],
         model: gamepad.actions.button.sendKey
     });
 
     // Actions that support `repeatRate` and `invert`:
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickHistoryNavigation", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickHistoryNavigation", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickHistoryNavigation
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickHorizontalArrows", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickHorizontalArrows", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickHorizontalArrows
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickTabbing", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickTabbing", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickTabbing
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickVerticalArrows", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickVerticalArrows", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickVerticalArrows
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickWindowSize", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickWindowSize", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickWindowSize
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.thumbstickZoom", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert"],
+    fluid.defaults("gamepad.ui.editBinding.thumbstickZoom", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert"],
         model: gamepad.actions.axis.thumbstickZoom
     });
 
     // Actions that support `repeatRate` and `scrollFactor`:
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollDown", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollDown", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.button.scrollDown
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollLeft", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollLeft", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.button.scrollLeft
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollRight", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollRight", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.button.scrollRight
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollUp", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollUp", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.button.scrollUp
     });
 
     // Actions that support `repeatRate`, `invert`, and `scrollFactor`:
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollHorizontally", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollHorizontally", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.axis.scrollHorizontally
     });
 
-    fluid.defaults("gamepad.settings.ui.editBinding.scrollVertically", {
-        gradeNames: ["gamepad.settings.ui.editBinding.hasParams", "gamepad.settings.ui.editBinding.supportsRepeatRate", "gamepad.settings.ui.editBinding.supportsInvert", "gamepad.settings.ui.editBinding.supportsScrollFactor"],
+    fluid.defaults("gamepad.ui.editBinding.scrollVertically", {
+        gradeNames: ["gamepad.ui.editBinding.hasParams", "gamepad.ui.editBinding.supportsRepeatRate", "gamepad.ui.editBinding.supportsInvert", "gamepad.ui.editBinding.supportsScrollFactor"],
         model: gamepad.actions.axis.scrollVertically
     });
 })(fluid);

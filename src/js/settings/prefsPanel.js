@@ -54,7 +54,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         components: {
             analogCutoff: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.rangeInput",
+                type: "gamepad.ui.prefs.rangeInput",
                 options: {
                     model: {
                         label: "Analog Cutoff",
@@ -69,7 +69,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             vibrate: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.prefs.toggle",
                 options: {
                     model: {
                         label: "Vibrate",
@@ -80,7 +80,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             pollingFrequency: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.rangeInput",
+                type: "gamepad.ui.prefs.rangeInput",
                 options: {
                     model: {
                         label: "Polling Frequency",
@@ -95,7 +95,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             openWindowOnStartup: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.prefs.toggle",
                 options: {
                     model: {
                         label: "Open Settings on Startup",
@@ -106,7 +106,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             newTabOrWindowURL: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.textInput",
+                type: "gamepad.ui.prefs.textInput",
                 options: {
                     model: {
                         label: "New Page/Tab URL",
@@ -117,7 +117,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             controlsOnAllMedia: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.prefs.toggle",
                 options: {
                     model: {
                         label: "Controls on All Media",
@@ -128,7 +128,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             arrowModals: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.prefs.toggle",
                 options: {
                     model: {
                         label: "Arrow Navigation",
@@ -139,7 +139,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             fixFocus: {
                 container: "{that}.dom.body",
-                type: "gamepad.ui.toggle",
+                type: "gamepad.ui.prefs.toggle",
                 options: {
                     model: {
                         label: "Fix Focus",
