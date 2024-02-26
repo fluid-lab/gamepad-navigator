@@ -67,3 +67,7 @@ button.osk-key {
     padding: clamp(0.2rem, 0.75vw, 0.75rem);
     width: clamp(0.75rem, 4.5vw, 4.5rem);
 }
+
+.gamepad-navigator-numpad .osk-text-input {
+    width: clamp(5rem, 25vw, 25rem);
+}
