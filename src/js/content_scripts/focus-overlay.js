@@ -101,7 +101,7 @@
 
     gamepad.focusOverlay.shouldDisplayOverlay = function (that) {
         var fixFocus = fluid.get(that, "model.prefs.fixFocus") ? true : false;
-        var hideFocusOverlay = !fixFocus || !that.model.focusOverlayElement || that.model.activeModal;
+        var hideFocusOverlay = !fixFocus || !that.model.focusOverlayElement;
         that.applier.change("hideFocusOverlay", hideFocusOverlay);
     };
 })(fluid);
