@@ -50,11 +50,9 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     fluid.defaults("gamepad.osk.keyboard.numpad", {
         gradeNames: ["osk.keyboard"],
         rowDefs: [
-            [osk.keydefsByCode.ArrowLeft, osk.keydefsByCode.ArrowRight, gamepad.osk.keyboard.numpad.keydefs.Backspace ],
-            [gamepad.osk.keyboard.numpad.keydefs.Digit1, gamepad.osk.keyboard.numpad.keydefs.Digit2, gamepad.osk.keyboard.numpad.keydefs.Digit3 ],
-            [gamepad.osk.keyboard.numpad.keydefs.Digit4, gamepad.osk.keyboard.numpad.keydefs.Digit5, gamepad.osk.keyboard.numpad.keydefs.Digit6 ],
-            [gamepad.osk.keyboard.numpad.keydefs.Digit7, gamepad.osk.keyboard.numpad.keydefs.Digit8, gamepad.osk.keyboard.numpad.keydefs.Digit9 ],
-            [gamepad.osk.keyboard.numpad.keydefs.Comma, gamepad.osk.keyboard.numpad.keydefs.Digit0, gamepad.osk.keyboard.numpad.keydefs.Period ]
+            [gamepad.osk.keyboard.numpad.keydefs.Digit1, gamepad.osk.keyboard.numpad.keydefs.Digit2, gamepad.osk.keyboard.numpad.keydefs.Digit3, gamepad.osk.keyboard.numpad.keydefs.Digit4, gamepad.osk.keyboard.numpad.keydefs.Digit5],
+            [gamepad.osk.keyboard.numpad.keydefs.Digit6, gamepad.osk.keyboard.numpad.keydefs.Digit7, gamepad.osk.keyboard.numpad.keydefs.Digit8, gamepad.osk.keyboard.numpad.keydefs.Digit9, gamepad.osk.keyboard.numpad.keydefs.Digit0 ],
+            [gamepad.osk.keyboard.numpad.keydefs.Comma, gamepad.osk.keyboard.numpad.keydefs.Period, osk.keydefsByCode.ArrowLeft, osk.keydefsByCode.ArrowRight, gamepad.osk.keyboard.numpad.keydefs.Backspace ]
         ]
     });
 
