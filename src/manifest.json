@@ -15,7 +15,10 @@
             "matches": [
                 "<all_urls>"
             ],
-            "css": ["css/focus-fix.css"],
+            "css": [
+                "css/focus-fix.css",
+                "css/iframe-wrapper.css"
+            ],
             "js": [
                 "js/lib/infusion/infusion-all.js",
                 "js/lib/ally/ally.min.js",

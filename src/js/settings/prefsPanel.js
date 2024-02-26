@@ -147,6 +147,17 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                         checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.fixFocus"
                     }
                 }
+            },
+            linkExternalIframes: {
+                container: "{that}.dom.body",
+                type: "gamepad.ui.prefs.toggle",
+                options: {
+                    model: {
+                        label: "Link External iframes",
+                        description: "Iframe elements embed content from other pages.  If these pages are hosted on other sites, the gamepad navigator can't control them directly.  If this setting is on, uncontrollable iframes will be wrapped in a link that can be used to open the content.",
+                        checked: "{gamepad.settings.ui.prefsPanel}.model.draftPrefs.linkExternalIframes"
+                    }
+                }
             }
         }
     });
