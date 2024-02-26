@@ -40,6 +40,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             "prefs.controlsOnAllMedia": {
                 func: "{that}.updateMediaControls",
                 args: [true] // performFullUpdate
+            },
+            "prefs.linkExternalIframes": {
+                func: "{that}.updateExternalIframes",
+                args: [true] // performFullUpdate
             }
         },
         listeners: {
@@ -65,6 +69,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             },
             updateMediaControls: {
                 funcName: "gamepad.inputMapper.base.updateMediaControls",
+                args: ["{that}", "{arguments}.0"] // performFullUpdate
+            },
+            updateExternalIframes: {
+                funcName: "gamepad.inputMapper.base.updateExternalIframes",
                 args: ["{that}", "{arguments}.0"] // performFullUpdate
             },
             produceNavigation: {
@@ -326,6 +334,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
 
     gamepad.inputMapper.base.handleDOMMutation = function (that) {
         that.updateMediaControls();
+        that.updateExternalIframes();
 
         gamepad.inputMapper.base.listenForFullscreenChanges(that);
 
@@ -401,6 +410,59 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 mediaElement.removeAttribute("controls-off-by-default");
             }
         }
+    };
+
+    gamepad.inputMapper.base.updateExternalIframes = function (that, performFullUpdate) {
+        if (that.model.prefs.linkExternalIframes) {
+            gamepad.inputMapper.base.wrapExternalIframes();
+        }
+        else if (performFullUpdate) {
+            gamepad.inputMapper.base.unwrapExternalIframes();
+        }
+    };
+
+    gamepad.inputMapper.base.wrapExternalIframes = function () {
+        var iframeElements = document.querySelectorAll("iframe");
+        for (var iframeIndex = 0; iframeIndex < iframeElements.length; iframeIndex++) {
+            var iframeElement = iframeElements[iframeIndex];
+            if (!iframeElement.currentDocument) {
+                gamepad.inputMapper.base.wrapIframeElement(iframeElement);
+            }
+        }
+    };
+
+    gamepad.inputMapper.base.unwrapExternalIframes = function () {
+        var wrapperElements = document.querySelectorAll("a.gamepad-navigator-iframe-wrapper");
+        for (var wrapperIndex = 0; wrapperIndex < wrapperElements.length; wrapperIndex++) {
+            var wrapperElement = wrapperElements[wrapperIndex];
+            gamepad.inputMapper.base.unwrapIframeElement(wrapperElement);
+        }
+    };
+
+    gamepad.inputMapper.base.wrapIframeElement = function (iframeElement) {
+        if (!iframeElement.parentElement.classList.contains("gamepad-navigator-iframe-wrapper")) {
+            var src = iframeElement.getAttribute("src");
+            if (src && src.length) {
+                var wrapper = document.createElement("a");
+                wrapper.classList.add("gamepad-navigator-iframe-wrapper");
+                wrapper.setAttribute("href", src);
+
+                var iframeTitle = iframeElement.getAttribute("title");
+
+                var anchorAlt = iframeTitle && iframeTitle.length ? iframeTitle : "Open iframe content";
+                wrapper.setAttribute("alt", anchorAlt);
+
+                iframeElement.parentElement.insertBefore(wrapper, iframeElement);
+
+                wrapper.appendChild(iframeElement);
+            }
+        }
+    };
+
+    gamepad.inputMapper.base.unwrapIframeElement = function (wrapperElement) {
+        var iframeElement = wrapperElement.removeChild(wrapperElement.firstElementChild);
+        wrapperElement.parentElement.insertBefore(iframeElement, wrapperElement);
+        wrapperElement.remove();
     };
 
     gamepad.inputMapper.base.vibrate = function (that) {

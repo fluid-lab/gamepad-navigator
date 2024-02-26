@@ -18,6 +18,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         arrowModals: true,
         controlsOnAllMedia: true,
         fixFocus: false,
+        linkExternalIframes: true,
         newTabOrWindowURL: "https://www.google.com/",
         openWindowOnStartup: true,
         pollingFrequency: 50,
