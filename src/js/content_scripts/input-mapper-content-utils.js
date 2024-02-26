@@ -362,6 +362,10 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         return element.nodeName === "INPUT" && (element.getAttribute("type") === "number" || element.getAttribute("inputmode") === "decimal");
     };
 
+    gamepad.inputMapperUtils.content.isSteppable = function (element) {
+        return element.nodeName === "INPUT" && (element.getAttribute("type") === "number" || gamepad.inputMapperUtils.content.isRangeInput(element));
+    };
+
     gamepad.inputMapperUtils.content.isRangeInput = function (element) {
         return element.nodeName === "INPUT" && element.getAttribute("type") === "range";
     };
@@ -479,9 +483,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         var activeElement = that.model.activeModal ? fluid.get(that, "model.shadowElement.activeElement") : document.activeElement;
 
         if (activeElement) {
-            var isNumberInput = gamepad.inputMapperUtils.content.isNumberInput(activeElement);
-            var isRangeInput = gamepad.inputMapperUtils.content.isRangeInput(activeElement);
-            if (isNumberInput || isRangeInput) {
+            var isSteppable = gamepad.inputMapperUtils.content.isSteppable(activeElement);
+            if (isSteppable) {
                 switch (key) {
                     case "ArrowLeft":
                     case "ArrowDown":
