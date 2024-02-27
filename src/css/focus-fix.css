@@ -4,6 +4,7 @@
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 99998;
 }
 
 .gamepad-navigator-focus-overlay-pointer {
@@ -11,6 +12,7 @@
     content: '';
     height: 0;
     mix-blend-mode: difference;
+    pointer-events: none;
     position: absolute;
     width: 0;
     z-index: 99999;
