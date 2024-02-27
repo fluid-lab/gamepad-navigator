@@ -225,9 +225,8 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 type: "gamepad.focusOverlay",
                 options: {
                     model: {
-                        activeModal: "{gamepad.inputMapper}.model.activeModal",
-                        focusOverlayElement: "{gamepad.inputMapper}.model.focusOverlayElement",
-                        prefs: "{gamepad.inputMapper}.model.prefs"
+                        prefs: "{gamepad.inputMapper}.model.prefs",
+                        modalManagerShadowElement: "{gamepad.inputMapper}.model.shadowElement"
                     }
                 }
             }

@@ -166,7 +166,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         event.preventDefault();
         modalManager.applier.change("activeModal", false);
         if (modalManager.model.lastExternalFocused && modalManager.model.lastExternalFocused.focus) {
-            gamepad.inputMapperUtils.content.focus(modalManager, modalManager.model.lastExternalFocused);
+            modalManager.model.lastExternalFocused.focus();
         }
     };
 
@@ -188,7 +188,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
         if (tabbableElements.length) {
             var elementIndex = reverse ? tabbableElements.length - 1 : 0;
             var elementToFocus = tabbableElements[elementIndex];
-            gamepad.inputMapperUtils.content.focus(that, elementToFocus);
+            elementToFocus.focus();
         }
     };
 

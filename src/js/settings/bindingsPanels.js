@@ -275,7 +275,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             var removeButtons = that.locate("removeButton");
             var removeButtonToFocus = fluid.get(removeButtons, focusIndexAfterRemove);
             if (removeButtonToFocus) {
-                gamepad.inputMapperUtils.content.focus(that, removeButtonToFocus);
+                removeButtonToFocus.focus();
             }
         }
         else {

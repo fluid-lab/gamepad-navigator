@@ -240,13 +240,13 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             // 7 elements, at position 0, add -1 would be (7 + 0 -1) % 7, or 6
             that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
             var elementToFocus = that.tabbableElements[that.currentTabIndex];
-            gamepad.inputMapperUtils.content.focus(that, elementToFocus);
+            elementToFocus.focus();
 
             // If focus didn't succeed, make one more attempt, to attempt to avoid focus traps (See #118).
             if (!that.model.activeModal && elementToFocus !== document.activeElement) {
                 that.currentTabIndex = (that.tabbableElements.length + activeElementIndex + increment) % that.tabbableElements.length;
                 var failoverElementToFocus = that.tabbableElements[that.currentTabIndex];
-                gamepad.inputMapperUtils.content.focus(that, failoverElementToFocus);
+                failoverElementToFocus.focus();
             }
         }
     };
@@ -392,7 +392,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
             // Ensure that we "wrap" in both directions.
             var buttonToFocusIndex = (allButtons.length + (currentButtonIndex + increment)) % allButtons.length;
             var buttonToFocus = allButtons[buttonToFocusIndex];
-            gamepad.inputMapperUtils.content.focus(that, buttonToFocus);
+            buttonToFocus.focus();
             buttonToFocus.click();
         }
     };
@@ -587,7 +587,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
                 element.classList.toggle("no-focus-indicator", false);
             });
 
-            gamepad.inputMapperUtils.content.focus(that, element);
+            element.focus();
         }
     };
 
@@ -600,7 +600,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapperUtils.content.enterFullscreen = function (that) {
-        if (document.fullscreen) {
+        if (document.fullscreenElement) {
             that.vibrate();
         }
         else {
@@ -609,31 +609,11 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
     };
 
     gamepad.inputMapperUtils.content.exitFullscreen = function (that) {
-        if (document.fullscreen) {
+        if (document.fullscreenElement) {
             document.exitFullscreen();
         }
         else {
             that.vibrate();
         }
-    };
-
-    /**
-     *
-     * Simulate focus on an element, including triggering visible focus.
-     *
-     * @param {Object} that - The input mapper component itself.
-     * @param {HTMLElement} element - The element to simulate focus on.
-     *
-     */
-    gamepad.inputMapperUtils.content.focus = function (that, element) {
-        if (that.model.prefs.fixFocus) {
-            that.applier.change("focusOverlayElement", element);
-
-            element.addEventListener("blur", function () {
-                that.applier.change("focusOverlayElement", false);
-            });
-        }
-
-        element.focus();
     };
 })(fluid, jQuery);
