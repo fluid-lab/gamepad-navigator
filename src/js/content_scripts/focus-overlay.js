@@ -18,10 +18,6 @@
             handleFocusin: {
                 funcName: "gamepad.focusOverlay.pointer.handleFocusin",
                 args: ["{that}", "{arguments}.0"] // event
-            },
-            handleFocusout: {
-                funcName: "gamepad.focusOverlay.pointer.handleFocusout",
-                args: ["{that}", "{arguments}.0"] // event
             }
         },
         modelListeners: {
@@ -34,14 +30,12 @@
 
     gamepad.focusOverlay.pointer.listenForWindowFocusEvents = function (that) {
         window.addEventListener("focusin", that.handleFocusin);
-        window.addEventListener("focusout", that.handleFocusout);
     };
 
     gamepad.focusOverlay.pointer.listenForModalFocusEvents = function (that) {
         var modalManagerShadowElement = fluid.get(that, "model.modalManagerShadowElement");
         if (modalManagerShadowElement) {
             modalManagerShadowElement.addEventListener("focusin", that.handleFocusin);
-            modalManagerShadowElement.addEventListener("focusout", that.handleFocusout);
         }
     };
 
@@ -66,14 +60,6 @@
         else {
             containerDomElement.style.borderRadius = 0;
         }
-    };
-
-    gamepad.focusOverlay.pointer.handleFocusout = function (that) {
-        var containerDomElement = that.container[0];
-
-        containerDomElement.style.height = 0;
-        containerDomElement.style.width = 0;
-        containerDomElement.style.borderRadius = 0;
     };
 
     fluid.defaults("gamepad.focusOverlay", {
