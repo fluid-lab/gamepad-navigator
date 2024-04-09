@@ -1,9 +1,7 @@
 a.gamepad-navigator-iframe-wrapper {
     display: block;
-    height: max-content;
     margin: 0;
     padding: 0;
-    width: max-content;
 }
 
 a.gamepad-navigator-iframe-wrapper:focus {
