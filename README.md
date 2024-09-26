@@ -79,8 +79,13 @@ to document these problems, and work to resolve as many problems as we can.
 
 ## Installation
 
+### From The Chrome Web Store
+
 The latest released version of the Gamepad Navigator is available for free on the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd).
+
+
+### Manual Installation
 
 The extension can also be installed on any Chromium-based browser using the source code (see below) as follows:
 
@@ -98,57 +103,15 @@ The extension can also be installed on any Chromium-based browser using the sour
 5. Click on the `Load unpacked` button on the top left of the same window, navigate into the `dist` directory, and
    open it. This will load the extension into your Chromium-based browser.
 
-## Supported Actions
-
-The Gamepad Navigator currently supports the following actions for buttons and triggers:
-
-1. Click the focused element
-2. Close the current tab
-3. Close the current window
-4. Switch to the next tab
-5. Switch to the next window
-6. Switch to the previous tab
-7. Switch to the previous window
-8. Maximise the window
-9. Switch to the next page in history
-10. Open a new tab
-11. Open a new window
-12. Open the action launcher
-13. Start a search
-14. Open the settings panel
-15. Switch to the previous page in history
-16. Reopen the most recently closed tab or window
-17. Restore the window to its previous size
-18. Scroll down
-19. Scroll left
-20. Scroll right
-21. Scroll up
-22. Send a key to the focused element
-23. Focus on the previous focusable element
-24. Focus on the next focusable element
-25. Zoom in to the current window
-26. Zoom out of the current window
-
-The following actions are supported for a thumb stick axis:
-
-1. Navigate through the history of the current tab/window
-2. Move through the focusable elements
-3. Scroll horizontally
-4. Scroll vertically
-5. Send left or right arrows
-6. Send up or down arrows
-7. Change the window size
-8. Zoom in or out of the window
 
 ## Demo
 
-You can check out the recorded demo to see how the navigator works.
+If you want to see it in action before you try it, there is [a series of demonstration videos on YouTube](https://www.youtube.com/playlist?list=PLSG_Q2qCFaC2kB6kYiOAi8Zxmyy6iCn3e) that cover how to use the gamepad navigator in detail.
 
-<p align="center">
-   <a href="http://www.youtube.com/watch?v=PmryYYO4qvc">
-      <img src="https://i.imgur.com/JtZvOcu.png" alt="Gamepad Navigator Demo" />
-   </a>
-</p>
+## Questions?
+
+If you have questions, check out [the wiki on GitHub](https://github.com/fluid-lab/gamepad-navigator/wiki).
+
 
 ## Contributing
 
