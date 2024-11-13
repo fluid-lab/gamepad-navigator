@@ -154,6 +154,7 @@ https://github.com/fluid-lab/gamepad-navigator/blob/main/LICENSE
      * Switch to the next or the previous window in the current window.
      *
      * @param {String} windowDirection - The direction in which the window focus should change,
+     * @return {Promise} - A `Promise` that will complete with a response payload.
      *
      */
     gamepad.messageListenerUtils.switchWindow = async function (windowDirection) {

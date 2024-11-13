@@ -84,7 +84,6 @@ to document these problems, and work to resolve as many problems as we can.
 The latest released version of the Gamepad Navigator is available for free on the
 [Chrome Web Store](https://chrome.google.com/webstore/detail/gamepad-navigator/egilmijcknfacjjbchcacijkknbkgfnd).
 
-
 ### Manual Installation
 
 The extension can also be installed on any Chromium-based browser using the source code (see below) as follows:
@@ -103,15 +102,15 @@ The extension can also be installed on any Chromium-based browser using the sour
 5. Click on the `Load unpacked` button on the top left of the same window, navigate into the `dist` directory, and
    open it. This will load the extension into your Chromium-based browser.
 
-
 ## Demo
 
-If you want to see it in action before you try it, there is [a series of demonstration videos on YouTube](https://www.youtube.com/playlist?list=PLSG_Q2qCFaC2kB6kYiOAi8Zxmyy6iCn3e) that cover how to use the gamepad navigator in detail.
+If you want to see it in action before you try it, there is
+[a series of demonstration videos on YouTube](https://www.youtube.com/playlist?list=PLSG_Q2qCFaC2kB6kYiOAi8Zxmyy6iCn3e)
+that cover how to use the gamepad navigator in detail.
 
 ## Questions?
 
 If you have questions, check out [the wiki on GitHub](https://github.com/fluid-lab/gamepad-navigator/wiki).
-
 
 ## Contributing
 
